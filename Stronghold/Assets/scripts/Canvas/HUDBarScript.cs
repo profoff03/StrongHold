@@ -38,8 +38,6 @@ public class HUDBarScript : MonoBehaviour
         if (Input.GetKey(KeyCode.Mouse1))//Input.GetKey(KeyCode.E)
         {
             UseSkill();
-            playerControll.noOfClick = 0;
-            playerControll.canClick = true;
         }
 
 

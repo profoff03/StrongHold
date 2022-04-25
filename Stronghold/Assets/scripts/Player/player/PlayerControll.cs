@@ -34,6 +34,7 @@ public class PlayerControll : MonoBehaviour
 
     #region ForAttack
 
+    [SerializeField]
     internal bool canClick = true;
 
     internal int noOfClick = 0;
@@ -280,12 +281,8 @@ public class PlayerControll : MonoBehaviour
             noOfClick = 0;
             _weponColider.tag = "Untagged";
         }
-        else
-        {
-            canClick = true;
-            noOfClick = 0;
-        }
 
+        
 
     }  //Check combo attack
 
