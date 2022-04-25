@@ -8,6 +8,12 @@ public class TestBossScrtpy : MonoBehaviour
     GameObject _target;
     Animator _animator;
     NavMeshAgent _agent;
+    Rigidbody _rb;
+    float dashtime;
+    [SerializeField]
+    float startDashtime;
+    [SerializeField]
+    float dashSpeed;
     //Transform transform;
 
     // Start is called before the first frame update
@@ -17,6 +23,8 @@ public class TestBossScrtpy : MonoBehaviour
         _agent = (NavMeshAgent)this.GetComponent("NavMeshAgent");
         _target = GameObject.Find("Player");
         _animator = GetComponent<Animator>();
+        _rb = GetComponent<Rigidbody>();
+        dashtime = startDashtime;
 
     }
 
@@ -31,9 +39,18 @@ public class TestBossScrtpy : MonoBehaviour
         }
         else if (distance < 20f)
         {
+
+            if (dashtime <= 0)
+            {
+                dashtime = startDashtime;
+                _agent.velocity = Vector3.zero;
+            }
+            else
+            {
+                dashtime -= Time.deltaTime;
+                _agent.transform.position += _agent.transform.forward * dashSpeed;
+            }
             
-            _agent.transform.position += _agent.transform.forward * 50f;
-            _agent.velocity = Vector3.zero;
 
         }
         
