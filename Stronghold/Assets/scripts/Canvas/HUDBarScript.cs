@@ -6,10 +6,10 @@ using UnityEngine.UI;
 
 public class HUDBarScript : MonoBehaviour
 {
-    [SerializeField] 
-    public float maxHP = 100f;
-    [SerializeField] 
-    internal float HP = 100f;
+    [SerializeField]
+    float maxHP;
+    [SerializeField]
+    internal float HP;
 
     [SerializeField]
     PlayerControll playerControll;
