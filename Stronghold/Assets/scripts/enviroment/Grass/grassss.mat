@@ -21,13 +21,13 @@ Material:
     m_TexEnvs: []
     m_Floats:
     - _AmbientStrength: 0.5
-    - _BladeCurve: 2
+    - _BladeCurve: 4
     - _BladeForward: 0.38
     - _GrassHeight: 1
     - _GrassWidth: 0.06
     - _MaxDist: 60
-    - _MinDist: 120
-    - _Rad: 0.6
+    - _MinDist: 150
+    - _Rad: 1
     - _Radius: 3
     - _RandomHeight: 0.25
     - _Strength: 2
@@ -35,5 +35,5 @@ Material:
     - _WindStrength: 0.05
     m_Colors:
     - _BottomColor: {r: 0.031817377, g: 0.103773594, b: 0.031817377, a: 1}
-    - _TopColor: {r: 0.3490566, g: 0.33071095, b: 0.13336597, a: 1}
+    - _TopColor: {r: 0.38079777, g: 0.38679248, b: 0.24630654, a: 1}
   m_BuildTextureStacks: []
