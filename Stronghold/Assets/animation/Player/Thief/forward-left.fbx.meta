@@ -5,7 +5,7 @@ ModelImporter:
   internalIDToNameTable:
   - first:
       74: 4201073346248514575
-    second: Armature|Forward-left
+    second: t|Forward-left
   externalObjects: {}
   materials:
     materialImportMode: 2
@@ -35,7 +35,7 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Armature|Forward-left
+      name: t|Forward-left
       takeName: Armature|Forward-left
       internalID: 0
       firstFrame: 0

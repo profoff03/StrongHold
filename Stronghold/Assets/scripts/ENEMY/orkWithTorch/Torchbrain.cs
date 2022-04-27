@@ -14,6 +14,7 @@ public class Torchbrain : MonoBehaviour
     NavMeshAgent _agent;
     Animator _playerAnimator;
     Animator _animator;
+    AudioSource[] _audioSource;
 
 
 
@@ -46,6 +47,7 @@ public class Torchbrain : MonoBehaviour
         _playerAnimator = _target.GetComponent<Animator>();
         _playerControl = _target.GetComponent<PlayerControll>();
         _animator = GetComponent<Animator>();
+        _audioSource = GetComponents<AudioSource>();
         #region health
         health = maxHealth;
         
@@ -190,12 +192,15 @@ public class Torchbrain : MonoBehaviour
         if (IsAnimationPlayerPlaying("Strong", 0))
         {
             _animator.SetTrigger("strongReact");
+            
         }
         else
         {
             _animator.SetTrigger("react");
         }
-
+        int soundNumber = Random.Range(0, 1);
+        _audioSource[soundNumber].pitch = Random.Range(0.8f, 1f);
+        _audioSource[soundNumber].Play();
 
         dmg ??= 0;
         health -= (float)dmg;
@@ -211,7 +216,8 @@ public class Torchbrain : MonoBehaviour
         {
             TakeDamage(other.GetComponent<DamageProperty>()?.Damage);
             Instantiate(blood, transform.position, Quaternion.Euler(-90f, 0f, 0f));
-            _playerControl._weponColider.tag = "Untagged";
+            //_playerControl._weponColider.tag = "Untagged";
+            
 
         }
     }

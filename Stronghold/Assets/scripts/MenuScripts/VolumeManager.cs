@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Audio;
 
 public class VolumeManager : MonoBehaviour
 {
@@ -12,8 +13,7 @@ public class VolumeManager : MonoBehaviour
     private int FirstPlayInt;
     public Slider musicSlider, soundEffectSlider;
     private float musicFloat, soundEffectsFloat;
-    public AudioSource musicAudio;
-    public AudioSource[] soundsEffectsAudio;
+    public AudioMixerGroup musicMixerGroup;
 
     // Start is called before the first frame update
     void Start()
@@ -53,12 +53,10 @@ public class VolumeManager : MonoBehaviour
 
     public void UpdateSound()
     {
-        musicAudio.volume = musicSlider.value;
+        musicMixerGroup.audioMixer.SetFloat("Music", Mathf.Lerp(-80, 0 , musicSlider.value));
+        musicMixerGroup.audioMixer.SetFloat("Effect", Mathf.Lerp(-80, 0, soundEffectSlider.value));
 
-        for(int i = 0; i < soundsEffectsAudio.Length; i++)
-        {
-            soundsEffectsAudio[i].volume = soundEffectSlider.value;
-        }
+        
     }
 
 
