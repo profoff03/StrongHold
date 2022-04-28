@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
@@ -161,9 +159,9 @@ public class Torchbrain : MonoBehaviour
 
     public bool IsAnimationPlayerPlaying(string animationName, int index)
     {
-        // берем информацию о состоянии
+        // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         var animatorStateInfo = _playerAnimator.GetCurrentAnimatorStateInfo(index);
-        // смотрим, есть ли в нем имя какой-то анимации, то возвращаем true
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ-пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ true
         if (animatorStateInfo.IsName(animationName))
             return true;
 
@@ -171,9 +169,9 @@ public class Torchbrain : MonoBehaviour
     } //Check animation state
     public bool IsAnimationPlaying(string animationName, int index)
     {
-        // берем информацию о состоянии
+        // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         var animatorStateInfo = _animator.GetCurrentAnimatorStateInfo(index);
-        // смотрим, есть ли в нем имя какой-то анимации, то возвращаем true
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ-пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ true
         if (animatorStateInfo.IsName(animationName))
             return true;
 
@@ -188,7 +186,7 @@ public class Torchbrain : MonoBehaviour
     private void TakeDamage(float? dmg)
     {
 
-        Debug.Log($"Получен удар на {dmg}");
+        Debug.Log($"пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ {dmg}");
         if (IsAnimationPlayerPlaying("Strong", 0))
         {
             _animator.SetTrigger("strongReact");
@@ -220,5 +218,9 @@ public class Torchbrain : MonoBehaviour
             
 
         }
+    }
+	private void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.CompareTag("Smoke")) Debug.Log("I'm in smoke");
     }
 }
