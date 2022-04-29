@@ -2194,7 +2194,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc3ce203347192840a4d24c04455af6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHP: 10
+  maxHP: 100
   HP: 10
   playerControll: {fileID: 7708838226405378994}
   blood: {fileID: 0}
@@ -4304,7 +4304,6 @@ MonoBehaviour:
   _StrongSlash: {fileID: 4596048143191237811}
   _ultTime: 20
   _ultRegenerateTime: 30
-  bombsAmount: 3
   _camera: {fileID: 7708838226794255230}
   _movementSpeed: 15
   _runningSpeed: 1.5

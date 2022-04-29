@@ -906,7 +906,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: FirstSlash
-  m_Speed: 1.3
+  m_Speed: 1.2
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 2261295473301631034}
@@ -1108,7 +1108,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: SecondSlash
-  m_Speed: 1.2
+  m_Speed: 1.1
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 3246142998122319107}
@@ -1206,7 +1206,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Strong
-  m_Speed: 1.2
+  m_Speed: 1.1
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 2011126256873481981}
@@ -1299,7 +1299,7 @@ BlendTree:
     m_DirectBlendParameter: Blend
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 1303299601406483602, guid: c1f682c8866b6be46a4020dd7dd1a49f, type: 3}
+    m_Motion: {fileID: 1303299601406483602, guid: b1e1856ae7a6eb6479395074790eb18b, type: 3}
     m_Threshold: 1.7
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
