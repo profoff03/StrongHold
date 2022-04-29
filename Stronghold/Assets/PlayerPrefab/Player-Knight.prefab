@@ -3060,18 +3060,6 @@ ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 198189196357569358, guid: 3e914ef784028124db1daf7002a87cc8, type: 3}
   m_PrefabInstance: {fileID: 3523416911084619274}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8668820501117727580
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3522085411131957972}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3623f53c57bb37e45a5c975bdc8b89a8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!82 &5519076178048328623
 AudioSource:
   m_ObjectHideFlags: 0
@@ -3168,6 +3156,18 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &8668820501117727580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3522085411131957972}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3623f53c57bb37e45a5c975bdc8b89a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &4397885335321145341
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4295,7 +4295,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hud: {fileID: 7708838226703610883}
   _weponColider: {fileID: 749352866353542729}
-  canClick: 1
+  bombPref: {fileID: 1090702106423642071, guid: 451a748196907c8439b50ca90e6eb718, type: 3}
   click_time: 0
   blood: {fileID: 3583297492628234557, guid: c7f60a0d96c56984687ba9c38727b0f4, type: 3}
   _FirstSlash: {fileID: 3613484514698530116}
@@ -4304,6 +4304,7 @@ MonoBehaviour:
   _StrongSlash: {fileID: 4596048143191237811}
   _ultTime: 20
   _ultRegenerateTime: 30
+  bombsAmount: 3
   _camera: {fileID: 7708838226794255230}
   _movementSpeed: 15
   _runningSpeed: 1.5

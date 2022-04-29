@@ -126,3 +126,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   smoke: {fileID: 1095787749935704, guid: cc606b05b54463b41bd3f1744812102d, type: 3}
+  smokeDelay: 1.5
+  smokeScale: 4

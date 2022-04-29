@@ -4,26 +4,25 @@ ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable:
   - first:
+      74: 2876981554226286365
+    second: Armature|IDLE
+  - first:
       74: -4349364226065339506
-    second: ORG|JumpAtack
+    second: Armature|JumpAtack
   - first:
       74: 8789740308271933675
     second: Armature|ReactStrong
-  - first:
-      74: -7059377046696155141
-    second: 'Armature|IDLE '
-  - first:
-      74: 3735904624263805422
-    second: ORG|IDLE(turnHead)
-  - first:
-      74: 3548440965778195293
-    second: ORG|ReactStrong
   externalObjects:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Bone
     second: {fileID: 2100000, guid: 71448d3b26474ec4485e8248b07847f4, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.001
+    second: {fileID: 2100000, guid: 2ea30f846697fda498dadd20efcb1622, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
@@ -38,7 +37,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Material.004
-    second: {fileID: 2100000, guid: 33d33616d63b5784e91bb8a6d1633b2f, type: 2}
+    second: {fileID: 2100000, guid: c7d07f983e64cb54cb06bf6fc680e7e2, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
@@ -128,7 +127,7 @@ ModelImporter:
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
   referencedClips: []
-  importAnimation: 0
+  importAnimation: 1
   humanDescription:
     serializedVersion: 3
     human: []
@@ -141,7 +140,7 @@ ModelImporter:
     legStretch: 0.05
     feetSpacing: 0
     globalScale: 1
-    rootMotionBoneName: mixamorig:Hips
+    rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1
@@ -149,7 +148,7 @@ ModelImporter:
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 2
   humanoidOversampling: 1
-  avatarSetup: 1
+  avatarSetup: 0
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
   additionalBone: 0
   userData: 

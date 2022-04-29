@@ -90,7 +90,7 @@ public class Torchbrain : MonoBehaviour
             }
             else
             {
-                if (distance > vewDistance-10f)
+                if (distance > 25f)
                 {
                     isAtack = false;
                     _animator.SetBool("isRunBack", false);
@@ -159,9 +159,7 @@ public class Torchbrain : MonoBehaviour
 
     public bool IsAnimationPlayerPlaying(string animationName, int index)
     {
-        // ����� ���������� � ���������
         var animatorStateInfo = _playerAnimator.GetCurrentAnimatorStateInfo(index);
-        // �������, ���� �� � ��� ��� �����-�� ��������, �� ���������� true
         if (animatorStateInfo.IsName(animationName))
             return true;
 
@@ -169,9 +167,7 @@ public class Torchbrain : MonoBehaviour
     } //Check animation state
     public bool IsAnimationPlaying(string animationName, int index)
     {
-        // ����� ���������� � ���������
         var animatorStateInfo = _animator.GetCurrentAnimatorStateInfo(index);
-        // �������, ���� �� � ��� ��� �����-�� ��������, �� ���������� true
         if (animatorStateInfo.IsName(animationName))
             return true;
 
@@ -185,8 +181,6 @@ public class Torchbrain : MonoBehaviour
 
     private void TakeDamage(float? dmg)
     {
-
-        Debug.Log($"������� ���� �� {dmg}");
         if (IsAnimationPlayerPlaying("Strong", 0))
         {
             _animator.SetTrigger("strongReact");
@@ -196,8 +190,10 @@ public class Torchbrain : MonoBehaviour
         {
             _animator.SetTrigger("react");
         }
-        int soundNumber = Random.Range(0, 1);
-        _audioSource[soundNumber].pitch = Random.Range(0.8f, 1f);
+        int soundNumber = Random.Range(0, 20);
+        if (soundNumber <= 10) soundNumber = 0;
+        if (soundNumber > 10) soundNumber = 1;
+        _audioSource[soundNumber].pitch = Random.Range(0.7f, 1.2f);
         _audioSource[soundNumber].Play();
 
         dmg ??= 0;
@@ -218,6 +214,8 @@ public class Torchbrain : MonoBehaviour
             
 
         }
+
+        
     }
 	private void OnTriggerStay(Collider other)
     {

@@ -12,6 +12,9 @@ ModelImporter:
   - first:
       74: -2108210049176166142
     second: Armature|1IDLE
+  - first:
+      74: 2876981554226286365
+    second: Armature|IDLE
   externalObjects:
   - first:
       type: UnityEngine:Material
@@ -61,11 +64,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Armature|1IDLE
-      takeName: Armature|1IDLE
+      name: Armature|IDLE
+      takeName: Armature|IDLE
       internalID: 0
-      firstFrame: 2
-      lastFrame: 218
+      firstFrame: 0
+      lastFrame: 217
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

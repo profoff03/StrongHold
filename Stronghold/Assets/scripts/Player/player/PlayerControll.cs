@@ -17,8 +17,6 @@ public class PlayerControll : MonoBehaviour
     [SerializeField]
     internal Collider _weponColider;
     [SerializeField]
-    GameObject blood;
-    [SerializeField]
     Bomb bombPref;
 
     #region ForMovement
@@ -93,8 +91,6 @@ public class PlayerControll : MonoBehaviour
     [SerializeField] internal float _ultTime = 20f;
 
     [SerializeField] internal float _ultRegenerateTime = 30f;
-
-    [SerializeField] internal int bombsAmount = 3;
     
     [Header("Moving")]
     [SerializeField] private Camera _camera;
@@ -151,7 +147,7 @@ public class PlayerControll : MonoBehaviour
     void Update()
     {
 
-        if (Input.GetKeyDown(KeyCode.G) && bombsAmount > 0) Spawnbomb();
+        if (Input.GetKeyDown(KeyCode.G)) SpawnBomb();
         if (Input.GetKeyDown(KeyCode.L) && IsAnimationPlaying("Death", 0))
         {
             Time.timeScale = 1f;
@@ -201,6 +197,18 @@ public class PlayerControll : MonoBehaviour
         }
         
     }
+
+    private void SpawnBomb()
+    {
+        var forward = transform.forward;
+        var bomb = Instantiate(bombPref,
+            transform.position + Vector3.up * 3.3F + forward * 10F,
+            quaternion.identity);
+        // bomb.GetComponent<Rigidbody>().velocity = _playerRigidbody.velocity;
+        bomb.direction = (forward + transform.up / 2).normalized;
+        bomb.force = 30;
+    }
+
     #region SlashPlayMethod
     void PlayFirstSlash()
     {
@@ -223,14 +231,7 @@ public class PlayerControll : MonoBehaviour
         audioSource.pitch = UnityEngine.Random.Range(0.9f, 1.1f);
         audioSource.Play();
         _ThirdSlash.Play();
-        var forward = transform.forward;
-        var bomb = Instantiate(bombPref,
-            transform.position + Vector3.up * 3.3F + forward * 10F, 
-            quaternion.identity);
-        // bomb.GetComponent<Rigidbody>().velocity = _playerRigidbody.velocity;
-        bomb.direction = (forward + transform.up / 2).normalized;
-        bomb.force = 30;
-        bombsAmount--;
+        
     }
     void PlayStrongSlash()
     {
