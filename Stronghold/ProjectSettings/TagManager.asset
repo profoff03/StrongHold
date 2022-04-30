@@ -9,6 +9,7 @@ TagManager:
   - grass
   - EnemyHit
   - Smoke
+  - dirt
   layers:
   - Default
   - TransparentFX

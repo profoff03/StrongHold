@@ -11,6 +11,7 @@ public class PlayerControll : MonoBehaviour
 
     private Rigidbody _playerRigidbody;
 
+
     [SerializeField]
     private HUDBarScript hud;
 
@@ -29,7 +30,7 @@ public class PlayerControll : MonoBehaviour
 
     private bool isPlayer;
 
-    private bool isMove;
+    internal bool isMove;
 
     #endregion
 
@@ -147,7 +148,7 @@ public class PlayerControll : MonoBehaviour
     void Update()
     {
 
-        if (Input.GetKeyDown(KeyCode.G)) SpawnBomb();
+        
         if (Input.GetKeyDown(KeyCode.L) && IsAnimationPlaying("Death", 0))
         {
             Time.timeScale = 1f;
@@ -157,12 +158,22 @@ public class PlayerControll : MonoBehaviour
         if (!IsAnimationPlaying("Death", 0) && !IsAnimationPlaying("ULTIMATE", 0))
         {
             _movementVector = CalculateMovementVector();
+           if (_movementVector.magnitude != 0)
+            {
+                isMove = true;
+            }
+            else
+            {
+                isMove = false;
+            }
+           
             //ultimate
             if (Input.GetKeyDown(KeyCode.Q) && !isUlting && !ultRegenerate)
             {
                 StartCoroutine(UltCooldown(_ultTime, _ultRegenerateTime));
                 _playerAnimator.SetTrigger("isUlt");
             }
+            
             if (Input.GetMouseButton(0))
             {
                 if (main_time == 0.0f)
@@ -193,6 +204,8 @@ public class PlayerControll : MonoBehaviour
                     main_time = 0.0f;
                 }
             }
+           
+            if (Input.GetKeyDown(KeyCode.G)) SpawnBomb();
             ResetAngularVelocity();
         }
         
@@ -249,7 +262,7 @@ public class PlayerControll : MonoBehaviour
             hud.TakeDamage(other.GetComponent<DamageProperty>()?.Damage);
             Instantiate(blood, transform.position, Quaternion.Euler(-90f, 0f, 0f));
         }
-        
+ 
     }
 
     private void ComboStarter()

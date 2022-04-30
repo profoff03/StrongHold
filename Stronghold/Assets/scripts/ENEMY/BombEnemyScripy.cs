@@ -57,13 +57,13 @@ public class BombEnemyScripy : MonoBehaviour
             Instantiate(_particleSystem, _target.transform.position, Quaternion.identity);
             var sphereCollider = gameObject.AddComponent<SphereCollider>();
             sphereCollider.isTrigger = true;
-            sphereCollider.radius = 5f;
+            sphereCollider.radius = 10f;
             sphereCollider.center = new Vector3(0, 5f, 4f);
             sphereCollider.tag = "EnemyHit";
             sphereCollider.gameObject.AddComponent<DamageProperty>();
             sphereCollider.GetComponent<DamageProperty>().Damage = bombDamage;
 
-            Destroy(_me,0.015f);
+            Destroy(_me,0.019f);
             
         }
     }
