@@ -53,7 +53,7 @@ public class VolumeManager : MonoBehaviour
 
     public void UpdateSound()
     {
-        musicMixerGroup.audioMixer.SetFloat("Music", Mathf.Lerp(-80, 0 , musicSlider.value));
+        musicMixerGroup.audioMixer.SetFloat("Music", Mathf.Lerp(-50, 0 , musicSlider.value));
         musicMixerGroup.audioMixer.SetFloat("Effect", Mathf.Lerp(-80, 0, soundEffectSlider.value));
 
         
