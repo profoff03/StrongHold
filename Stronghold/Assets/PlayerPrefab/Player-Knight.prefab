@@ -4419,8 +4419,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90ead7d111072a14680fb92fd6df8b74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  steps:
-  - {fileID: 8300000, guid: 0056868aff218604e8b0c859b2f72e32, type: 3}
-  - {fileID: 8300000, guid: 8d93736d3c6baf341bc47a2953f63663, type: 3}
-  - {fileID: 8300000, guid: 129839f36797c2f4a809fb4b7046e7a4, type: 3}
-  - {fileID: 8300000, guid: 5443e371be091954f8902a4fc731c903, type: 3}
+  steps: {fileID: 8300000, guid: 200834ed15c4f1542bf1933a16ccb8ac, type: 3}

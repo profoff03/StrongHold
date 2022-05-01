@@ -5,9 +5,10 @@ using UnityEngine;
 public class StepsSound : MonoBehaviour
 {
     [SerializeField]
-    AudioClip[] steps;
+    AudioClip steps;
     AudioSource audioSorce;
     PlayerControll playerControll;
+    int rand = 0;
     // Start is called before the first frame update
     void Start()
     {
@@ -19,8 +20,9 @@ public class StepsSound : MonoBehaviour
     {
         if (playerControll.isMove)
         {
-            int rand = Random.Range(0, steps.Length);
-            audioSorce.PlayOneShot(steps[rand]);
+            int prevrand = rand;
+            audioSorce.pitch = (Random.Range(0.7f, 0.9f));
+            audioSorce.PlayOneShot(steps);
         }
         
     }
