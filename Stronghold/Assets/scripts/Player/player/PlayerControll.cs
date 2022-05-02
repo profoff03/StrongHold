@@ -20,6 +20,8 @@ public class PlayerControll : MonoBehaviour
     [SerializeField]
     Bomb bombPref;
 
+    internal bool canThrowBomb = true;
+
     #region ForMovement
 
     private Vector3 _movementVector;
@@ -36,6 +38,7 @@ public class PlayerControll : MonoBehaviour
 
     #region ForAttack
 
+    [SerializeField]
     private bool canClick = true;
 
     private bool ultRegenerate;
@@ -47,8 +50,6 @@ public class PlayerControll : MonoBehaviour
     private int noOfClick = 0;
 
     private float main_time;
-
-    public float click_time;
 
     private float bool_time = 0.3f;
 
@@ -85,6 +86,9 @@ public class PlayerControll : MonoBehaviour
     [SerializeField]
     ParticleSystem _ThirdSlash;
     
+    [SerializeField]
+    ParticleSystem _4Slash;
+
     [SerializeField]
     ParticleSystem _StrongSlash;
     
@@ -185,7 +189,7 @@ public class PlayerControll : MonoBehaviour
                 {
                     //strong attack
                     noOfClick = 4;
-                    _playerAnimator.SetInteger("isAttackPhase", 4);
+                    _playerAnimator.SetInteger("isAttackPhase", 5);
                     mouseDown = true;
                     DoHit(_strongAttackDamage);
 
@@ -205,21 +209,25 @@ public class PlayerControll : MonoBehaviour
                 }
             }
            
-            if (Input.GetKeyDown(KeyCode.G)) SpawnBomb();
             ResetAngularVelocity();
         }
         
     }
 
-    private void SpawnBomb()
+    internal void SpawnBomb()
     {
-        var forward = transform.forward;
-        var bomb = Instantiate(bombPref,
-            transform.position + Vector3.up * 3.3F + forward * 10F,
-            quaternion.identity);
-        // bomb.GetComponent<Rigidbody>().velocity = _playerRigidbody.velocity;
-        bomb.direction = (forward + transform.up / 2).normalized;
-        bomb.force = 30;
+        if (canThrowBomb)
+        {
+            var forward = transform.forward;
+            var bomb = Instantiate(bombPref,
+                transform.position + Vector3.up * 3.3F + forward * 10F,
+                quaternion.identity);
+            // bomb.GetComponent<Rigidbody>().velocity = _playerRigidbody.velocity;
+            bomb.direction = (forward + transform.up / 2).normalized;
+            bomb.force = 30;
+            canThrowBomb = false;
+        }
+        
     }
 
     #region SlashPlayMethod
@@ -245,6 +253,14 @@ public class PlayerControll : MonoBehaviour
         audioSource.Play();
         _ThirdSlash.Play();
         
+    }
+    void Play4Slash()
+    {
+        AudioSource audioSource = _ThirdSlash.GetComponentInParent<AudioSource>();
+        audioSource.pitch = UnityEngine.Random.Range(0.9f, 1.1f);
+        audioSource.Play();
+        _4Slash.Play();
+
     }
     void PlayStrongSlash()
     {
@@ -309,7 +325,20 @@ public class PlayerControll : MonoBehaviour
             canClick = true;
             DoHit(_simpleAttackDamage + 2);
         }
-        else if (IsAnimationPlaying("ThirdSlash", 0))
+        else if (IsAnimationPlaying("ThirdSlash", 0) && noOfClick == 3)
+        {
+            _playerAnimator.SetInteger("isAttackPhase", 0);
+            canClick = true;
+            noOfClick = 0;
+            _weponColider.tag = "Untagged";
+        }
+        else if (IsAnimationPlaying("ThirdSlash", 0) && noOfClick >= 4)
+        {
+            _playerAnimator.SetInteger("isAttackPhase", 4);
+            canClick = true;
+            DoHit(_simpleAttackDamage + 3);
+        }
+        else if (IsAnimationPlaying("4Slash", 0))
         {
             _playerAnimator.SetInteger("isAttackPhase", 0);
             canClick = true;
