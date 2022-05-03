@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.0059959176, g: 0.06022302, b: 0.19527307, a: 1}
+  m_IndirectSpecularColor: {r: 0.0059996275, g: 0.060222622, b: 0.19526969, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -770,7 +770,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02318141b9a2f445b509407699a3c56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  blood: {fileID: 3583297492628234557, guid: c7f60a0d96c56984687ba9c38727b0f4, type: 3}
   maxHealth: 100
   dmg: 2
   vewDistance: 30
@@ -1060,7 +1059,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02318141b9a2f445b509407699a3c56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  blood: {fileID: 3583297492628234557, guid: c7f60a0d96c56984687ba9c38727b0f4, type: 3}
   maxHealth: 100
   dmg: 2
   vewDistance: 30
@@ -2175,7 +2173,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02318141b9a2f445b509407699a3c56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  blood: {fileID: 3583297492628234557, guid: c7f60a0d96c56984687ba9c38727b0f4, type: 3}
   maxHealth: 100
   dmg: 2
   vewDistance: 30

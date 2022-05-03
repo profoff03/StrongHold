@@ -7,9 +7,6 @@ using static UnityEngine.Mathf;
 public class Torchbrain : MonoBehaviour
 {
     GameObject _target;
-    [SerializeField]
-    GameObject blood;
-    PlayerControll _playerControl;
     NavMeshAgent _agent;
     Animator _playerAnimator;
     Animator _animator;
@@ -45,7 +42,7 @@ public class Torchbrain : MonoBehaviour
         _agent = (NavMeshAgent)this.GetComponent("NavMeshAgent");
         _target = GameObject.Find("Player");
         _playerAnimator = _target.GetComponent<Animator>();
-        _playerControl = _target.GetComponent<PlayerControll>();
+       
         _animator = GetComponent<Animator>();
         _audioSource = GetComponents<AudioSource>();
         #region health
@@ -211,7 +208,6 @@ public class Torchbrain : MonoBehaviour
         if (other.gameObject.CompareTag("Hit"))
         {
             TakeDamage(other.GetComponent<DamageProperty>()?.Damage);
-            Instantiate(blood, transform.position, Quaternion.Euler(-90f, 0f, 0f));
             //_playerControl._weponColider.tag = "Untagged";
             
 

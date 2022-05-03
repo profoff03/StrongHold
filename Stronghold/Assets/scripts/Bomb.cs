@@ -1,13 +1,6 @@
 using System.Collections;
 using UnityEngine;
-public class DestroyGameObject : MonoBehaviour
-{
-    public float destroyTime = 2f;
-    void Update()
-    {
-        Destroy(gameObject, destroyTime);
-    }
-}
+
 public class Bomb : MonoBehaviour
 {
     PlayerControll player;
