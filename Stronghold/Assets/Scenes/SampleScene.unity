@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.0059996275, g: 0.060222622, b: 0.19526969, a: 1}
+  m_IndirectSpecularColor: {r: 0.0059959176, g: 0.06022302, b: 0.19527307, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -679,7 +679,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 02653907b2c11dd4fbe362c49b926b38, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 299.1
+      value: 319.7
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 02653907b2c11dd4fbe362c49b926b38, type: 3}
       propertyPath: m_LocalPosition.y
@@ -687,7 +687,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 02653907b2c11dd4fbe362c49b926b38, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 421.61176
+      value: 402.9
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 02653907b2c11dd4fbe362c49b926b38, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1007,6 +1007,20 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 02653907b2c11dd4fbe362c49b926b38, type: 3}
   m_PrefabInstance: {fileID: 527706760}
   m_PrefabAsset: {fileID: 0}
+--- !u!136 &570672105
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 570672097}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 2.8287048
+  m_Height: 9.96037
+  m_Direction: 1
+  m_Center: {x: 0.03186035, y: 4.965079, z: 0}
 --- !u!1 &693006227 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 02653907b2c11dd4fbe362c49b926b38, type: 3}
@@ -1490,6 +1504,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7708838226405378994, guid: 787f7c1aa7082cd48a48402e5c565528, type: 3}
+      propertyPath: sphere
+      value: 
+      objectReference: {fileID: 375249148704825696, guid: c367cf25775793447a8bca768aa8ea00, type: 3}
     - target: {fileID: 7708838226703610883, guid: 787f7c1aa7082cd48a48402e5c565528, type: 3}
       propertyPath: HP
       value: 100

@@ -21,6 +21,7 @@ public class BombEnemyScripy : MonoBehaviour
     [SerializeField]
     float moveSpeed;
 
+    private Vector3 _force;
 
     float _rotationSpeed;
     // Start is called before the first frame update
@@ -36,7 +37,9 @@ public class BombEnemyScripy : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
+    {        
+        transform.position += _force;
+
         float DistanceToPlayer = Vector3.Distance(_agent.transform.position, _target.transform.position);
         //  Debug.Log(DistanceToPlayer);
         if(DistanceToPlayer < 40.0f)
@@ -80,4 +83,27 @@ public class BombEnemyScripy : MonoBehaviour
            _rotationSpeed * Time.deltaTime * RotationSpeed
             );
     }
+    
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Push"))
+        {
+            var control = other.gameObject.transform.parent.gameObject.GetComponent<PlayerControll>();
+            var direction = transform.position - control.transform.position;
+            direction.y = 0;
+            Debug.Log(direction);
+            StartCoroutine(Push(direction.normalized * control._puchForce));
+        }
+        
+    }
+    private IEnumerator Push(Vector3 force)
+    {
+        _force = force.normalized;
+        Debug.Log($"{force}, {force.magnitude}");
+        yield return new WaitForSeconds(force.magnitude / 30f);
+        _force.x = 0;
+        _force.z = 0;
+        _force.y = 0;
+    }
+    
 }

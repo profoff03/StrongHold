@@ -112,6 +112,10 @@ public class PlayerControll : MonoBehaviour
     [SerializeField] private float _simpleAttackDamage = 10;
 
     [SerializeField] private float _strongAttackDamage = 15;
+    [SerializeField] public float _puchForce = 5f;
+
+    [SerializeField] GameObject sphere;
+    
 
     #endregion
 
@@ -177,6 +181,11 @@ public class PlayerControll : MonoBehaviour
                 StartCoroutine(UltCooldown(_ultTime, _ultRegenerateTime));
                 _playerAnimator.SetTrigger("isUlt");
             }
+
+            if (Input.GetKeyDown(KeyCode.C))
+            {
+                PushEnemy(5f);
+            }
             
             if (Input.GetMouseButton(0))
             {
@@ -212,6 +221,17 @@ public class PlayerControll : MonoBehaviour
             ResetAngularVelocity();
         }
         
+    }
+
+    private void PushEnemy(float force=0)
+    {
+        _puchForce = force;
+        var spherecoll = Instantiate(sphere, transform.position, quaternion.identity);
+        spherecoll.transform.parent = gameObject.transform;
+        spherecoll.transform.localPosition = new Vector3(0, 5, 3f);
+        spherecoll.tag = "Push";
+        spherecoll.GetComponent<SphereCollider>().center= Vector3.zero;
+        Destroy(spherecoll, 5f);
     }
 
     internal void SpawnBomb()

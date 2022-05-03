@@ -10,6 +10,7 @@ TagManager:
   - EnemyHit
   - Smoke
   - dirt
+  - Push
   layers:
   - Default
   - TransparentFX

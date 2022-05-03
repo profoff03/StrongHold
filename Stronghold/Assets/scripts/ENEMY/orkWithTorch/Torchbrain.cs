@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
@@ -37,6 +38,7 @@ public class Torchbrain : MonoBehaviour
     [SerializeField]
     float stayTime;
     float start = 0;
+    private Vector3 _force;
 
     void Start()
     {
@@ -60,7 +62,7 @@ public class Torchbrain : MonoBehaviour
     }
     void Update()
     {
-        
+        transform.position += _force;
         float distance = Vector3.Distance(_agent.transform.position, _target.transform.position);
         if (!IsAnimationPlayerPlaying("Death", 0))
         {
@@ -214,8 +216,25 @@ public class Torchbrain : MonoBehaviour
             
 
         }
-
         
+        
+        if (other.gameObject.CompareTag("Push"))
+        {
+            var control = other.gameObject.transform.parent.gameObject.GetComponent<PlayerControll>();
+            var direction = transform.position - control.transform.position;
+            direction.y = 0;
+            Debug.Log(direction);
+            StartCoroutine(Push(direction.normalized * control._puchForce));
+        }
+        
+    }
+    private IEnumerator Push(Vector3 force)
+    {
+        _force = force.normalized;
+        yield return new WaitForSeconds(force.magnitude / 30f);
+        _force.x = 0;
+        _force.z = 0;
+        _force.y = 0;
     }
 	private void OnTriggerStay(Collider other)
     {

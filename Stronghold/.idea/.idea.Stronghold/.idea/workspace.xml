@@ -12,6 +12,8 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/0ee480759f3d481d82ada245dc74f9fd13be00/0d/1ce6a3b0/HeaderAttribute.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/scripts/DestroyGameObject.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/scripts/ENEMY/BrainFollowScript.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -75,6 +77,7 @@
       <updated>1650640522480</updated>
       <workItem from="1650640524493" duration="8880000" />
       <workItem from="1651159980801" duration="598000" />
+      <workItem from="1651516944181" duration="7666000" />
     </task>
     <servers />
   </component>
