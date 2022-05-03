@@ -82,7 +82,35 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.26022717
+        functionName: DoHit
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 2c9aff866065b0b4bbb2669710af7831, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.4034871
+        functionName: DoHit
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 2c9aff866065b0b4bbb2669710af7831, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.6664219
+        functionName: DoHit
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 2c9aff866065b0b4bbb2669710af7831, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.89770657
+        functionName: CkeckAtack
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 2c9aff866065b0b4bbb2669710af7831, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
@@ -111,7 +139,21 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.39526364
+        functionName: DoHit
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 2c9aff866065b0b4bbb2669710af7831, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.7025931
+        functionName: CkeckAtack
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 2c9aff866065b0b4bbb2669710af7831, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
@@ -169,7 +211,21 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.47520864
+        functionName: DoHit
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 2c9aff866065b0b4bbb2669710af7831, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.89229393
+        functionName: CkeckAtack
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 2c9aff866065b0b4bbb2669710af7831, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
@@ -314,7 +370,21 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.38993204
+        functionName: DoHit
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 2c9aff866065b0b4bbb2669710af7831, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.7527389
+        functionName: CkeckAtack
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 2c9aff866065b0b4bbb2669710af7831, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}

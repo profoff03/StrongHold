@@ -5,7 +5,7 @@ ModelImporter:
   internalIDToNameTable:
   - first:
       74: 3735904624263805422
-    second: Armature|IDLE(turnHead)
+    second: AxeOrk|IDLE(turnHead)
   - first:
       74: -4349364226065339506
     second: Armature|JumpAtack
@@ -41,7 +41,7 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Armature|IDLE(turnHead)
+      name: AxeOrk|IDLE(turnHead)
       takeName: Armature|IDLE(turnHead)
       internalID: 0
       firstFrame: 0

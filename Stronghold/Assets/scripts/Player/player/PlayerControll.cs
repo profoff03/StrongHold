@@ -395,7 +395,7 @@ public class PlayerControll : MonoBehaviour
         {
             RotateFromMouseVector(); //mouse rotate
             if (IsAnimationPlaying("movement", 0))
-                _playerAnimator.transform.position += _movementVector * _movementSpeed / 45;
+                _playerRigidbody.AddForce(_movementVector * _movementSpeed * 1000);
         }
         
     }
@@ -440,8 +440,8 @@ public class PlayerControll : MonoBehaviour
 
 
 
-        _playerAnimator.SetFloat("Horizontal", relativeVector.x, 1 / _movingSens, Time.deltaTime);
-        _playerAnimator.SetFloat("Vertical", relativeVector.z, 1 / _movingSens, Time.deltaTime);
+        _playerAnimator.SetFloat("Horizontal", relativeVector.x, 1 / _movingSens, Time.fixedDeltaTime);
+        _playerAnimator.SetFloat("Vertical", relativeVector.z, 1 / _movingSens, Time.fixedDeltaTime);
 
 
         if (v < 0 || h != 0 && v == 0 || Math.Abs(Mathf.Abs(h) - Mathf.Abs(v)) < 0.00001d)
