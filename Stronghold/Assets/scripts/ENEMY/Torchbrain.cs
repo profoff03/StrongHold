@@ -154,8 +154,6 @@ public class Torchbrain : MonoBehaviour
         sphereCollider.GetComponent<DamageProperty>().Damage = dmg;
         Destroy(sphereCollider, 0.1f);
         Destroy(sphereCollider.GetComponent<DamageProperty>(), 0.1f);
-
-
     }
 
 

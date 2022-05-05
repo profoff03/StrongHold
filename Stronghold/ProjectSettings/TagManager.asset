@@ -11,6 +11,7 @@ TagManager:
   - Smoke
   - dirt
   - Push
+  - StunHit
   layers:
   - Default
   - TransparentFX

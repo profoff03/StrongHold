@@ -11,6 +11,7 @@ public class PlayerControll : MonoBehaviour
 
     private Rigidbody _playerRigidbody;
 
+    internal bool isStan;
 
     [SerializeField]
     private HUDBarScript hud;
@@ -163,7 +164,7 @@ public class PlayerControll : MonoBehaviour
             _playerAnimator.SetTrigger("isLive");
             hud.HP = 100f;
         }
-        if (!IsAnimationPlaying("Death", 0) && !IsAnimationPlaying("ULTIMATE", 0))
+        if (!IsAnimationPlaying("Death", 0) && !IsAnimationPlaying("ULTIMATE", 0) && !isStan)
         {
             _movementVector = CalculateMovementVector();
            if (_movementVector.magnitude != 0)
@@ -222,6 +223,26 @@ public class PlayerControll : MonoBehaviour
         }
         
     }
+    void isNotStun()
+    {
+        isStan = false;
+        _playerAnimator.SetInteger("isAttackPhase", 0);
+        canClick = true;
+        noOfClick = 0;
+
+    }
+
+    private void FixedUpdate()
+    {
+        if (!IsAnimationPlaying("Death", 0) && !IsAnimationPlaying("ULTIMATE", 0) && !isStan)
+        {
+            RotateFromMouseVector(); //mouse rotate
+            if (IsAnimationPlaying("movement", 0))
+                _playerRigidbody.AddForce(_movementVector * _movementSpeed * 1000);
+        }
+
+    }
+
 
     private void PushEnemy(float force=0)
     {
@@ -298,7 +319,12 @@ public class PlayerControll : MonoBehaviour
             hud.TakeDamage(other.GetComponent<DamageProperty>()?.Damage);
             Instantiate(blood, transform.position, Quaternion.Euler(-90f, 0f, 0f));
         }
- 
+        if (other.gameObject.CompareTag("StunHit"))
+        {
+            _playerAnimator.SetTrigger("isStun");
+            isStan = true;
+        }
+
     }
 
     private void ComboStarter()
@@ -389,16 +415,7 @@ public class PlayerControll : MonoBehaviour
     } //Check animation state
 
 
-    private void FixedUpdate()
-    {
-        if (!IsAnimationPlaying("Death", 0) && !IsAnimationPlaying("ULTIMATE", 0))
-        {
-            RotateFromMouseVector(); //mouse rotate
-            if (IsAnimationPlaying("movement", 0))
-                _playerRigidbody.AddForce(_movementVector * _movementSpeed * 1000);
-        }
-        
-    }
+    
 
 
     private Vector3 CalculateMovementVector()

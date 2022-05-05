@@ -9,6 +9,9 @@ ModelImporter:
   - first:
       74: -8858524443752318369
     second: knight|4slash
+  - first:
+      74: -8963745751997360686
+    second: knight|stunIDLE
   externalObjects: {}
   materials:
     materialImportMode: 2
@@ -142,6 +145,42 @@ ModelImporter:
         messageOptions: 0
       - time: 0.4483198
         functionName: SetTriggerUntagged
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 91b501fb8d1c41e4dbc7c64d45b835e0, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: knight|stunIDLE
+      takeName: Armature|stunIDLE
+      internalID: 0
+      firstFrame: 0
+      lastFrame: 359
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 1
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 1
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events:
+      - time: 0.9559118
+        functionName: isNotStun
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 91b501fb8d1c41e4dbc7c64d45b835e0, type: 3}
         floatParameter: 0
