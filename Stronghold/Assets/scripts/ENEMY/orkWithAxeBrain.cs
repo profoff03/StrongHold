@@ -12,7 +12,7 @@ public class orkWithAxeBrain : MonoBehaviour
     Animator _animator;
     AudioSource[] _audioSource;
     CapsuleCollider _myColider;
-
+    Camera _camera;
 
 
     bool isAtack = false;
@@ -21,7 +21,8 @@ public class orkWithAxeBrain : MonoBehaviour
     private Canvas canvas;
     private Slider healthSlider;
 
-
+    [SerializeField]
+    float moveSpeed;
     [SerializeField]
     float maxHealth;
     [SerializeField]
@@ -40,6 +41,7 @@ public class orkWithAxeBrain : MonoBehaviour
 
     void Start()
     {
+        _camera = Camera.main;
         _myColider = GetComponent<CapsuleCollider>();
         _agent = (NavMeshAgent)this.GetComponent("NavMeshAgent");
         _target = GameObject.Find("Player");
@@ -48,6 +50,8 @@ public class orkWithAxeBrain : MonoBehaviour
         _animator = GetComponent<Animator>();
         _audioSource = GetComponents<AudioSource>();
         #region health
+
+       
         health = maxHealth;
         
         canvas = _agent.transform.Find("HealthBar").gameObject.GetComponent<Canvas>();
@@ -55,7 +59,7 @@ public class orkWithAxeBrain : MonoBehaviour
         
         healthSlider.maxValue = maxHealth;
         healthSlider.value = health;
-
+        canvas.worldCamera = _camera;
         canvas.transform.rotation = canvas.worldCamera.transform.rotation;
         #endregion
     }
@@ -140,14 +144,14 @@ public class orkWithAxeBrain : MonoBehaviour
     void CkeckAtack()
     {
         isAtack = true;
-        _myColider.tag = "Untagged";
+        _myColider.tag = "Enemy";
     }
 
     void DoHit()
     {
         var sphereCollider = gameObject.AddComponent<SphereCollider>();
         sphereCollider.isTrigger = true;
-        sphereCollider.radius = 3.4f;
+        sphereCollider.radius = 5f;
         sphereCollider.center = new Vector3(0, 5f, 4f);
         sphereCollider.tag = "EnemyHit";
         sphereCollider.gameObject.AddComponent<DamageProperty>();
@@ -227,7 +231,10 @@ public class orkWithAxeBrain : MonoBehaviour
             Debug.Log(direction);
             StartCoroutine(Push(direction.normalized * control._puchForce));
         }
+
         
+
+
     }
     private IEnumerator Push(Vector3 force)
     {

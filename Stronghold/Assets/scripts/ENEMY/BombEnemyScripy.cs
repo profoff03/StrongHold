@@ -9,9 +9,10 @@ public class BombEnemyScripy : MonoBehaviour
     private bool _isSees;
     private Animator _animator;
     private NavMeshAgent _agent;
-    private GameObject _me;
     [SerializeField]
     private ParticleSystem _particleSystem;
+    [SerializeField]
+    float viewDistance;
     [SerializeField]
     float explosionDistance;
     [SerializeField]
@@ -21,16 +22,18 @@ public class BombEnemyScripy : MonoBehaviour
     [SerializeField]
     float moveSpeed;
 
+    Rigidbody _rb;
+
     private Vector3 _force;
 
     float _rotationSpeed;
     // Start is called before the first frame update
     void Start()
     {
+        _rb = GetComponent<Rigidbody>();
         _animator = GetComponent<Animator>();
         _agent = GetComponent<NavMeshAgent>();
         _isSees = false;
-        _me = GameObject.Find("goblinWithBomb");
         _target = GameObject.Find("Player");
         _rotationSpeed = _agent.angularSpeed;
     }
@@ -42,16 +45,18 @@ public class BombEnemyScripy : MonoBehaviour
 
         float DistanceToPlayer = Vector3.Distance(_agent.transform.position, _target.transform.position);
         //  Debug.Log(DistanceToPlayer);
-        if(DistanceToPlayer < 40.0f)
+        if(DistanceToPlayer < viewDistance)
         {
             _isSees = true;
         }
 
         if(_isSees)
         {
-            _agent.transform.position += transform.forward * moveSpeed * Time.deltaTime;
-            _animator.SetBool("IsRunnig", true);
+            //_agent.transform.position += transform.forward * moveSpeed * Time.deltaTime;
+            
+            _animator.SetBool("isRunForward", true);
             _agent.SetDestination(_target.transform.position);
+            _rb.AddForce(transform.forward * moveSpeed * 1000);
             RotateToTarget();
         }
 
@@ -66,7 +71,7 @@ public class BombEnemyScripy : MonoBehaviour
             sphereCollider.gameObject.AddComponent<DamageProperty>();
             sphereCollider.GetComponent<DamageProperty>().Damage = bombDamage;
 
-            Destroy(_me,0.019f);
+            Destroy(gameObject,0.019f);
             
         }
     }

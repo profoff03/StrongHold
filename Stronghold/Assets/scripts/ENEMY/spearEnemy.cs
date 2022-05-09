@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class spearEnemy : MonoBehaviour
 {
     GameObject _target;
+    Camera _camera;
 
     [SerializeField]
     GameObject _stayPositions;
@@ -67,6 +68,7 @@ public class spearEnemy : MonoBehaviour
 
     void Start()
     {
+        _camera = Camera.main;
         _audioSource = GetComponents<AudioSource>();
         _myColider = GetComponent<CapsuleCollider>();
         _agent = (NavMeshAgent)this.GetComponent("NavMeshAgent");
@@ -86,12 +88,12 @@ public class spearEnemy : MonoBehaviour
 
         healthSlider.maxValue = maxHealth;
         healthSlider.value = health;
-
+        canvas.worldCamera = _camera;
         canvas.transform.rotation = canvas.worldCamera.transform.rotation;
         #endregion
 
     }
-    void Update()
+    void FixedUpdate()
     { 
         if (!IsAnimationPlaying("react", 0) && !IsAnimationPlaying("reactStrong", 0) && !cantDo)
         {
@@ -117,7 +119,7 @@ public class spearEnemy : MonoBehaviour
                         {
                             isHome = true;
                             _animator.SetBool("isHome", isHome);
-                            _animator.SetBool("isRun", false);
+                            _animator.SetBool("isRunForward", false);
                             RotateToTarget();
                         }
 
@@ -143,7 +145,7 @@ public class spearEnemy : MonoBehaviour
                             if (distance <= atackDistance && !isStunAtack && Time.time - startTiredTime >= 4f)
                             {
                                 _agent.speed = 0;
-                                _animator.SetBool("isRun", false);
+                                _animator.SetBool("isRunForward", false);
                                 RotateToTarget();
                                 _animator.SetBool("isAtack", true);
                                 
@@ -153,7 +155,7 @@ public class spearEnemy : MonoBehaviour
                             {
                                 _agent.speed = startSpeed;
                                 _agent.SetDestination(_home.position);
-                                _animator.SetBool("isRun", true);
+                                _animator.SetBool("isRunForward", true);
 
                             }
                         }
@@ -177,7 +179,7 @@ public class spearEnemy : MonoBehaviour
                     //_agent.transform.position += transform.forward * moveSpeed * Time.deltaTime;
 
                     float distToDistanation = Vector3.Distance(_agent.transform.position, playerPos);
-                    _animator.SetBool("isRun", true);
+                    _animator.SetBool("isRunForward", true);
                     if (distToDistanation <= atackDistance)
                     {
                         _agent.speed = 0;
@@ -185,7 +187,7 @@ public class spearEnemy : MonoBehaviour
                         isTired = true;
                         startTiredTime = Time.time;
                         _home = _stayPosTransforms[Random.Range(0, _stayPosTransforms.Length)];
-                        _animator.SetBool("isRun", false);
+                        _animator.SetBool("isRunForward", false);
                     }
                 }
                 else
@@ -280,7 +282,7 @@ public class spearEnemy : MonoBehaviour
     }
     void CkeckAtack()
     {
-        _myColider.tag = "Untagged";
+        _myColider.tag = "Enemy";
     }
 
 

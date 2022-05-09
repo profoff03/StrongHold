@@ -12,7 +12,7 @@ public class Torchbrain : MonoBehaviour
     Animator _animator;
     AudioSource[] _audioSource;
     CapsuleCollider _myColider;
-
+    Camera _camera;
 
 
     bool isAtack = false;
@@ -20,7 +20,6 @@ public class Torchbrain : MonoBehaviour
     float health;
     private Canvas canvas;
     private Slider healthSlider;
-
 
     [SerializeField]
     float maxHealth;
@@ -40,6 +39,8 @@ public class Torchbrain : MonoBehaviour
 
     void Start()
     {
+        
+        _camera = Camera.main;
         _myColider = GetComponent<CapsuleCollider>();
         _agent = (NavMeshAgent)this.GetComponent("NavMeshAgent");
         _target = GameObject.Find("Player");
@@ -55,7 +56,7 @@ public class Torchbrain : MonoBehaviour
         
         healthSlider.maxValue = maxHealth;
         healthSlider.value = health;
-
+        canvas.worldCamera = _camera;
         canvas.transform.rotation = canvas.worldCamera.transform.rotation;
         #endregion
     }
@@ -76,7 +77,8 @@ public class Torchbrain : MonoBehaviour
                 else if (distance < vewDistance && distance < atackDistance)
                 {
                     _agent.velocity = Vector3.zero;
-                    _agent.SetDestination(_target.transform.position);
+                    float r = Random.Range(0, 2);
+                    _agent.SetDestination(_target.transform.position + new Vector3 (r,0,r) );
                     _animator.SetBool("isRunForward", false);
                     _animator.SetInteger("AtackPhase", Random.Range(0, 10));
                     whereAtackDistance = _agent.transform.position;
@@ -99,15 +101,15 @@ public class Torchbrain : MonoBehaviour
                 }
                 else
                 {
-                    float dist = Vector3.Distance(_agent.transform.position, whereAtackDistance);
+                    //float dist = Vector3.Distance(_agent.transform.position, whereAtackDistance);
                     _animator.SetInteger("AtackPhase", 0);
-                    if (dist < goBackDistance)
+                    if (distance < goBackDistance)
                     {
                         _animator.SetBool("isRunBack", true);
                         isAtack = true;
 
                     }
-                    else if (dist >= goBackDistance)
+                    else if (distance >= goBackDistance)
                     {
                         
                         if (Time.time - start <= stayTime)
@@ -140,14 +142,14 @@ public class Torchbrain : MonoBehaviour
     void CkeckAtack()
     {
         isAtack = true;
-        _myColider.tag = "Untagged";
+        _myColider.tag = "Enemy";
     }
 
     void DoHit()
     {
         var sphereCollider = gameObject.AddComponent<SphereCollider>();
         sphereCollider.isTrigger = true;
-        sphereCollider.radius = 3.4f;
+        sphereCollider.radius = 5f;
         sphereCollider.center = new Vector3(0, 5f, 4f);
         sphereCollider.tag = "EnemyHit";
         sphereCollider.gameObject.AddComponent<DamageProperty>();
@@ -225,7 +227,8 @@ public class Torchbrain : MonoBehaviour
             Debug.Log(direction);
             StartCoroutine(Push(direction.normalized * control._puchForce));
         }
-        
+
+
     }
     private IEnumerator Push(Vector3 force)
     {
