@@ -36,6 +36,7 @@ public class Torchbrain : MonoBehaviour
     float stayTime;
     float start = 0;
     private Vector3 _force;
+    bool nearOther = false;
 
     void Start()
     {
@@ -63,81 +64,95 @@ public class Torchbrain : MonoBehaviour
     void Update()
     {
         transform.position += _force;
-        float distance = Vector3.Distance(_agent.transform.position, _target.transform.position);
-        if (!IsAnimationPlayerPlaying("Death", 0))
+        if (!nearOther)
         {
-            if (!isAtack)
+            float distance = Vector3.Distance(_agent.transform.position, _target.transform.position);
+            if (!IsAnimationPlayerPlaying("Death", 0))
             {
-                if (distance < vewDistance && distance >= atackDistance)
+                if (!isAtack)
                 {
-                    _agent.SetDestination(_target.transform.position);
-                    _animator.SetBool("isRunForward", true);
-                    
-                }
-                else if (distance < vewDistance && distance < atackDistance)
-                {
-                    _agent.velocity = Vector3.zero;
-                    float r = Random.Range(0, 2);
-                    _agent.SetDestination(_target.transform.position + new Vector3 (r,0,r) );
-                    _animator.SetBool("isRunForward", false);
-                    _animator.SetInteger("AtackPhase", Random.Range(0, 10));
-                    whereAtackDistance = _agent.transform.position;
-                    start = Time.time;
+                    if (distance < vewDistance && distance >= atackDistance)
+                    {
+                        _agent.SetDestination(_target.transform.position);
+                        _animator.SetBool("isRunForward", true);
+
+                    }
+                    else if (distance < vewDistance && distance < atackDistance)
+                    {
+                        _agent.velocity = Vector3.zero;
+                        float r = Random.Range(0, 2);
+                        _agent.SetDestination(_target.transform.position + new Vector3(r, 0, r));
+                        _animator.SetBool("isRunForward", false);
+                        _animator.SetInteger("AtackPhase", Random.Range(0, 10));
+                        whereAtackDistance = _agent.transform.position;
+                        start = Time.time;
+                    }
+                    else
+                    {
+                        _agent.velocity = Vector3.zero;
+                        _animator.SetBool("isRunForward", false);
+
+                    }
                 }
                 else
                 {
-                    _agent.velocity = Vector3.zero;
-                    _animator.SetBool("isRunForward", false);
+                    if (distance > 25f)
+                    {
+                        isAtack = false;
+                        _animator.SetBool("isRunBack", false);
+                        _animator.SetBool("isRunLeft", false);
+                    }
+                    else
+                    {
+                        //float dist = Vector3.Distance(_agent.transform.position, whereAtackDistance);
+                        _animator.SetInteger("AtackPhase", 0);
+                        if (distance < goBackDistance)
+                        {
+                            _animator.SetBool("isRunBack", true);
+                            isAtack = true;
+
+                        }
+                        else if (distance >= goBackDistance)
+                        {
+
+                            if (Time.time - start <= stayTime)
+                            {
+
+                                _animator.SetBool("isRunLeft", true);
+                                _agent.SetDestination(_target.transform.position);
+                            }
+                            else
+                            {
+                                _animator.SetBool("isRunBack", false);
+                                _animator.SetBool("isRunLeft", false);
+                                isAtack = false;
+                            }
+
+                        }
+
+                    }
 
                 }
+
             }
             else
             {
-                if (distance > 25f)
-                {
-                    isAtack = false;
-                    _animator.SetBool("isRunBack", false);
-                    _animator.SetBool("isRunLeft", false);
-                }
-                else
-                {
-                    //float dist = Vector3.Distance(_agent.transform.position, whereAtackDistance);
-                    _animator.SetInteger("AtackPhase", 0);
-                    if (distance < goBackDistance)
-                    {
-                        _animator.SetBool("isRunBack", true);
-                        isAtack = true;
-
-                    }
-                    else if (distance >= goBackDistance)
-                    {
-                        
-                        if (Time.time - start <= stayTime)
-                        {
-                            
-                            _animator.SetBool("isRunLeft", true);
-                            _agent.SetDestination(_target.transform.position);
-                        }
-                        else
-                        {
-                            _animator.SetBool("isRunBack", false);
-                            _animator.SetBool("isRunLeft", false);
-                            isAtack = false;
-                        }
-
-                    }
-                    
-                }
-                
+                _animator.SetInteger("AtackPhase", 0);
             }
-            
         }
         else
         {
-            _animator.SetInteger("AtackPhase",0);
+            StartCoroutine(changeDistanation());
         }
 
         canvas.transform.LookAt(canvas.worldCamera.transform);
+    }
+    private IEnumerator changeDistanation()
+    {
+        _animator.SetBool("isRunForward", true);
+        _agent.SetDestination(_target.transform.position + new Vector3(100, 0, 10));
+        yield return new WaitForSeconds(2);
+        nearOther = false;
     }
     void CkeckAtack()
     {
@@ -214,11 +229,15 @@ public class Torchbrain : MonoBehaviour
         {
             TakeDamage(other.GetComponent<DamageProperty>()?.Damage);
             //_playerControl._weponColider.tag = "Untagged";
-            
+
 
         }
-        
-        
+        else if (other.gameObject.CompareTag("Enemy"))
+        {
+            nearOther = true;
+        }
+
+
         if (other.gameObject.CompareTag("Push"))
         {
             var control = other.gameObject.transform.parent.gameObject.GetComponent<PlayerControll>();

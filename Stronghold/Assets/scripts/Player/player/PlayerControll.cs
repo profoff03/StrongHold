@@ -16,8 +16,8 @@ public class PlayerControll : MonoBehaviour
     [SerializeField]
     private HUDBarScript hud;
 
-    [SerializeField]
-    internal Collider _weponColider;
+    //[SerializeField]
+    //internal Collider _weponColider;
     [SerializeField]
     Bomb bombPref;
 
@@ -55,19 +55,28 @@ public class PlayerControll : MonoBehaviour
     private float bool_time = 0.3f;
 
     private void DoHit(float dmg = 0)
-    { 
-        
-        _weponColider.GetComponent<DamageProperty>().Damage = dmg;
+    {
+
+        _FirstSlash.GetComponent<DamageProperty>().Damage = dmg;
+        _SecondSlash.GetComponent<DamageProperty>().Damage = dmg;
+        _ThirdSlash.GetComponent<DamageProperty>().Damage = dmg;
+        _4Slash.GetComponent<DamageProperty>().Damage = dmg;
+        _StrongSlash.GetComponent<DamageProperty>().Damage = dmg;
         
     }
 
-    private void SetTriggerHit()
-    {
-        _weponColider.tag = "Hit";
-    }
+    //private void SetTriggerHit()
+    //{
+    //    //gameObject.tag = "Hit";
+    //}
     private void SetTriggerUntagged()
     {
-        _weponColider.tag = "Untagged";
+        
+        _FirstSlash.SetActive(false);
+        _SecondSlash.SetActive(false);
+        _ThirdSlash.SetActive(false);
+        _4Slash.SetActive(false);
+        _StrongSlash.SetActive(false);
     }
 
     #endregion
@@ -79,19 +88,19 @@ public class PlayerControll : MonoBehaviour
     GameObject blood;
     
     [SerializeField]
-    ParticleSystem _FirstSlash;
+    GameObject _FirstSlash;
     
     [SerializeField]
-    ParticleSystem _SecondSlash;
+    GameObject _SecondSlash;
     
     [SerializeField]
-    ParticleSystem _ThirdSlash;
+    GameObject _ThirdSlash;
     
     [SerializeField]
-    ParticleSystem _4Slash;
+    GameObject _4Slash;
 
     [SerializeField]
-    ParticleSystem _StrongSlash;
+    GameObject _StrongSlash;
     
     [Header("Ultimate")]
     [SerializeField] internal float _ultTime = 20f;
@@ -122,7 +131,12 @@ public class PlayerControll : MonoBehaviour
 
     void Awake()
     {
-        _weponColider.gameObject.AddComponent<DamageProperty>();
+        _FirstSlash.AddComponent<DamageProperty>();
+        _SecondSlash.AddComponent<DamageProperty>();
+        _ThirdSlash.AddComponent<DamageProperty>();
+        _4Slash.AddComponent<DamageProperty>();
+        _StrongSlash.AddComponent<DamageProperty>();
+        
         _playerAnimator = GetComponent<Animator>();
         _playerRigidbody = GetComponent<Rigidbody>();
         _camera = Camera.main;
@@ -277,7 +291,8 @@ public class PlayerControll : MonoBehaviour
         AudioSource audioSource = _FirstSlash.GetComponentInParent<AudioSource>();
         audioSource.pitch = UnityEngine.Random.Range(0.8f, 1.2f);
         audioSource.Play();
-        _FirstSlash.Play();
+        //_FirstSlash.GetComponent<ParticleSystem>().Play();
+        _FirstSlash.SetActive(true);
         
     }
     void PlaySecondSlash()
@@ -285,22 +300,22 @@ public class PlayerControll : MonoBehaviour
         AudioSource audioSource = _SecondSlash.GetComponentInParent<AudioSource>();
         audioSource.pitch = UnityEngine.Random.Range(0.9f, 1.1f);
         audioSource.Play();
-        _SecondSlash.Play();
+        _SecondSlash.SetActive(true);
     }
     void PlayThirdSlash()
     {
         AudioSource audioSource = _ThirdSlash.GetComponentInParent<AudioSource>();
         audioSource.pitch = UnityEngine.Random.Range(0.9f, 1.1f);
         audioSource.Play();
-        _ThirdSlash.Play();
-        
+        _ThirdSlash.SetActive(true);
+
     }
     void Play4Slash()
     {
         AudioSource audioSource = _ThirdSlash.GetComponentInParent<AudioSource>();
         audioSource.pitch = UnityEngine.Random.Range(0.9f, 1.1f);
         audioSource.Play();
-        _4Slash.Play();
+        _4Slash.SetActive(true);
 
     }
     void PlayStrongSlash()
@@ -308,7 +323,7 @@ public class PlayerControll : MonoBehaviour
         AudioSource audioSource = _StrongSlash.GetComponentInParent<AudioSource>();
         audioSource.pitch = UnityEngine.Random.Range(0.9f, 1.1f);
         audioSource.Play();
-        _StrongSlash.Play();
+        _StrongSlash.SetActive(true);
     }
     #endregion
 
@@ -350,7 +365,6 @@ public class PlayerControll : MonoBehaviour
             _playerAnimator.SetInteger("isAttackPhase", 0);
             canClick = true;
             noOfClick = 0;
-            _weponColider.tag = "Untagged";
         }
         else if (IsAnimationPlaying("FirstSlash", 0) && noOfClick >= 2)
         {
@@ -363,7 +377,6 @@ public class PlayerControll : MonoBehaviour
             _playerAnimator.SetInteger("isAttackPhase", 0);
             canClick = true;
             noOfClick = 0;
-            _weponColider.tag = "Untagged";
         }
         else if (IsAnimationPlaying("SecondSlash", 0) && noOfClick >= 3)
         {
@@ -376,7 +389,6 @@ public class PlayerControll : MonoBehaviour
             _playerAnimator.SetInteger("isAttackPhase", 0);
             canClick = true;
             noOfClick = 0;
-            _weponColider.tag = "Untagged";
         }
         else if (IsAnimationPlaying("ThirdSlash", 0) && noOfClick >= 4)
         {
@@ -389,14 +401,12 @@ public class PlayerControll : MonoBehaviour
             _playerAnimator.SetInteger("isAttackPhase", 0);
             canClick = true;
             noOfClick = 0;
-            _weponColider.tag = "Untagged";
         }
         else if (IsAnimationPlaying("Strong", 0))
         {
             _playerAnimator.SetInteger("isAttackPhase", 0);
             canClick = true;
             noOfClick = 0;
-            _weponColider.tag = "Untagged";
         }
 
         

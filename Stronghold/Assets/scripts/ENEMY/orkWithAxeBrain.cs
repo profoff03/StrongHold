@@ -38,6 +38,7 @@ public class orkWithAxeBrain : MonoBehaviour
     float stayTime;
     float start = 0;
     private Vector3 _force;
+    bool nearOther = false;
 
     void Start()
     {
@@ -67,77 +68,88 @@ public class orkWithAxeBrain : MonoBehaviour
     {
         transform.position += _force;
         float distance = Vector3.Distance(_agent.transform.position, _target.transform.position);
-        if (!IsAnimationPlayerPlaying("Death", 0))
+        if (!nearOther)
         {
-            if (!isAtack)
+            if (!IsAnimationPlayerPlaying("Death", 0))
             {
-                if (distance < vewDistance && distance >= atackDistance)
+                if (!isAtack)
                 {
-                    _agent.SetDestination(_target.transform.position);
-                    _animator.SetBool("isRunForward", true);
-                    
-                }
-                else if (distance < vewDistance && distance < atackDistance)
-                {
-                    _agent.velocity = Vector3.zero;
-                    _agent.SetDestination(_target.transform.position);
-                    _animator.SetBool("isRunForward", false);
-                    _animator.SetInteger("AtackPhase", Random.Range(0, 10));
-                    whereAtackDistance = _agent.transform.position;
-                    start = Time.time;
+                    if (distance < vewDistance && distance >= atackDistance)
+                    {
+                        _agent.SetDestination(_target.transform.position);
+                        _animator.SetBool("isRunForward", true);
+
+                    }
+                    else if (distance < vewDistance && distance < atackDistance)
+                    {
+                        _agent.velocity = Vector3.zero;
+                        _agent.SetDestination(_target.transform.position);
+                        _animator.SetBool("isRunForward", false);
+                        _animator.SetInteger("AtackPhase", Random.Range(0, 10));
+                        whereAtackDistance = _agent.transform.position;
+                        start = Time.time;
+                    }
+                    else
+                    {
+                        _agent.velocity = Vector3.zero;
+                        _animator.SetBool("isRunForward", false);
+
+                    }
                 }
                 else
                 {
-                    _agent.velocity = Vector3.zero;
-                    _animator.SetBool("isRunForward", false);
+                    if (distance > 25f)
+                    {
+                        isAtack = false;
+                        _animator.SetBool("isRunBack", false);
+                        _animator.SetBool("isRunLeft", false);
+                    }
+                    else
+                    {
+                        float dist = Vector3.Distance(_agent.transform.position, whereAtackDistance);
+                        _animator.SetInteger("AtackPhase", 0);
+                        if (dist < goBackDistance)
+                        {
+                            _animator.SetBool("isRunBack", true);
+                            isAtack = true;
+
+                        }
+                        else if (dist >= goBackDistance)
+                        {
+
+                            if (Time.time - start <= stayTime)
+                            {
+
+                                _animator.SetBool("isRunLeft", true);
+                                _agent.SetDestination(_target.transform.position);
+                            }
+                            else
+                            {
+                                _animator.SetBool("isRunBack", false);
+                                _animator.SetBool("isRunLeft", false);
+                                isAtack = false;
+                            }
+
+                        }
+
+                    }
 
                 }
+
             }
             else
             {
-                if (distance > 25f)
-                {
-                    isAtack = false;
-                    _animator.SetBool("isRunBack", false);
-                    _animator.SetBool("isRunLeft", false);
-                }
-                else
-                {
-                    float dist = Vector3.Distance(_agent.transform.position, whereAtackDistance);
-                    _animator.SetInteger("AtackPhase", 0);
-                    if (dist < goBackDistance)
-                    {
-                        _animator.SetBool("isRunBack", true);
-                        isAtack = true;
-
-                    }
-                    else if (dist >= goBackDistance)
-                    {
-                        
-                        if (Time.time - start <= stayTime)
-                        {
-                            
-                            _animator.SetBool("isRunLeft", true);
-                            _agent.SetDestination(_target.transform.position);
-                        }
-                        else
-                        {
-                            _animator.SetBool("isRunBack", false);
-                            _animator.SetBool("isRunLeft", false);
-                            isAtack = false;
-                        }
-
-                    }
-                    
-                }
-                
+                _animator.SetInteger("AtackPhase", 0);
             }
-            
         }
         else
         {
-            _animator.SetInteger("AtackPhase",0);
+            StartCoroutine(changeDistanation());
+            
         }
+        
+         
+        
 
         canvas.transform.LookAt(canvas.worldCamera.transform);
     }
@@ -231,11 +243,21 @@ public class orkWithAxeBrain : MonoBehaviour
             Debug.Log(direction);
             StartCoroutine(Push(direction.normalized * control._puchForce));
         }
-
-        
+        else if (other.gameObject.CompareTag("Enemy"))
+        {
+            nearOther = true;
+        }
 
 
     }
+    private IEnumerator changeDistanation()
+    {
+        _animator.SetBool("isRunForward", true);
+        _agent.SetDestination(_target.transform.position + new Vector3(100, 0, 0));
+        yield return new WaitForSeconds(2);
+        nearOther = false;
+    }
+    
     private IEnumerator Push(Vector3 force)
     {
         _force = force.normalized;

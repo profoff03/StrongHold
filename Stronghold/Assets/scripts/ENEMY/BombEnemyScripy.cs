@@ -23,8 +23,10 @@ public class BombEnemyScripy : MonoBehaviour
     float moveSpeed;
 
     Rigidbody _rb;
-
+    bool can = true;
     private Vector3 _force;
+
+    bool nearOther = false;
 
     float _rotationSpeed;
     // Start is called before the first frame update
@@ -45,37 +47,52 @@ public class BombEnemyScripy : MonoBehaviour
 
         float DistanceToPlayer = Vector3.Distance(_agent.transform.position, _target.transform.position);
         //  Debug.Log(DistanceToPlayer);
-        if(DistanceToPlayer < viewDistance)
+        if (!nearOther)
         {
-            _isSees = true;
-        }
+            if (DistanceToPlayer < viewDistance)
+            {
+                _isSees = true;
+            }
 
-        if(_isSees)
-        {
-            //_agent.transform.position += transform.forward * moveSpeed * Time.deltaTime;
-            
-            _animator.SetBool("isRunForward", true);
-            _agent.SetDestination(_target.transform.position);
-            _rb.AddForce(transform.forward * moveSpeed * 1000);
-            RotateToTarget();
-        }
+            if (_isSees)
+            {
+                //_agent.transform.position += transform.forward * moveSpeed * Time.deltaTime;
 
-        if (DistanceToPlayer < explosionDistance)
-        {
-            Instantiate(_particleSystem, _target.transform.position, Quaternion.identity);
-            var sphereCollider = gameObject.AddComponent<SphereCollider>();
-            sphereCollider.isTrigger = true;
-            sphereCollider.radius = 10f;
-            sphereCollider.center = new Vector3(0, 5f, 4f);
-            sphereCollider.tag = "EnemyHit";
-            sphereCollider.gameObject.AddComponent<DamageProperty>();
-            sphereCollider.GetComponent<DamageProperty>().Damage = bombDamage;
+                _animator.SetBool("isRunForward", true);
+                _agent.SetDestination(_target.transform.position);
+                _rb.AddForce(transform.forward * moveSpeed * 1000);
+                RotateToTarget();
+            }
 
-            Destroy(gameObject,0.019f);
-            
+            if (DistanceToPlayer < explosionDistance)
+            {
+                if (can)
+                {
+                    Instantiate(_particleSystem, _target.transform.position, Quaternion.identity);
+                    var sphereCollider = gameObject.AddComponent<SphereCollider>();
+                    sphereCollider.isTrigger = true;
+                    sphereCollider.radius = 10f;
+                    sphereCollider.center = new Vector3(0, 5f, 4f);
+                    sphereCollider.tag = "EnemyHit";
+                    sphereCollider.gameObject.AddComponent<DamageProperty>();
+                    sphereCollider.GetComponent<DamageProperty>().Damage = bombDamage;
+
+                    Destroy(gameObject, 0.019f);
+                    can = false;
+                }
+
+
+            }
         }
+        else StartCoroutine(changeDistanation());
     }
-
+    private IEnumerator changeDistanation()
+    {
+        _animator.SetBool("isRunForward", true);
+        _agent.SetDestination(_target.transform.position + new Vector3(100, 0, 0));
+        yield return new WaitForSeconds(2);
+        nearOther = false;
+    }
     private void RotateToTarget()
     {
         Vector3 lookVector = _target.transform.position - _agent.transform.position;
@@ -99,7 +116,11 @@ public class BombEnemyScripy : MonoBehaviour
             Debug.Log(direction);
             StartCoroutine(Push(direction.normalized * control._puchForce));
         }
-        
+        else if (other.gameObject.CompareTag("Enemy"))
+        {
+            nearOther = true;
+        }
+
     }
     private IEnumerator Push(Vector3 force)
     {

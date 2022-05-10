@@ -90,13 +90,6 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.5054595
-        functionName: SetTriggerHit
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 91b501fb8d1c41e4dbc7c64d45b835e0, type: 3}
-        floatParameter: 18
-        intParameter: 0
-        messageOptions: 0
       - time: 0.6623026
         functionName: SetTriggerUntagged
         data: 
@@ -147,14 +140,7 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.53080523
-        functionName: SetTriggerHit
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 91b501fb8d1c41e4dbc7c64d45b835e0, type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.6774841
+      - time: 0.80406636
         functionName: SetTriggerUntagged
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 91b501fb8d1c41e4dbc7c64d45b835e0, type: 3}
@@ -204,14 +190,7 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.25632417
-        functionName: SetTriggerHit
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 91b501fb8d1c41e4dbc7c64d45b835e0, type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.577783
+      - time: 0.7448716
         functionName: SetTriggerUntagged
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 91b501fb8d1c41e4dbc7c64d45b835e0, type: 3}
@@ -254,13 +233,6 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.33216402
-        functionName: SetTriggerHit
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 91b501fb8d1c41e4dbc7c64d45b835e0, type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
       - time: 0.5350933
         functionName: SetTriggerUntagged
         data: 
@@ -269,13 +241,6 @@ ModelImporter:
         intParameter: 0
         messageOptions: 0
       - time: 0.5839861
-        functionName: ComboCheck
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 91b501fb8d1c41e4dbc7c64d45b835e0, type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.92004734
         functionName: ComboCheck
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 91b501fb8d1c41e4dbc7c64d45b835e0, type: 3}
