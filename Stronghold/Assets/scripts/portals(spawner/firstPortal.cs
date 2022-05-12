@@ -9,10 +9,15 @@ public class firstPortal : MonoBehaviour
     Transform startEnemy;
 
     [SerializeField]
-    Transform _startTarget;
+    Transform playerTransform;
 
     [SerializeField]
     GameObject[] enemyPrefabs;
+
+    [SerializeField]
+    GameObject stoneParticles;
+
+    ParticleSystem[] stoneWallParticles;
 
     [SerializeField]
     GameObject firstPortalLoc;
@@ -30,18 +35,40 @@ public class firstPortal : MonoBehaviour
     float spawnDelay;
 
     bool detroyPortal = false;
+    bool wallEnable = false;
 
     [System.Obsolete]
     void Start()
     {
 
         StartCoroutine(CheckFirstEnemy());
+        stoneWallParticles = stoneParticles.GetComponentsInChildren<ParticleSystem>();
     }
 
     private void Update()
     {
+        float distance = Vector3.Distance(playerTransform.position, transform.position);
         if (detroyPortal) portal.transform.position -= new Vector3 (0, 0.1f,0);
+        if (distance <= 150f && !wallEnable)
+        {
+            StartCoroutine(enableWall());
+            //Debug.Log(distance);
+        }
 
+    }
+    private IEnumerator enableWall()
+    {
+        wallEnable = true;
+        stoneParticles.active = true;
+        foreach (ParticleSystem particle in stoneWallParticles)
+        {
+            particle.Play();
+        }
+        yield return new WaitForSeconds(2.8f);
+        foreach (ParticleSystem particle in stoneWallParticles)
+        {
+            particle.Pause();
+        }
     }
 
     [System.Obsolete]
@@ -130,6 +157,10 @@ public class firstPortal : MonoBehaviour
     {
         Instantiate(explosionFX, transform.position, Quaternion.identity,transform);
         detroyPortal = true;
+        foreach (ParticleSystem particle in stoneWallParticles)
+        {
+            particle.Play();
+        }
         Destroy(portal, 1.5f);
         Destroy(firstPortalLoc, 5f);
     }

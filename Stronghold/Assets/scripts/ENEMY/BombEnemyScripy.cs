@@ -60,7 +60,7 @@ public class BombEnemyScripy : MonoBehaviour
 
                 _animator.SetBool("isRunForward", true);
                 _agent.SetDestination(_target.transform.position);
-                _rb.AddForce(transform.forward * moveSpeed * 1000);
+                _rb.AddForce(transform.forward * moveSpeed * Time.deltaTime * 100000);
                 RotateToTarget();
             }
 
