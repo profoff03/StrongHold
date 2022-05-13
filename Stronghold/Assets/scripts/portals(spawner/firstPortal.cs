@@ -59,7 +59,7 @@ public class firstPortal : MonoBehaviour
     private IEnumerator enableWall()
     {
         wallEnable = true;
-        stoneParticles.active = true;
+        stoneParticles.SetActive(true);
         foreach (ParticleSystem particle in stoneWallParticles)
         {
             particle.Play();

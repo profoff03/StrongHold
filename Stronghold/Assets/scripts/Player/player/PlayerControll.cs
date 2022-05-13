@@ -288,42 +288,47 @@ public class PlayerControll : MonoBehaviour
     #region SlashPlayMethod
     void PlayFirstSlash()
     {
+        _FirstSlash.SetActive(true);
         AudioSource audioSource = _FirstSlash.GetComponentInParent<AudioSource>();
         audioSource.pitch = UnityEngine.Random.Range(0.8f, 1.2f);
         audioSource.Play();
         //_FirstSlash.GetComponent<ParticleSystem>().Play();
-        _FirstSlash.SetActive(true);
+        
         
     }
     void PlaySecondSlash()
     {
+        _SecondSlash.SetActive(true);
         AudioSource audioSource = _SecondSlash.GetComponentInParent<AudioSource>();
         audioSource.pitch = UnityEngine.Random.Range(0.9f, 1.1f);
         audioSource.Play();
-        _SecondSlash.SetActive(true);
+        
     }
     void PlayThirdSlash()
     {
+        _ThirdSlash.SetActive(true);
         AudioSource audioSource = _ThirdSlash.GetComponentInParent<AudioSource>();
         audioSource.pitch = UnityEngine.Random.Range(0.9f, 1.1f);
         audioSource.Play();
-        _ThirdSlash.SetActive(true);
+        
 
     }
     void Play4Slash()
     {
+        _4Slash.SetActive(true);
         AudioSource audioSource = _ThirdSlash.GetComponentInParent<AudioSource>();
         audioSource.pitch = UnityEngine.Random.Range(0.9f, 1.1f);
         audioSource.Play();
-        _4Slash.SetActive(true);
+        
 
     }
     void PlayStrongSlash()
     {
+        _StrongSlash.SetActive(true);
         AudioSource audioSource = _StrongSlash.GetComponentInParent<AudioSource>();
         audioSource.pitch = UnityEngine.Random.Range(0.9f, 1.1f);
         audioSource.Play();
-        _StrongSlash.SetActive(true);
+        
     }
     #endregion
 
