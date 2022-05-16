@@ -1151,7 +1151,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _stayPositions: {fileID: 0}
-  maxHealth: 100
+  maxHealth: 120
   vewDistance: 50
   atackDistance: 15
   goBackDistance: 20

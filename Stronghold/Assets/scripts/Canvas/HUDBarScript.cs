@@ -61,10 +61,7 @@ public class HUDBarScript : MonoBehaviour
             UseSmoke();
         }
 
-        if (Input.GetKey(KeyCode.Escape))
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
-        }
+       
 
         if (playerControll.isUlting) // ulta
             Ultimate.fillAmount -= Time.deltaTime / playerControll._ultTime;
