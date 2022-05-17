@@ -40,7 +40,7 @@ public class PlayerControll : MonoBehaviour
     #region ForAttack
 
     [SerializeField]
-    private bool canClick = true;
+    internal bool canClick = true;
 
     private bool ultRegenerate;
 
@@ -201,8 +201,8 @@ public class PlayerControll : MonoBehaviour
             {
                 PushEnemy(5f);
             }
-            
-            if (Input.GetMouseButton(0))
+
+            if (Input.GetAxis("Atack") == 1)
             {
                 if (main_time == 0.0f)
                 {
@@ -219,7 +219,7 @@ public class PlayerControll : MonoBehaviour
 
                 }
             } //atack
-            if (Input.GetMouseButtonUp(0))
+            if (Input.GetAxis("Atack") == 0)
             {
                 mouseDown = false;
                 if (Time.time - main_time < bool_time)//fast click

@@ -40,6 +40,8 @@ public class orkWithAxeBrain : MonoBehaviour
     private Vector3 _force;
     bool nearOther = false;
 
+    bool inSmoke = false;
+
     void Start()
     {
         _camera = Camera.main;
@@ -68,84 +70,87 @@ public class orkWithAxeBrain : MonoBehaviour
     {
         transform.position += _force;
         float distance = Vector3.Distance(_agent.transform.position, _target.transform.position);
-        if (!nearOther)
+        if (!inSmoke)
         {
-            if (!IsAnimationPlayerPlaying("Death", 0))
+            if (!nearOther)
             {
-                if (!isAtack)
+                if (!IsAnimationPlayerPlaying("Death", 0))
                 {
-                    if (distance < vewDistance && distance >= atackDistance)
+                    if (!isAtack)
                     {
-                        _agent.SetDestination(_target.transform.position);
-                        _animator.SetBool("isRunForward", true);
+                        if (distance < vewDistance && distance >= atackDistance)
+                        {
+                            _agent.SetDestination(_target.transform.position);
+                            _animator.SetBool("isRunForward", true);
 
-                    }
-                    else if (distance < vewDistance && distance < atackDistance)
-                    {
-                        _agent.velocity = Vector3.zero;
-                        _agent.SetDestination(_target.transform.position);
-                        _animator.SetBool("isRunForward", false);
-                        _animator.SetInteger("AtackPhase", Random.Range(0, 10));
-                        whereAtackDistance = _agent.transform.position;
-                        start = Time.time;
+                        }
+                        else if (distance < vewDistance && distance < atackDistance)
+                        {
+                            _agent.velocity = Vector3.zero;
+                            _agent.SetDestination(_target.transform.position);
+                            _animator.SetBool("isRunForward", false);
+                            _animator.SetInteger("AtackPhase", Random.Range(0, 10));
+                            whereAtackDistance = _agent.transform.position;
+                            start = Time.time;
+                        }
+                        else
+                        {
+                            _agent.velocity = Vector3.zero;
+                            _animator.SetBool("isRunForward", false);
+
+                        }
                     }
                     else
                     {
-                        _agent.velocity = Vector3.zero;
-                        _animator.SetBool("isRunForward", false);
+                        if (distance > 25f)
+                        {
+                            isAtack = false;
+                            _animator.SetBool("isRunBack", false);
+                            _animator.SetBool("isRunLeft", false);
+                        }
+                        else
+                        {
+                            float dist = Vector3.Distance(_agent.transform.position, whereAtackDistance);
+                            _animator.SetInteger("AtackPhase", 0);
+                            if (dist < goBackDistance)
+                            {
+                                _animator.SetBool("isRunBack", true);
+                                isAtack = true;
+
+                            }
+                            else if (dist >= goBackDistance)
+                            {
+
+                                if (Time.time - start <= stayTime)
+                                {
+
+                                    _animator.SetBool("isRunLeft", true);
+                                    _agent.SetDestination(_target.transform.position);
+                                }
+                                else
+                                {
+                                    _animator.SetBool("isRunBack", false);
+                                    _animator.SetBool("isRunLeft", false);
+                                    isAtack = false;
+                                }
+
+                            }
+
+                        }
 
                     }
+
                 }
                 else
                 {
-                    if (distance > 25f)
-                    {
-                        isAtack = false;
-                        _animator.SetBool("isRunBack", false);
-                        _animator.SetBool("isRunLeft", false);
-                    }
-                    else
-                    {
-                        float dist = Vector3.Distance(_agent.transform.position, whereAtackDistance);
-                        _animator.SetInteger("AtackPhase", 0);
-                        if (dist < goBackDistance)
-                        {
-                            _animator.SetBool("isRunBack", true);
-                            isAtack = true;
-
-                        }
-                        else if (dist >= goBackDistance)
-                        {
-
-                            if (Time.time - start <= stayTime)
-                            {
-
-                                _animator.SetBool("isRunLeft", true);
-                                _agent.SetDestination(_target.transform.position);
-                            }
-                            else
-                            {
-                                _animator.SetBool("isRunBack", false);
-                                _animator.SetBool("isRunLeft", false);
-                                isAtack = false;
-                            }
-
-                        }
-
-                    }
-
+                    _animator.SetInteger("AtackPhase", 0);
                 }
-
             }
             else
             {
-                _animator.SetInteger("AtackPhase", 0);
+                StartCoroutine(changeDistanation());
+
             }
-        }
-        else
-        {
-            StartCoroutine(changeDistanation());
-            
         }
         
          
@@ -248,6 +253,18 @@ public class orkWithAxeBrain : MonoBehaviour
             nearOther = true;
         }
 
+        if (other.gameObject.CompareTag("Smoke"))
+        {
+            inSmoke = true;
+            _animator.SetBool("isRunForward", false);
+            _animator.SetBool("isRunBack", false);
+            _animator.SetBool("isRunLeft", false);
+        }
+        else
+        {
+            inSmoke = false;
+        }
+
 
     }
     private IEnumerator changeDistanation()
@@ -268,6 +285,10 @@ public class orkWithAxeBrain : MonoBehaviour
     }
 	private void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.CompareTag("Smoke")) Debug.Log("I'm in smoke");
+        if (other.gameObject.CompareTag("Smoke"))
+        {
+            inSmoke = true;
+        }
+        
     }
 }

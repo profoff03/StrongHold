@@ -50,9 +50,10 @@ public class HUDBarScript : MonoBehaviour
     void Update()
     {
         CheckShieldCoolDown();
-        if (Input.GetKey(KeyCode.Mouse1))//Input.GetKey(KeyCode.E)
+        if (Input.GetAxis("Shield") == 1)//Input.GetKey(KeyCode.E)
         {
             UseShield();
+            playerControll.canClick = true;
         }
 
         CheckSmokeCoolDown();
