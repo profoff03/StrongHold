@@ -4901,7 +4901,7 @@ Transform:
   m_GameObject: {fileID: 1851072841808772}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_Children: []
   m_Father: {fileID: 4085816057360858}
   m_RootOrder: 1
@@ -9768,7 +9768,7 @@ GameObject:
   - component: {fileID: 4085816057360858}
   - component: {fileID: 198202731371243394}
   - component: {fileID: 199167055428053058}
-  - component: {fileID: 6021823201247893167}
+  - component: {fileID: 4649521183323166902}
   m_Layer: 0
   m_Name: FX_Explosion_01
   m_TagString: Untagged
@@ -14634,7 +14634,7 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
---- !u!114 &6021823201247893167
+--- !u!114 &4649521183323166902
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -14646,4 +14646,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0c97f97a81db4d4382dfcc8b3b4318a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destroyTime: 3
+  destroyTime: 2

@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class Bomb : MonoBehaviour
 {
+    PlayerControll player;
+    
     public GameObject smoke;
     public float force { get; set; }
     public Vector3 direction { get; set; }
@@ -18,6 +20,7 @@ public class Bomb : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        player = GameObject.Find("Player").GetComponent<PlayerControll>();
         StartCoroutine(SpawnSmoke());
         _rigidbody = GetComponent<Rigidbody>();
         _rigidbody.AddForce(direction * force, ForceMode.Impulse);
@@ -31,11 +34,12 @@ public class Bomb : MonoBehaviour
         var sphcol = smk.AddComponent<SphereCollider>();
         Destroy(gameObject);
         sphcol.isTrigger = true;
-        sphcol.radius = 5F;
+        sphcol.radius = 4.5F;
         sphcol.tag = "Smoke";
         smk.transform.localScale = new Vector3(1 * smokeScale, 3, 1 * smokeScale) ;
         smk.AddComponent<DestroyGameObject>();
-        smk.GetComponent<DestroyGameObject>().destroyTime = 16f;
+        smk.GetComponent<DestroyGameObject>().destroyTime = 20f;
+        player.canThrowBomb = true;
     }
 
     // Update is called once per frame

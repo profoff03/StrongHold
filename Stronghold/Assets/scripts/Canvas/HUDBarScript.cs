@@ -6,60 +6,80 @@ using UnityEngine.UI;
 
 public class HUDBarScript : MonoBehaviour
 {
-    [SerializeField]
-    float maxHP;
-    [SerializeField]
-    internal float HP;
+    
 
     [SerializeField]
     PlayerControll playerControll;
-
     public GameObject blood;
-    public float MaxCoolDown;
-    private float DefaultCoolDown;
 
-    public Image Ultimate;
-    public Image Skills;
-    public Image HPBar;
-
+    [Header("Shield")]
     private bool CanTakeShields = false;
+    private float DefaultShieldCoolDown;
+    public float MaxShieldCoolDown;   
+    public Image Shield;
+
+
+    [Header("Smoke")]
+    private bool CanSmoke = false;
+    private float DefaultSmokeCoolDown;
+    public float MaxSmokeCoolDown;
+    public Image SmokeBar;
+
+
+    [Header("Ultimate")]
+    public Image Ultimate;
+
+    [Header("HP")]
+    public Image HPBar;
+    [SerializeField]
+    float maxHP;
+    internal float HP;
+
+
+    
 
 
     void Start()
     {
-        DefaultCoolDown = MaxCoolDown;
+        DefaultShieldCoolDown = MaxShieldCoolDown;
+        DefaultSmokeCoolDown = MaxSmokeCoolDown;
         HP = maxHP/100;
     }
 
     // Update is called once per frame
     void Update()
     {
-        CheckCoolDown();
-        if (Input.GetKey(KeyCode.Mouse1))//Input.GetKey(KeyCode.E)
+        CheckShieldCoolDown();
+        if (Input.GetAxis("Shield") == 1)//Input.GetKey(KeyCode.E)
         {
-            UseSkill();
+            UseShield();
+            playerControll.canClick = true;
         }
 
-
-        if (Input.GetKey(KeyCode.Escape))
+        CheckSmokeCoolDown();
+        if (Input.GetKey(KeyCode.G))
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
+            UseSmoke();
         }
+
+       
 
         if (playerControll.isUlting) // ulta
             Ultimate.fillAmount -= Time.deltaTime / playerControll._ultTime;
         else
             Ultimate.fillAmount += Time.deltaTime / playerControll._ultRegenerateTime;
 
+
+
     }
 
-    void CheckCoolDown()
+    void CheckShieldCoolDown()
     {
         
-        if (DefaultCoolDown < MaxCoolDown && !playerControll._playerAnimator.GetBool("isAbil"))
+        if (DefaultShieldCoolDown < MaxShieldCoolDown && !playerControll._playerAnimator.GetBool("isShield"))
         {
             CanTakeShields = false;
-            DefaultCoolDown += Time.deltaTime / 2;
+            DefaultShieldCoolDown += Time.deltaTime / 2;
 
         }
         else
@@ -74,21 +94,58 @@ public class HUDBarScript : MonoBehaviour
             }
             if (CanTakeShields && Input.GetKey(KeyCode.Mouse1))
             {
-                playerControll._playerAnimator.SetBool("isAbil", true);
+                playerControll._playerAnimator.SetBool("isShield", true);
                 playerControll._playerAnimator.SetInteger("isAttackPhase", 0);
             }
             else
             {
-                playerControll._playerAnimator.SetBool("isAbil", false);
+                playerControll._playerAnimator.SetBool("isShield", false);
             }
         }
 
-        float newScale = DefaultCoolDown / MaxCoolDown;
-        Skills.fillAmount = newScale;
+        float newScale = DefaultShieldCoolDown / MaxShieldCoolDown;
+        Shield.fillAmount = newScale;
 
 
     }
 
+    void CheckSmokeCoolDown()
+    {
+
+        if (DefaultSmokeCoolDown < MaxSmokeCoolDown && !playerControll._playerAnimator.GetBool("isSmoke"))
+        {
+            CanSmoke = false;
+            DefaultSmokeCoolDown += Time.deltaTime / 2;
+
+        }
+        else
+        {
+            if (playerControll._playerAnimator.GetInteger("isAttackPhase") != 0 || playerControll.IsAnimationPlaying("ULTIMATE", 0))
+            {
+                CanSmoke = false;
+            }
+            else
+            {
+                CanSmoke = true;
+            }
+            if (CanSmoke && Input.GetKey(KeyCode.G))
+            {
+                playerControll._playerAnimator.SetBool("isSmoke", true);
+                playerControll.SpawnBomb();
+                playerControll._playerAnimator.SetInteger("isAttackPhase", 0);
+               
+            }
+            else
+            {
+                playerControll._playerAnimator.SetBool("isSmoke", false);
+            }
+        }
+
+        float newScale = DefaultSmokeCoolDown / MaxSmokeCoolDown;
+        SmokeBar.fillAmount = newScale;
+
+
+    }
     internal void TakeDamage(float? dmg)
     {
 
@@ -107,18 +164,24 @@ public class HUDBarScript : MonoBehaviour
         HPBar.fillAmount = HP;
     }
 
-    void UseSkill()
+    void UseShield()
     {
-        if (DefaultCoolDown < MaxCoolDown) return;
+        if (DefaultShieldCoolDown < MaxShieldCoolDown) return;
 
-        if (playerControll._playerAnimator.GetBool("isAbil") == true)
+        if (playerControll._playerAnimator.GetBool("isShield") == true)
         {
-            DefaultCoolDown = 0;
+            DefaultShieldCoolDown = 0;
+        }
+        
+    }
+    void UseSmoke()
+    {
+        if (DefaultShieldCoolDown < MaxShieldCoolDown) return;
+
+        if (playerControll._playerAnimator.GetBool("isSmoke") == true)
+        {
+            DefaultSmokeCoolDown = 0;
         }
 
-        //HP -= 10.0f;
-
-
-        
     }
 }

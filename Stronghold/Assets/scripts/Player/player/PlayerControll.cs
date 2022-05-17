@@ -11,14 +11,17 @@ public class PlayerControll : MonoBehaviour
 
     private Rigidbody _playerRigidbody;
 
+    internal bool isStan;
 
     [SerializeField]
     private HUDBarScript hud;
 
-    [SerializeField]
-    internal Collider _weponColider;
+    //[SerializeField]
+    //internal Collider _weponColider;
     [SerializeField]
     Bomb bombPref;
+
+    internal bool canThrowBomb = true;
 
     #region ForMovement
 
@@ -36,7 +39,8 @@ public class PlayerControll : MonoBehaviour
 
     #region ForAttack
 
-    private bool canClick = true;
+    [SerializeField]
+    internal bool canClick = true;
 
     private bool ultRegenerate;
 
@@ -48,24 +52,31 @@ public class PlayerControll : MonoBehaviour
 
     private float main_time;
 
-    public float click_time;
-
     private float bool_time = 0.3f;
 
     private void DoHit(float dmg = 0)
-    { 
-        
-        _weponColider.GetComponent<DamageProperty>().Damage = dmg;
+    {
+
+        _FirstSlash.GetComponent<DamageProperty>().Damage = dmg;
+        _SecondSlash.GetComponent<DamageProperty>().Damage = dmg;
+        _ThirdSlash.GetComponent<DamageProperty>().Damage = dmg;
+        _4Slash.GetComponent<DamageProperty>().Damage = dmg;
+        _StrongSlash.GetComponent<DamageProperty>().Damage = dmg;
         
     }
 
-    private void SetTriggerHit()
-    {
-        _weponColider.tag = "Hit";
-    }
+    //private void SetTriggerHit()
+    //{
+    //    //gameObject.tag = "Hit";
+    //}
     private void SetTriggerUntagged()
     {
-        _weponColider.tag = "Untagged";
+        
+        _FirstSlash.SetActive(false);
+        _SecondSlash.SetActive(false);
+        _ThirdSlash.SetActive(false);
+        _4Slash.SetActive(false);
+        _StrongSlash.SetActive(false);
     }
 
     #endregion
@@ -77,16 +88,19 @@ public class PlayerControll : MonoBehaviour
     GameObject blood;
     
     [SerializeField]
-    ParticleSystem _FirstSlash;
+    GameObject _FirstSlash;
     
     [SerializeField]
-    ParticleSystem _SecondSlash;
+    GameObject _SecondSlash;
     
     [SerializeField]
-    ParticleSystem _ThirdSlash;
+    GameObject _ThirdSlash;
     
     [SerializeField]
-    ParticleSystem _StrongSlash;
+    GameObject _4Slash;
+
+    [SerializeField]
+    GameObject _StrongSlash;
     
     [Header("Ultimate")]
     [SerializeField] internal float _ultTime = 20f;
@@ -108,12 +122,21 @@ public class PlayerControll : MonoBehaviour
     [SerializeField] private float _simpleAttackDamage = 10;
 
     [SerializeField] private float _strongAttackDamage = 15;
+    [SerializeField] public float _puchForce = 5f;
+
+    [SerializeField] GameObject sphere;
+    
 
     #endregion
 
     void Awake()
     {
-        _weponColider.gameObject.AddComponent<DamageProperty>();
+        _FirstSlash.AddComponent<DamageProperty>();
+        _SecondSlash.AddComponent<DamageProperty>();
+        _ThirdSlash.AddComponent<DamageProperty>();
+        _4Slash.AddComponent<DamageProperty>();
+        _StrongSlash.AddComponent<DamageProperty>();
+        
         _playerAnimator = GetComponent<Animator>();
         _playerRigidbody = GetComponent<Rigidbody>();
         _camera = Camera.main;
@@ -155,7 +178,7 @@ public class PlayerControll : MonoBehaviour
             _playerAnimator.SetTrigger("isLive");
             hud.HP = 100f;
         }
-        if (!IsAnimationPlaying("Death", 0) && !IsAnimationPlaying("ULTIMATE", 0))
+        if (!IsAnimationPlaying("Death", 0) && !IsAnimationPlaying("ULTIMATE", 0) && !isStan)
         {
             _movementVector = CalculateMovementVector();
            if (_movementVector.magnitude != 0)
@@ -173,8 +196,13 @@ public class PlayerControll : MonoBehaviour
                 StartCoroutine(UltCooldown(_ultTime, _ultRegenerateTime));
                 _playerAnimator.SetTrigger("isUlt");
             }
-            
-            if (Input.GetMouseButton(0))
+
+            if (Input.GetKeyDown(KeyCode.C))
+            {
+                PushEnemy(5f);
+            }
+
+            if (Input.GetAxis("Atack") == 1)
             {
                 if (main_time == 0.0f)
                 {
@@ -185,13 +213,13 @@ public class PlayerControll : MonoBehaviour
                 {
                     //strong attack
                     noOfClick = 4;
-                    _playerAnimator.SetInteger("isAttackPhase", 4);
+                    _playerAnimator.SetInteger("isAttackPhase", 5);
                     mouseDown = true;
                     DoHit(_strongAttackDamage);
 
                 }
             } //atack
-            if (Input.GetMouseButtonUp(0))
+            if (Input.GetAxis("Atack") == 0)
             {
                 mouseDown = false;
                 if (Time.time - main_time < bool_time)//fast click
@@ -205,53 +233,102 @@ public class PlayerControll : MonoBehaviour
                 }
             }
            
-            if (Input.GetKeyDown(KeyCode.G)) SpawnBomb();
             ResetAngularVelocity();
         }
         
     }
-
-    private void SpawnBomb()
+    void isNotStun()
     {
-        var forward = transform.forward;
-        var bomb = Instantiate(bombPref,
-            transform.position + Vector3.up * 3.3F + forward * 10F,
-            quaternion.identity);
-        // bomb.GetComponent<Rigidbody>().velocity = _playerRigidbody.velocity;
-        bomb.direction = (forward + transform.up / 2).normalized;
-        bomb.force = 30;
+        isStan = false;
+        _playerAnimator.SetInteger("isAttackPhase", 0);
+        canClick = true;
+        noOfClick = 0;
+
+    }
+
+    private void FixedUpdate()
+    {
+        if (!IsAnimationPlaying("Death", 0) && !IsAnimationPlaying("ULTIMATE", 0) && !isStan)
+        {
+            RotateFromMouseVector(); //mouse rotate
+            if (IsAnimationPlaying("movement", 0))
+                _playerRigidbody.AddForce(_movementVector * _movementSpeed * 1000);
+        }
+
+    }
+
+
+    private void PushEnemy(float force=0)
+    {
+        _puchForce = force;
+        var spherecoll = Instantiate(sphere, transform.position, quaternion.identity);
+        spherecoll.transform.parent = gameObject.transform;
+        spherecoll.transform.localPosition = new Vector3(0, 5, 3f);
+        spherecoll.tag = "Push";
+        spherecoll.GetComponent<SphereCollider>().center= Vector3.zero;
+        Destroy(spherecoll, 5f);
+    }
+
+    internal void SpawnBomb()
+    {
+        if (canThrowBomb)
+        {
+            var forward = transform.forward;
+            var bomb = Instantiate(bombPref,
+                transform.position + Vector3.up * 3.3F + forward * 10F,
+                quaternion.identity);
+            // bomb.GetComponent<Rigidbody>().velocity = _playerRigidbody.velocity;
+            bomb.direction = (forward + transform.up / 2).normalized;
+            bomb.force = 30;
+            canThrowBomb = false;
+        }
+        
     }
 
     #region SlashPlayMethod
     void PlayFirstSlash()
     {
+        _FirstSlash.SetActive(true);
         AudioSource audioSource = _FirstSlash.GetComponentInParent<AudioSource>();
         audioSource.pitch = UnityEngine.Random.Range(0.8f, 1.2f);
         audioSource.Play();
-        _FirstSlash.Play();
+        //_FirstSlash.GetComponent<ParticleSystem>().Play();
+        
         
     }
     void PlaySecondSlash()
     {
+        _SecondSlash.SetActive(true);
         AudioSource audioSource = _SecondSlash.GetComponentInParent<AudioSource>();
         audioSource.pitch = UnityEngine.Random.Range(0.9f, 1.1f);
         audioSource.Play();
-        _SecondSlash.Play();
+        
     }
     void PlayThirdSlash()
     {
+        _ThirdSlash.SetActive(true);
         AudioSource audioSource = _ThirdSlash.GetComponentInParent<AudioSource>();
         audioSource.pitch = UnityEngine.Random.Range(0.9f, 1.1f);
         audioSource.Play();
-        _ThirdSlash.Play();
         
+
+    }
+    void Play4Slash()
+    {
+        _4Slash.SetActive(true);
+        AudioSource audioSource = _ThirdSlash.GetComponentInParent<AudioSource>();
+        audioSource.pitch = UnityEngine.Random.Range(0.9f, 1.1f);
+        audioSource.Play();
+        
+
     }
     void PlayStrongSlash()
     {
+        _StrongSlash.SetActive(true);
         AudioSource audioSource = _StrongSlash.GetComponentInParent<AudioSource>();
         audioSource.pitch = UnityEngine.Random.Range(0.9f, 1.1f);
         audioSource.Play();
-        _StrongSlash.Play();
+        
     }
     #endregion
 
@@ -262,7 +339,12 @@ public class PlayerControll : MonoBehaviour
             hud.TakeDamage(other.GetComponent<DamageProperty>()?.Damage);
             Instantiate(blood, transform.position, Quaternion.Euler(-90f, 0f, 0f));
         }
- 
+        if (other.gameObject.CompareTag("StunHit"))
+        {
+            _playerAnimator.SetTrigger("isStun");
+            isStan = true;
+        }
+
     }
 
     private void ComboStarter()
@@ -288,7 +370,6 @@ public class PlayerControll : MonoBehaviour
             _playerAnimator.SetInteger("isAttackPhase", 0);
             canClick = true;
             noOfClick = 0;
-            _weponColider.tag = "Untagged";
         }
         else if (IsAnimationPlaying("FirstSlash", 0) && noOfClick >= 2)
         {
@@ -301,7 +382,6 @@ public class PlayerControll : MonoBehaviour
             _playerAnimator.SetInteger("isAttackPhase", 0);
             canClick = true;
             noOfClick = 0;
-            _weponColider.tag = "Untagged";
         }
         else if (IsAnimationPlaying("SecondSlash", 0) && noOfClick >= 3)
         {
@@ -309,19 +389,29 @@ public class PlayerControll : MonoBehaviour
             canClick = true;
             DoHit(_simpleAttackDamage + 2);
         }
-        else if (IsAnimationPlaying("ThirdSlash", 0))
+        else if (IsAnimationPlaying("ThirdSlash", 0) && noOfClick == 3)
         {
             _playerAnimator.SetInteger("isAttackPhase", 0);
             canClick = true;
             noOfClick = 0;
-            _weponColider.tag = "Untagged";
+        }
+        else if (IsAnimationPlaying("ThirdSlash", 0) && noOfClick >= 4)
+        {
+            _playerAnimator.SetInteger("isAttackPhase", 4);
+            canClick = true;
+            DoHit(_simpleAttackDamage + 3);
+        }
+        else if (IsAnimationPlaying("4Slash", 0))
+        {
+            _playerAnimator.SetInteger("isAttackPhase", 0);
+            canClick = true;
+            noOfClick = 0;
         }
         else if (IsAnimationPlaying("Strong", 0))
         {
             _playerAnimator.SetInteger("isAttackPhase", 0);
             canClick = true;
             noOfClick = 0;
-            _weponColider.tag = "Untagged";
         }
 
         
@@ -340,16 +430,7 @@ public class PlayerControll : MonoBehaviour
     } //Check animation state
 
 
-    private void FixedUpdate()
-    {
-        if (!IsAnimationPlaying("Death", 0) && !IsAnimationPlaying("ULTIMATE", 0))
-        {
-            RotateFromMouseVector(); //mouse rotate
-            if (IsAnimationPlaying("movement", 0))
-                _playerAnimator.transform.position += _movementVector * _movementSpeed / 45;
-        }
-        
-    }
+    
 
 
     private Vector3 CalculateMovementVector()
@@ -391,8 +472,8 @@ public class PlayerControll : MonoBehaviour
 
 
 
-        _playerAnimator.SetFloat("Horizontal", relativeVector.x, 1 / _movingSens, Time.deltaTime);
-        _playerAnimator.SetFloat("Vertical", relativeVector.z, 1 / _movingSens, Time.deltaTime);
+        _playerAnimator.SetFloat("Horizontal", relativeVector.x, 1 / _movingSens, Time.fixedDeltaTime);
+        _playerAnimator.SetFloat("Vertical", relativeVector.z, 1 / _movingSens, Time.fixedDeltaTime);
 
 
         if (v < 0 || h != 0 && v == 0 || Math.Abs(Mathf.Abs(h) - Mathf.Abs(v)) < 0.00001d)
