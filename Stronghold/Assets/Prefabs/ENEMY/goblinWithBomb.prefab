@@ -120,7 +120,7 @@ MonoBehaviour:
   _particleSystem: {fileID: 198202731371243394, guid: 65932b7368590234d8163da03c2055d8, type: 3}
   viewDistance: 70
   explosionDistance: 5
-  bombDamage: 5
+  bombDamage: 0
   RotationSpeed: 0.5
   moveSpeed: 5
 --- !u!195 &1087910559088355523

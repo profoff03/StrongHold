@@ -83,6 +83,13 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
+      - time: 0.4327682
+        functionName: PlayStrongSlash
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 91b501fb8d1c41e4dbc7c64d45b835e0, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       - time: 0.58501536
         functionName: ComboCheck
         data: 
@@ -97,8 +104,8 @@ ModelImporter:
         floatParameter: 18
         intParameter: 0
         messageOptions: 0
-      - time: 0.4327682
-        functionName: PlayStrongSlash
+      - time: 0.92056584
+        functionName: ComboCheck
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 91b501fb8d1c41e4dbc7c64d45b835e0, type: 3}
         floatParameter: 0
