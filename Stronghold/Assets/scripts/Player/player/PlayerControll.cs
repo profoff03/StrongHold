@@ -9,7 +9,7 @@ public class PlayerControll : MonoBehaviour
 {
     internal Animator _playerAnimator;
 
-    private Rigidbody _playerRigidbody;
+    internal Rigidbody _playerRigidbody;
 
     internal bool isStan;
 
@@ -40,7 +40,6 @@ public class PlayerControll : MonoBehaviour
     #region ForAttack
 
     [SerializeField]
-    internal bool canClick = true;
 
     private bool ultRegenerate;
 
@@ -48,9 +47,10 @@ public class PlayerControll : MonoBehaviour
 
     private bool mouseDown = false;
 
-    private int noOfClick = 0;
+    internal bool isAtack = false;
 
-    private float main_time;
+
+    private float main_time = 0;
 
     private float bool_time = 0.3f;
 
@@ -77,6 +77,7 @@ public class PlayerControll : MonoBehaviour
         _ThirdSlash.SetActive(false);
         _4Slash.SetActive(false);
         _StrongSlash.SetActive(false);
+        isAtack = false;
     }
 
     #endregion
@@ -202,7 +203,7 @@ public class PlayerControll : MonoBehaviour
                 PushEnemy(5f);
             }
 
-            if (Input.GetAxis("Atack") == 1)
+            if (Input.GetMouseButton(0))
             {
                 if (main_time == 0.0f)
                 {
@@ -212,20 +213,23 @@ public class PlayerControll : MonoBehaviour
                 if (Time.time - main_time > bool_time && !mouseDown)//long press
                 {
                     //strong attack
-                    noOfClick = 4;
-                    _playerAnimator.SetInteger("isAttackPhase", 5);
+                   
+                    _playerAnimator.SetTrigger("isStrongAtack");
+                    isAtack = true;
                     mouseDown = true;
                     DoHit(_strongAttackDamage);
 
                 }
             } //atack
-            if (Input.GetAxis("Atack") == 0)
+            if (Input.GetMouseButtonUp(0)) 
             {
                 mouseDown = false;
                 if (Time.time - main_time < bool_time)//fast click
                 {
-                    ComboStarter();
+                    _playerAnimator.SetTrigger("isAtack");
                     main_time = 0.0f;
+                    DoHit(_simpleAttackDamage);
+                    isAtack = true;
                 }
                 else
                 {
@@ -237,14 +241,7 @@ public class PlayerControll : MonoBehaviour
         }
         
     }
-    void isNotStun()
-    {
-        isStan = false;
-        _playerAnimator.SetInteger("isAttackPhase", 0);
-        canClick = true;
-        noOfClick = 0;
-
-    }
+    void isNotStun()=> isStan = false;
 
     private void FixedUpdate()
     {
@@ -342,81 +339,12 @@ public class PlayerControll : MonoBehaviour
         if (other.gameObject.CompareTag("StunHit"))
         {
             _playerAnimator.SetTrigger("isStun");
+            hud.TakeDamage(other.GetComponent<DamageProperty>()?.Damage);
             isStan = true;
         }
 
     }
 
-    private void ComboStarter()
-    {
-        if (canClick)
-        {
-            noOfClick++;
-
-        }
-
-        if (noOfClick == 1)
-        {
-            _playerAnimator.SetInteger("isAttackPhase", 1);
-            DoHit(_simpleAttackDamage);
-        }
-    } //First attack
-
-    public void ComboCheck()
-    {
-        canClick = false;
-        if (IsAnimationPlaying("FirstSlash", 0) && noOfClick == 1)
-        {
-            _playerAnimator.SetInteger("isAttackPhase", 0);
-            canClick = true;
-            noOfClick = 0;
-        }
-        else if (IsAnimationPlaying("FirstSlash", 0) && noOfClick >= 2)
-        {
-            _playerAnimator.SetInteger("isAttackPhase", 2);
-            canClick = true;
-            DoHit(_simpleAttackDamage + 1);
-        }
-        else if (IsAnimationPlaying("SecondSlash", 0) && noOfClick == 2)
-        {
-            _playerAnimator.SetInteger("isAttackPhase", 0);
-            canClick = true;
-            noOfClick = 0;
-        }
-        else if (IsAnimationPlaying("SecondSlash", 0) && noOfClick >= 3)
-        {
-            _playerAnimator.SetInteger("isAttackPhase", 3);
-            canClick = true;
-            DoHit(_simpleAttackDamage + 2);
-        }
-        else if (IsAnimationPlaying("ThirdSlash", 0) && noOfClick == 3)
-        {
-            _playerAnimator.SetInteger("isAttackPhase", 0);
-            canClick = true;
-            noOfClick = 0;
-        }
-        else if (IsAnimationPlaying("ThirdSlash", 0) && noOfClick >= 4)
-        {
-            _playerAnimator.SetInteger("isAttackPhase", 4);
-            canClick = true;
-            DoHit(_simpleAttackDamage + 3);
-        }
-        else if (IsAnimationPlaying("4Slash", 0))
-        {
-            _playerAnimator.SetInteger("isAttackPhase", 0);
-            canClick = true;
-            noOfClick = 0;
-        }
-        else if (IsAnimationPlaying("Strong", 0))
-        {
-            _playerAnimator.SetInteger("isAttackPhase", 0);
-            canClick = true;
-            noOfClick = 0;
-        }
-
-        
-
-    }  //Check combo attack
 
     public bool IsAnimationPlaying(string animationName, int index)
     {
@@ -428,10 +356,6 @@ public class PlayerControll : MonoBehaviour
 
         return false;
     } //Check animation state
-
-
-    
-
 
     private Vector3 CalculateMovementVector()
     {

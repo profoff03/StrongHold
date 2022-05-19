@@ -90,25 +90,11 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.58501536
-        functionName: ComboCheck
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 91b501fb8d1c41e4dbc7c64d45b835e0, type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
       - time: 0.6623026
         functionName: SetTriggerUntagged
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 91b501fb8d1c41e4dbc7c64d45b835e0, type: 3}
         floatParameter: 18
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.92056584
-        functionName: ComboCheck
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 91b501fb8d1c41e4dbc7c64d45b835e0, type: 3}
-        floatParameter: 0
         intParameter: 0
         messageOptions: 0
       transformMask: []
@@ -149,13 +135,6 @@ ModelImporter:
         messageOptions: 0
       - time: 0.80406636
         functionName: SetTriggerUntagged
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 91b501fb8d1c41e4dbc7c64d45b835e0, type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.8283886
-        functionName: ComboCheck
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 91b501fb8d1c41e4dbc7c64d45b835e0, type: 3}
         floatParameter: 0
@@ -204,13 +183,6 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.9173695
-        functionName: ComboCheck
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 91b501fb8d1c41e4dbc7c64d45b835e0, type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
@@ -242,13 +214,6 @@ ModelImporter:
       events:
       - time: 0.5350933
         functionName: SetTriggerUntagged
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 91b501fb8d1c41e4dbc7c64d45b835e0, type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.5839861
-        functionName: ComboCheck
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 91b501fb8d1c41e4dbc7c64d45b835e0, type: 3}
         floatParameter: 0

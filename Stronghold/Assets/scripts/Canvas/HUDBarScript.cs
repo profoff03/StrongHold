@@ -50,10 +50,10 @@ public class HUDBarScript : MonoBehaviour
     void Update()
     {
         CheckShieldCoolDown();
-        if (Input.GetAxis("Shield") == 1)//Input.GetKey(KeyCode.E)
+        if (Input.GetAxis("Shield") == 1)
         {
             UseShield();
-            playerControll.canClick = true;
+
         }
 
         CheckSmokeCoolDown();
@@ -84,7 +84,7 @@ public class HUDBarScript : MonoBehaviour
         }
         else
         {
-            if (playerControll._playerAnimator.GetInteger("isAttackPhase") !=0 || playerControll.IsAnimationPlaying("ULTIMATE", 0))
+            if (playerControll.isAtack || playerControll.IsAnimationPlaying("ULTIMATE", 0))
             {
                 CanTakeShields = false;
             }
@@ -95,7 +95,6 @@ public class HUDBarScript : MonoBehaviour
             if (CanTakeShields && Input.GetKey(KeyCode.Mouse1))
             {
                 playerControll._playerAnimator.SetBool("isShield", true);
-                playerControll._playerAnimator.SetInteger("isAttackPhase", 0);
             }
             else
             {
@@ -120,7 +119,7 @@ public class HUDBarScript : MonoBehaviour
         }
         else
         {
-            if (playerControll._playerAnimator.GetInteger("isAttackPhase") != 0 || playerControll.IsAnimationPlaying("ULTIMATE", 0))
+            if (playerControll.isAtack || playerControll.IsAnimationPlaying("ULTIMATE", 0))
             {
                 CanSmoke = false;
             }
@@ -149,8 +148,8 @@ public class HUDBarScript : MonoBehaviour
     internal void TakeDamage(float? dmg)
     {
 
-        //Debug.Log($"Получен удар на {dmg}
-        dmg ??= 0;
+        Debug.Log($"Получен удар на {dmg}");
+        
         HP -= (float)dmg/100;
         
 

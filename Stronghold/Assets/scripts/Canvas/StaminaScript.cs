@@ -79,7 +79,7 @@ public class StaminaScript : MonoBehaviour
     {
 
 
-        if (playerControl._playerAnimator.GetBool("isRunning") && !IsRunning && playerControl._playerAnimator.GetInteger("isAttackPhase") == 0)
+        if (playerControl._playerAnimator.GetBool("isRunning") && !IsRunning)
         {
             //animator.SetBool("isRunning", true);
             UpdateStamina -= StaminaIncreasedPerSecond * Time.deltaTime;

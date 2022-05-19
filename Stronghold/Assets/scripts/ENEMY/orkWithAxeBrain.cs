@@ -168,7 +168,7 @@ public class orkWithAxeBrain : MonoBehaviour
     {
         var sphereCollider = gameObject.AddComponent<SphereCollider>();
         sphereCollider.isTrigger = true;
-        sphereCollider.radius = 5f;
+        sphereCollider.radius = 8f;
         sphereCollider.center = new Vector3(0, 5f, 4f);
         sphereCollider.tag = "EnemyHit";
         sphereCollider.gameObject.AddComponent<DamageProperty>();

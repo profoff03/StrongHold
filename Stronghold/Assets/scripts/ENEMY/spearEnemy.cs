@@ -310,7 +310,7 @@ public class spearEnemy : MonoBehaviour
 
         var sphereCollider = gameObject.AddComponent<SphereCollider>();
         sphereCollider.isTrigger = true;
-        sphereCollider.radius = 3.4f;
+        sphereCollider.radius = 6f;
         sphereCollider.center = new Vector3(0, 5f, 4f);
         sphereCollider.tag = "StunHit";
         sphereCollider.gameObject.AddComponent<DamageProperty>();
@@ -323,7 +323,7 @@ public class spearEnemy : MonoBehaviour
     {
         var sphereCollider = gameObject.AddComponent<SphereCollider>();
         sphereCollider.isTrigger = true;
-        sphereCollider.radius = 5f;
+        sphereCollider.radius = 7f;
         sphereCollider.center = new Vector3(0, 5f, 4f);
         sphereCollider.tag = "EnemyHit";
         sphereCollider.gameObject.AddComponent<DamageProperty>();

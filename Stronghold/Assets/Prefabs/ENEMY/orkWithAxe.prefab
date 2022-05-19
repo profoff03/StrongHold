@@ -363,7 +363,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   maxHealth: 150
-  dmg: 3
+  dmg: 6
   vewDistance: 60
   atackDistance: 10
   goBackDistance: 5

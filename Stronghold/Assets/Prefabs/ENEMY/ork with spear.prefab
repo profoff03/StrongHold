@@ -1155,7 +1155,7 @@ MonoBehaviour:
   vewDistance: 50
   atackDistance: 15
   goBackDistance: 20
-  dmg: 2
+  dmg: 3
   stayTime: 2
   tiredTime: 12
 --- !u!195 &5587570090695406739
