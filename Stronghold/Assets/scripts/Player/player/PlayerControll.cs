@@ -251,6 +251,11 @@ public class PlayerControll : MonoBehaviour
             if (IsAnimationPlaying("movement", 0))
                 _playerRigidbody.AddForce(_movementVector * _movementSpeed * 1000);
         }
+        else
+        {
+            _playerAnimator.SetFloat("Horizontal", 0);
+            _playerAnimator.SetFloat("Vertical", 0);
+        }
 
     }
 

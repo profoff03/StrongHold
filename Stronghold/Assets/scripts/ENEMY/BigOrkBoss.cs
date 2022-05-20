@@ -12,12 +12,17 @@ public class BigOrkBoss : MonoBehaviour
 
     bool can = true;
 
+
+    CameraMove shake;
+
     [SerializeField]
     ParticleSystem kickParticle;
 
-    GameObject _target;
     [SerializeField]
     GameObject blood;
+
+    GameObject _target;
+   
     Animator _animator;
     NavMeshAgent _agent;
     Animator _playerAnimator;
@@ -39,6 +44,9 @@ public class BigOrkBoss : MonoBehaviour
     [SerializeField]
     float kickDist;
 
+    [SerializeField]
+    float groundAtackDist;
+
 
 
     void Start()
@@ -48,6 +56,8 @@ public class BigOrkBoss : MonoBehaviour
         _playerAnimator = _target.GetComponent<Animator>();
         _playerControl = _target.GetComponent<PlayerControll>();
         _animator = GetComponent<Animator>();
+
+        shake = Camera.main.GetComponent<CameraMove>();
 
         RotationSpeed = _agent.angularSpeed / 2;
         #region health
@@ -84,6 +94,9 @@ public class BigOrkBoss : MonoBehaviour
            
             StartCoroutine(kikcAtack());
             
+        }else if(distance < groundAtackDist && distance > kickDist)
+        {
+            _animator.SetTrigger("isGroundAtack");
         }
     }
 
@@ -100,11 +113,12 @@ public class BigOrkBoss : MonoBehaviour
         {
             
             kickParticle.Play();
+            shake.Shake();
             DoStunHit();
             can = false;
         }
         //_playerControl.isStan = true;
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(2);
         isDoKick = false;
         can = true;
 
