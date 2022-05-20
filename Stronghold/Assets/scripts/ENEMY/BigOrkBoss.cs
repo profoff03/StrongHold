@@ -19,6 +19,10 @@ public class BigOrkBoss : MonoBehaviour
     ParticleSystem kickParticle;
 
     [SerializeField]
+    GameObject groundAtackParticle;
+    GameObject groundAtkP;
+
+    [SerializeField]
     GameObject blood;
 
     GameObject _target;
@@ -29,6 +33,7 @@ public class BigOrkBoss : MonoBehaviour
     PlayerControll _playerControl;
 
     bool isDoKick = false;
+    bool isDoGroundAtk = false;
 
     float RotationSpeed;
 
@@ -96,14 +101,35 @@ public class BigOrkBoss : MonoBehaviour
             
         }else if(distance < groundAtackDist && distance > kickDist)
         {
-            _animator.SetTrigger("isGroundAtack");
+            if (!isDoGroundAtk)
+            {
+                isDoGroundAtk = true;
+                _animator.SetTrigger("isGroundAtack");
+                
+            }
+
         }
     }
-
-    private IEnumerator kikcAtack()
+    void StartGroundAtk() => StartCoroutine(groundAtack());
+    private IEnumerator groundAtack()
     {
 
 
+        groundAtkP = Instantiate(groundAtackParticle, transform.position, transform.rotation);
+        DoGroundHit(new Vector3(0, 0f, 0f));
+        yield return new WaitForSeconds(0.1f);
+        DoGroundHit(new Vector3(0, 0f, 3f));
+        yield return new WaitForSeconds(0.1f);
+        DoGroundHit(new Vector3(0, 0f, 6f));
+        
+
+        yield return new WaitForSeconds(5f);
+        isDoGroundAtk = false;
+    }
+    private IEnumerator kikcAtack()
+    {
+
+        
         isDoKick = true;
 
         yield return new WaitForSeconds(0.6f);
@@ -120,11 +146,23 @@ public class BigOrkBoss : MonoBehaviour
         //_playerControl.isStan = true;
         yield return new WaitForSeconds(2);
         isDoKick = false;
+        isDoGroundAtk = false;
         can = true;
 
 
     }
-
+    void DoGroundHit(Vector3 center)
+    {
+        var sphereCollider = groundAtkP.AddComponent<SphereCollider>();
+        sphereCollider.radius = 3f;
+        sphereCollider.isTrigger = true;     
+        sphereCollider.center = center;
+        sphereCollider.tag = "EnemyHit";
+        sphereCollider.gameObject.AddComponent<DamageProperty>();
+        sphereCollider.GetComponent<DamageProperty>().Damage = dmg/2;
+        Destroy(sphereCollider, 0.2f);
+        Destroy(sphereCollider.GetComponent<DamageProperty>(), 0.2f);
+    }
     void DoStunHit()
     {
         var sphereCollider = gameObject.AddComponent<SphereCollider>();

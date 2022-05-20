@@ -8844,6 +8844,10 @@ PrefabInstance:
       propertyPath: groundAtackDist
       value: 35
       objectReference: {fileID: 0}
+    - target: {fileID: 3898903049559064494, guid: 5e0b03516ec83794db4caffc7d76cde0, type: 3}
+      propertyPath: groundAtackParticle
+      value: 
+      objectReference: {fileID: 1812710422880096, guid: 3880daeda09abd04daa08703e695f73e, type: 3}
     - target: {fileID: 4000512800449745839, guid: 5e0b03516ec83794db4caffc7d76cde0, type: 3}
       propertyPath: m_LocalRotation.w
       value: 0.9018034

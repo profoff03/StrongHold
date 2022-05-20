@@ -263,6 +263,7 @@ public class orkWithAxeBrain : MonoBehaviour
         else
         {
             inSmoke = false;
+            isAtack = false;
         }
 
 

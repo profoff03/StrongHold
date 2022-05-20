@@ -616,11 +616,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   kickParticle: {fileID: 0}
+  groundAtackParticle: {fileID: 0}
   blood: {fileID: 3583297492628234557, guid: c7f60a0d96c56984687ba9c38727b0f4, type: 3}
   dmg: 0
   maxHealth: 1000
   vewDist: 50
   kickDist: 20
+  groundAtackDist: 0
 --- !u!195 &3898903049559064495
 NavMeshAgent:
   m_ObjectHideFlags: 0
