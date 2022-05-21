@@ -16,6 +16,7 @@ public class secondPortal : MonoBehaviour
 
     [SerializeField]
     GameObject bossPrefab;
+    GameObject bossPref;
 
     [SerializeField]
     GameObject stoneParticles;
@@ -40,6 +41,8 @@ public class secondPortal : MonoBehaviour
     bool detroyPortal = false;
     bool wallEnable = false;
 
+    internal bool roaring = false;
+
     [System.Obsolete]
     void Start()
     {
@@ -58,7 +61,15 @@ public class secondPortal : MonoBehaviour
             //Debug.Log(distance);
         }
 
+        if (roaring)
+        {
+            roaring = false;
+            Debug.Log("e");
+        }
+
     }
+
+    
     private IEnumerator enableWall()
     {
         wallEnable = true;
@@ -128,7 +139,7 @@ public class secondPortal : MonoBehaviour
     [System.Obsolete]
     private IEnumerator SpawnEnemySecondWave()
     {
-        Instantiate(bossPrefab, transform.position, transform.rotation, transform);
+        bossPref = Instantiate(bossPrefab, transform.position, transform.rotation, transform);
         yield return new WaitForSeconds(4);
         bool allEnemyDie = false;
         while (!allEnemyDie)

@@ -11,7 +11,11 @@ public class BigOrkBoss : MonoBehaviour
     private Canvas canvas;
     private Slider healthSlider;
 
-    
+    secondPortal spawner;
+
+    AudioSource audioSource;
+    [SerializeField]
+    AudioClip[] slashsounds;
 
     Rigidbody _rb;
     CameraMove shake;
@@ -75,6 +79,8 @@ public class BigOrkBoss : MonoBehaviour
 
     void Start()
     {
+        spawner = GameObject.Find("secondSpawner").GetComponent<secondPortal>();
+
         home = GameObject.Find("bossHome").GetComponent<Transform>();
 
         _agent = (NavMeshAgent)this.GetComponent("NavMeshAgent");
@@ -85,6 +91,8 @@ public class BigOrkBoss : MonoBehaviour
 
         shake = Camera.main.GetComponent<CameraMove>();
 
+        audioSource = GetComponent<AudioSource>();
+        
         RotationSpeed = _agent.angularSpeed / 2;
         #region health
         health = maxHealth;
@@ -225,6 +233,8 @@ public class BigOrkBoss : MonoBehaviour
         }
     
     }
+
+    void roaringTrue() => spawner.roaring = true;
 
     public bool IsAnimationPlaying(string animationName, int index)
     {
@@ -377,8 +387,8 @@ public class BigOrkBoss : MonoBehaviour
         int soundNumber = Random.Range(0, 20);
         if (soundNumber <= 10) soundNumber = 0;
         if (soundNumber > 10) soundNumber = 1;
-        //_audioSource[soundNumber].pitch = Random.Range(0.7f, 1.2f);
-        //_audioSource[soundNumber].Play();
+        audioSource.pitch = Random.Range(0.7f, 1.2f);
+        audioSource.PlayOneShot(slashsounds[soundNumber]);
 
         dmg ??= 0;
         health -= (float)dmg;
