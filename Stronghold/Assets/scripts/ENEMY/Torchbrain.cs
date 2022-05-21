@@ -157,6 +157,7 @@ public class Torchbrain : MonoBehaviour
         _animator.SetBool("isRunForward", true);
         _agent.SetDestination(_target.transform.position + new Vector3(100, 0, 10));
         yield return new WaitForSeconds(2);
+        _animator.SetBool("isRunForward", false);
         nearOther = false;
     }
     void CkeckAtack()

@@ -5428,9 +5428,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerControll: {fileID: 6279160570140273072}
   blood: {fileID: 3583297492628234557, guid: c7f60a0d96c56984687ba9c38727b0f4, type: 3}
-  MaxShieldCoolDown: 1.5
+  MaxShieldCoolDown: 2
   Shield: {fileID: 6863866104808600707}
-  MaxSmokeCoolDown: 12
+  MaxSmokeCoolDown: 18
   SmokeBar: {fileID: 1315629236704320438}
   Ultimate: {fileID: 3532662719244495729}
   HPBar: {fileID: 1002288035885985926}

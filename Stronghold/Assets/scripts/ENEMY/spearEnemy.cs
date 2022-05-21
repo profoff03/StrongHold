@@ -25,6 +25,8 @@ public class spearEnemy : MonoBehaviour
 
     AudioSource[] _audioSource;
 
+    bool inSmoke = false;
+
     bool nearOther = false;
 
     private float RotationSpeed;
@@ -97,119 +99,123 @@ public class spearEnemy : MonoBehaviour
     }
     void FixedUpdate()
     {
-        if (!nearOther)
+        if (!inSmoke)
         {
-            if (!IsAnimationPlaying("react", 0) && !IsAnimationPlaying("reactStrong", 0) && !cantDo)
+            if (!nearOther)
             {
-                if (!iSee)
+                if (!IsAnimationPlaying("react", 0) && !IsAnimationPlaying("reactStrong", 0) && !cantDo)
                 {
-                    distance = Vector3.Distance(_agent.transform.position, _target.transform.position);
-
-                    if (distance <= vewDistance && !isTired)
+                    if (!iSee)
                     {
-                        iSee = true;
-                        startVewTime = Time.time;
-                        isStunAtack = false;
-                        isHome = false;
-                        _animator.SetBool("isHome", isHome);
-                    }
-                    if (isTired)
-                    {
+                        distance = Vector3.Distance(_agent.transform.position, _target.transform.position);
 
-
-                        if (Vector3.Distance(_agent.transform.position, _home.position) <= goBackDistance)
+                        if (distance <= vewDistance && !isTired)
                         {
-                            if (Vector3.Distance(_agent.transform.position, _home.position) <= atackDistance)
-                            {
-                                isHome = true;
-                                _animator.SetBool("isHome", isHome);
-                                _animator.SetBool("isRunForward", false);
-                                RotateToTarget();
-                            }
-
-                            if (isHome && isTired && distance <= atackDistance)
-                            {
-                                _animator.SetTrigger("isStab");
-                            }
-
-
-                            if (Time.time - startTiredTime >= tiredTime)
-                            {
-                                isTired = false;
-
-                            }
-
+                            iSee = true;
+                            startVewTime = Time.time;
+                            isStunAtack = false;
+                            isHome = false;
+                            _animator.SetBool("isHome", isHome);
                         }
-                        if (!IsAnimationPlaying("Stab", 0) && !IsAnimationPlaying("atack", 0) && Time.time - startTiredTime >= 3f && !isHome)
+                        if (isTired)
                         {
-                            _agent.speed = 0;
-                            if (Vector3.Distance(_target.transform.position, _home.position) >= goBackDistance)
-                            {
 
-                                if (distance <= atackDistance && !isStunAtack && Time.time - startTiredTime >= 4f)
+
+                            if (Vector3.Distance(_agent.transform.position, _home.position) <= goBackDistance)
+                            {
+                                if (Vector3.Distance(_agent.transform.position, _home.position) <= atackDistance)
                                 {
-                                    _agent.speed = 0;
+                                    isHome = true;
+                                    _animator.SetBool("isHome", isHome);
                                     _animator.SetBool("isRunForward", false);
                                     RotateToTarget();
-                                    _animator.SetBool("isAtack", true);
-
-
                                 }
-                                else if (!IsAnimationPlaying("atack", 0))
+
+                                if (isHome && isTired && distance <= atackDistance)
                                 {
-                                    _agent.speed = startSpeed;
-                                    _agent.SetDestination(_home.position);
-                                    _animator.SetBool("isRunForward", true);
+                                    _animator.SetTrigger("isStab");
+                                }
+
+
+                                if (Time.time - startTiredTime >= tiredTime)
+                                {
+                                    isTired = false;
 
                                 }
+
                             }
-                            else
+                            if (!IsAnimationPlaying("Stab", 0) && !IsAnimationPlaying("atack", 0) && Time.time - startTiredTime >= 3f && !isHome)
                             {
-                                _home = _stayPosTransforms[Random.Range(0, _stayPosTransforms.Length)];
-                                RotateToTarget();
+                                _agent.speed = 0;
+                                if (Vector3.Distance(_target.transform.position, _home.position) >= goBackDistance)
+                                {
+
+                                    if (distance <= atackDistance && !isStunAtack && Time.time - startTiredTime >= 4f)
+                                    {
+                                        _agent.speed = 0;
+                                        _animator.SetBool("isRunForward", false);
+                                        RotateToTarget();
+                                        _animator.SetBool("isAtack", true);
+
+
+                                    }
+                                    else if (!IsAnimationPlaying("atack", 0))
+                                    {
+                                        _agent.speed = startSpeed;
+                                        _agent.SetDestination(_home.position);
+                                        _animator.SetBool("isRunForward", true);
+
+                                    }
+                                }
+                                else
+                                {
+                                    _home = _stayPosTransforms[Random.Range(0, _stayPosTransforms.Length)];
+                                    RotateToTarget();
+                                }
                             }
                         }
-                    }
 
 
-                }
-                else
-                {
-                    distance = Vector3.Distance(_agent.transform.position, _target.transform.position);
-                    if (Time.time - startVewTime >= stayTime)
-                    {
-                        _agent.speed = startSpeed;
-                        _agent.SetDestination(playerPos);
-                        //_agent.transform.position += transform.forward * moveSpeed * Time.deltaTime;
-
-                        float distToDistanation = Vector3.Distance(_agent.transform.position, playerPos);
-                        _animator.SetBool("isRunForward", true);
-                        if (distToDistanation <= atackDistance)
-                        {
-                            _agent.speed = 0;
-                            iSee = false;
-                            isTired = true;
-                            startTiredTime = Time.time;
-                            _home = _stayPosTransforms[Random.Range(0, _stayPosTransforms.Length)];
-                            _animator.SetBool("isRunForward", false);
-                        }
                     }
                     else
                     {
-                        _agent.speed = 0;
-                        RotateToTarget();
-                        playerPos = _target.transform.position;
+                        distance = Vector3.Distance(_agent.transform.position, _target.transform.position);
+                        if (Time.time - startVewTime >= stayTime)
+                        {
+                            _agent.speed = startSpeed;
+                            _agent.SetDestination(playerPos);
+                            //_agent.transform.position += transform.forward * moveSpeed * Time.deltaTime;
 
+                            float distToDistanation = Vector3.Distance(_agent.transform.position, playerPos);
+                            _animator.SetBool("isRunForward", true);
+                            if (distToDistanation <= atackDistance)
+                            {
+                                _agent.speed = 0;
+                                iSee = false;
+                                isTired = true;
+                                startTiredTime = Time.time;
+                                _home = _stayPosTransforms[Random.Range(0, _stayPosTransforms.Length)];
+                                _animator.SetBool("isRunForward", false);
+                            }
+                        }
+                        else
+                        {
+                            _agent.speed = 0;
+                            RotateToTarget();
+                            playerPos = _target.transform.position;
+
+
+                        }
 
                     }
-
                 }
             }
+            else
+            {
+                StartCoroutine(changeDistanation());
+            }
         }
-        else
-        {
-            StartCoroutine(changeDistanation());
-        }
+        
 
 
         canvas.transform.LookAt(canvas.worldCamera.transform);
@@ -223,6 +229,7 @@ public class spearEnemy : MonoBehaviour
         _animator.SetBool("isRunForward", true);
         _agent.SetDestination(_target.transform.position + new Vector3(100, 0, 0));
         yield return new WaitForSeconds(2);
+        _animator.SetBool("isRunForward", false);
         nearOther = false;
     }
 
@@ -346,6 +353,18 @@ public class spearEnemy : MonoBehaviour
             nearOther = true;
         }
 
+        if (other.gameObject.CompareTag("Smoke"))
+        {
+            inSmoke = true;
+            _animator.SetBool("isRunForward", false);
+            _animator.SetBool("isRunBack", false);
+            _animator.SetBool("isRunLeft", false);
+        }
+        else
+        {
+            inSmoke = false;
+            
+        }
 
         if (other.gameObject.CompareTag("Push"))
         {
@@ -357,6 +376,14 @@ public class spearEnemy : MonoBehaviour
         }
 
     }
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.CompareTag("Smoke"))
+        {
+            inSmoke = true;
+        }
+
+    }
     private IEnumerator Push(Vector3 force)
     {
         _force = force.normalized;
@@ -365,4 +392,5 @@ public class spearEnemy : MonoBehaviour
         _force.z = 0;
         _force.y = 0;
     }
+
 }

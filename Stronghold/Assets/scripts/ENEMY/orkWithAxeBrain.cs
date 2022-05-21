@@ -274,6 +274,7 @@ public class orkWithAxeBrain : MonoBehaviour
         _agent.SetDestination(_target.transform.position + new Vector3(100, 0, 0));
         yield return new WaitForSeconds(2);
         nearOther = false;
+        _animator.SetBool("isRunForward", false);
     }
     
     private IEnumerator Push(Vector3 force)

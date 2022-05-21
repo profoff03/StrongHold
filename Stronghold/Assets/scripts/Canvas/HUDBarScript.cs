@@ -50,14 +50,14 @@ public class HUDBarScript : MonoBehaviour
     void Update()
     {
         CheckShieldCoolDown();
-        if (Input.GetAxis("Shield") == 1)
+        if (Input.GetAxis("Shield") == 1 && !playerControll.isStan)
         {
             UseShield();
 
         }
 
         CheckSmokeCoolDown();
-        if (Input.GetKey(KeyCode.G))
+        if (Input.GetKey(KeyCode.G) && !playerControll.isStan)
         {
             UseSmoke();
         }
@@ -127,11 +127,11 @@ public class HUDBarScript : MonoBehaviour
             {
                 CanSmoke = true;
             }
-            if (CanSmoke && Input.GetKey(KeyCode.G))
+            if (CanSmoke && Input.GetKey(KeyCode.G) && !playerControll.isStan)
             {
                 playerControll._playerAnimator.SetBool("isSmoke", true);
                 playerControll.SpawnBomb();
-                playerControll._playerAnimator.SetInteger("isAttackPhase", 0);
+
                
             }
             else

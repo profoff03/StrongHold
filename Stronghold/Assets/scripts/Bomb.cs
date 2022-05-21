@@ -34,11 +34,11 @@ public class Bomb : MonoBehaviour
         var sphcol = smk.AddComponent<SphereCollider>();
         Destroy(gameObject);
         sphcol.isTrigger = true;
-        sphcol.radius = 4.5F;
+        sphcol.radius = 3F;
         sphcol.tag = "Smoke";
         smk.transform.localScale = new Vector3(1 * smokeScale, 3, 1 * smokeScale) ;
         smk.AddComponent<DestroyGameObject>();
-        smk.GetComponent<DestroyGameObject>().destroyTime = 20f;
+        smk.GetComponent<DestroyGameObject>().destroyTime = 15f;
         player.canThrowBomb = true;
     }
 
