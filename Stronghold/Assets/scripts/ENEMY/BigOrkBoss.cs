@@ -17,6 +17,12 @@ public class BigOrkBoss : MonoBehaviour
     [SerializeField]
     AudioClip[] slashsounds;
 
+    [SerializeField]
+    AudioClip[] hitSounds;
+
+    [SerializeField]
+    AudioClip roaringSounds;
+
     Rigidbody _rb;
     CameraMove shake;
 
@@ -48,10 +54,12 @@ public class BigOrkBoss : MonoBehaviour
     bool nearOther = false;
     bool inSmoke = false;
 
-    bool isFirstState = false;
+    internal bool isFirstState = false;
     bool firstStateStart = false;
 
     bool isHome = false;
+
+    internal bool allDie = false;
 
     float RotationSpeed;
 
@@ -73,8 +81,8 @@ public class BigOrkBoss : MonoBehaviour
     bool startDoing = true;
 
     [SerializeField]
-    float atkDelay;
-    float curAtkDelay;
+    internal float atkDelay;
+    internal float curAtkDelay;
 
 
     void Start()
@@ -189,7 +197,7 @@ public class BigOrkBoss : MonoBehaviour
 
             atkDelay = 2f;
 
-            _animator.SetBool("isRun", false);
+            
             if (distance < kickDist)
             {
 
@@ -218,7 +226,13 @@ public class BigOrkBoss : MonoBehaviour
             RotateToHome();
             _rb.AddForce(transform.forward * 70000 * Time.deltaTime, ForceMode.Acceleration);
             _animator.SetBool("isRun", true);
-            if (Vector3.Distance(transform.position, home.position) <= 10f) isHome = true;
+            if (Vector3.Distance(transform.position, home.position) <= 10f) 
+            {
+                _animator.SetBool("isRun", false);
+                _animator.SetTrigger("isRoaring");
+                
+                isHome = true;
+            } 
         }
 
 
@@ -228,7 +242,7 @@ public class BigOrkBoss : MonoBehaviour
             Debug.Log("firstState");
             isFirstState = true;
             firstStateStart = true;
-            atkDelay = Mathf.Round(atkDelay/1.3f);
+            atkDelay = Mathf.Round(atkDelay/1.5f);
             curAtkDelay = atkDelay;
         }
     
@@ -236,6 +250,14 @@ public class BigOrkBoss : MonoBehaviour
 
     void roaringTrue() => spawner.roaring = true;
 
+    void playRoaringSound()
+    {
+        audioSource.volume = 0.5f;
+        audioSource.pitch = 1.5f;
+        audioSource.PlayOneShot(roaringSounds);
+    }
+   
+    
     public bool IsAnimationPlaying(string animationName, int index)
     {
         // берем информацию о состоянии
@@ -381,16 +403,21 @@ public class BigOrkBoss : MonoBehaviour
     }
     private void TakeDamage(float? dmg)
     {
+        dmg ??= 0;
         
         _agent.speed = 0;
         Instantiate(blood, transform);
         int soundNumber = Random.Range(0, 20);
         if (soundNumber <= 10) soundNumber = 0;
         if (soundNumber > 10) soundNumber = 1;
+        audioSource.volume = 1;
         audioSource.pitch = Random.Range(0.7f, 1.2f);
         audioSource.PlayOneShot(slashsounds[soundNumber]);
 
-        dmg ??= 0;
+        audioSource.volume = 0.5f;
+        audioSource.PlayOneShot(hitSounds[Random.Range(0,hitSounds.Length)]);
+
+
         health -= (float)dmg;
         if (health <= 0.001) health = 0f;
 

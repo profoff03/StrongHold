@@ -54,16 +54,7 @@ public class PlayerControll : MonoBehaviour
 
     private float bool_time = 0.3f;
 
-    private void DoHit(float dmg = 0)
-    {
-
-        _FirstSlash.GetComponent<DamageProperty>().Damage = dmg;
-        _SecondSlash.GetComponent<DamageProperty>().Damage = dmg;
-        _ThirdSlash.GetComponent<DamageProperty>().Damage = dmg;
-        _4Slash.GetComponent<DamageProperty>().Damage = dmg;
-        _StrongSlash.GetComponent<DamageProperty>().Damage = dmg;
-        
-    }
+    
 
     //private void SetTriggerHit()
     //{
@@ -132,15 +123,20 @@ public class PlayerControll : MonoBehaviour
 
     void Awake()
     {
-        _FirstSlash.AddComponent<DamageProperty>();
-        _SecondSlash.AddComponent<DamageProperty>();
-        _ThirdSlash.AddComponent<DamageProperty>();
-        _4Slash.AddComponent<DamageProperty>();
-        _StrongSlash.AddComponent<DamageProperty>();
-        
+        SetDmg();
         _playerAnimator = GetComponent<Animator>();
         _playerRigidbody = GetComponent<Rigidbody>();
         _camera = Camera.main;
+    }
+    private void SetDmg()
+    {
+
+        _FirstSlash.GetComponent<DamageProperty>().Damage = _simpleAttackDamage;
+        _SecondSlash.GetComponent<DamageProperty>().Damage = _simpleAttackDamage;
+        _ThirdSlash.GetComponent<DamageProperty>().Damage = _simpleAttackDamage;
+        _4Slash.GetComponent<DamageProperty>().Damage = _simpleAttackDamage;
+        _StrongSlash.GetComponent<DamageProperty>().Damage = _strongAttackDamage;
+
     }
 
     private IEnumerator UltCooldown(float duration1, float duration2)
@@ -217,7 +213,7 @@ public class PlayerControll : MonoBehaviour
                     _playerAnimator.SetTrigger("isStrongAtack");
                     isAtack = true;
                     mouseDown = true;
-                    DoHit(_strongAttackDamage);
+                    //DoHit(_strongAttackDamage);
 
                 }
             } //atack
@@ -228,7 +224,7 @@ public class PlayerControll : MonoBehaviour
                 {
                     _playerAnimator.SetTrigger("isAtack");
                     main_time = 0.0f;
-                    DoHit(_simpleAttackDamage);
+                    //DoHit(_simpleAttackDamage);
                     isAtack = true;
                 }
                 else

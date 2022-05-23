@@ -5,6 +5,8 @@ using UnityEngine.AI;
 
 public class secondPortal : MonoBehaviour
 {
+    Transform[] spawnerTransforms;
+
     [SerializeField]
     Transform startEnemy;
 
@@ -46,11 +48,12 @@ public class secondPortal : MonoBehaviour
     [System.Obsolete]
     void Start()
     {
-
+        spawnerTransforms = transform.GetComponentsInChildren<Transform>();
         StartCoroutine(CheckFirstEnemy());
         stoneWallParticles = stoneParticles.GetComponentsInChildren<ParticleSystem>();
     }
 
+    [System.Obsolete]
     private void Update()
     {
         float distance = Vector3.Distance(playerTransform.position, transform.position);
@@ -64,7 +67,7 @@ public class secondPortal : MonoBehaviour
         if (roaring)
         {
             roaring = false;
-            Debug.Log("e");
+            StartCoroutine(SpawnBossEnemyFirstWave());
         }
 
     }
@@ -109,7 +112,8 @@ public class secondPortal : MonoBehaviour
         {
             for (int i = 0; i < 2; i++)
             {
-                GameObject thisEnemy = Instantiate(enemy, transform.position, transform.rotation, transform);
+                int r = Random.Range(0,spawnerTransforms.Length);
+                GameObject thisEnemy = Instantiate(enemy, spawnerTransforms[r].position, spawnerTransforms[r].rotation, transform);
                 //Animator anim = thisEnemy.GetComponent<Animator>();
 
 
@@ -155,6 +159,45 @@ public class secondPortal : MonoBehaviour
             yield return new WaitForSeconds(5);
         }
     }
+
+    [System.Obsolete]
+    private IEnumerator SpawnBossEnemyFirstWave()
+    {
+        foreach (GameObject enemy in enemyPrefabs)
+        {
+            for (int i = 0; i < 2; i++)
+            {
+                int r = Random.Range(1, spawnerTransforms.Length);
+                GameObject thisEnemy = Instantiate(enemy, spawnerTransforms[r].position, spawnerTransforms[r].rotation, transform);
+                //Animator anim = thisEnemy.GetComponent<Animator>();
+
+
+
+                //anim.SetBool("isRunForward", true);
+                yield return new WaitForSeconds(spawnDelay);
+                //anim.SetBool("isRunForward", false);
+
+            }
+        }
+        yield return new WaitForSeconds(4);
+
+        bool allEnemyDie = false;
+        BigOrkBoss orkBoss = bossPref.GetComponent<BigOrkBoss>();
+        while (!allEnemyDie)
+        {
+            if (transform.GetChildCount() <= 3)
+            {
+                Debug.Log("allDie");
+                allEnemyDie = true;
+                orkBoss.allDie = allEnemyDie;
+                orkBoss.isFirstState = false;
+                orkBoss.atkDelay = orkBoss.curAtkDelay;
+            }
+            yield return new WaitForSeconds(5);
+        }
+
+    }
+
 
     void destroyPortal()
     {

@@ -259,6 +259,13 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
+      - time: 0.33753943
+        functionName: playRoaringSound
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: e3d933ba19d26aa4491c4d72e11e7bbc, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       - time: 0.93370163
         functionName: roaringTrue
         data: 
