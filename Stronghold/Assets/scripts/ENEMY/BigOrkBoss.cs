@@ -453,7 +453,8 @@ public class BigOrkBoss : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {      
-            inSmoke = false;  
+        inSmoke = false;
+
     }
     private void OnTriggerStay(Collider other)
     {

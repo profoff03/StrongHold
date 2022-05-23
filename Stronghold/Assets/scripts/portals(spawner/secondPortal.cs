@@ -5,7 +5,12 @@ using UnityEngine.AI;
 
 public class secondPortal : MonoBehaviour
 {
+    AudioSource[] mainAudioSourse;
+
     Transform[] spawnerTransforms;
+
+    [SerializeField]
+    Transform trigger;
 
     [SerializeField]
     Transform startEnemy;
@@ -48,6 +53,8 @@ public class secondPortal : MonoBehaviour
     [System.Obsolete]
     void Start()
     {
+        mainAudioSourse = Camera.main.GetComponents<AudioSource>();
+
         spawnerTransforms = transform.GetComponentsInChildren<Transform>();
         StartCoroutine(CheckFirstEnemy());
         stoneWallParticles = stoneParticles.GetComponentsInChildren<ParticleSystem>();
@@ -57,10 +64,13 @@ public class secondPortal : MonoBehaviour
     private void Update()
     {
         float distance = Vector3.Distance(playerTransform.position, transform.position);
-        if (detroyPortal) portal.transform.position -= new Vector3(0, 0.1f, 0);
-        if (distance <= 90f && !wallEnable)
+        float trigDistance = Vector3.Distance(playerTransform.position, trigger.position);
+
+        if (detroyPortal) portal.transform.position -= new Vector3(0, 0.2f, 0);
+        if ((trigDistance <=50f) && !wallEnable)
         {
             StartCoroutine(enableWall());
+            StartCoroutine(changeMusicToBattle());
             //Debug.Log(distance);
         }
 
@@ -72,7 +82,40 @@ public class secondPortal : MonoBehaviour
 
     }
 
-    
+    private IEnumerator changeMusicToBattle()
+    {
+        while (mainAudioSourse[0].volume > 0)
+        {
+            mainAudioSourse[0].volume -= 0.1f;
+            yield return new WaitForSeconds(0.1f);
+        }
+        if (mainAudioSourse[0].volume == 0)
+        {
+            while (mainAudioSourse[1].volume <= 0.7)
+            {
+                mainAudioSourse[1].volume += 0.1f;
+                yield return new WaitForSeconds(0.2f);
+            }
+        }
+    }
+
+    private IEnumerator changeMusicToMain()
+    {
+        while (mainAudioSourse[1].volume > 0)
+        {
+            mainAudioSourse[1].volume -= 0.1f;
+            yield return new WaitForSeconds(0.1f);
+        }
+        if (mainAudioSourse[1].volume == 0)
+        {
+            while (mainAudioSourse[0].volume <= 0.7)
+            {
+                mainAudioSourse[0].volume += 0.1f;
+                yield return new WaitForSeconds(0.2f);
+            }
+        }
+    }
+
     private IEnumerator enableWall()
     {
         wallEnable = true;
@@ -209,5 +252,7 @@ public class secondPortal : MonoBehaviour
         }
         Destroy(portal, 1.5f);
         Destroy(firstPortalLoc, 5f);
+
+        StartCoroutine(changeMusicToMain());
     }
 }
