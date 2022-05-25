@@ -25,6 +25,12 @@ public class HUDBarScript : MonoBehaviour
     public float MaxSmokeCoolDown;
     public Image SmokeBar;
 
+    [Header("Dash")]
+    internal bool CanDash = false;
+    internal float DefaultDashCoolDown;
+    public float MaxDashCoolDown;
+    public Image DashBar;
+
 
     [Header("Ultimate")]
     public Image Ultimate;
@@ -41,6 +47,7 @@ public class HUDBarScript : MonoBehaviour
 
     void Start()
     {
+        DefaultDashCoolDown = MaxDashCoolDown;
         DefaultShieldCoolDown = MaxShieldCoolDown;
         DefaultSmokeCoolDown = MaxSmokeCoolDown;
         HP = maxHP/100;
@@ -49,8 +56,12 @@ public class HUDBarScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        CheckDashCoolDown();
+
+
+
         CheckShieldCoolDown();
-        if (Input.GetAxis("Shield") == 1 && !playerControll.isStan)
+        if (Input.GetMouseButton(1) && !playerControll.isStan)
         {
             UseShield();
 
@@ -69,6 +80,32 @@ public class HUDBarScript : MonoBehaviour
         else
             Ultimate.fillAmount += Time.deltaTime / playerControll._ultRegenerateTime;
 
+
+
+    }
+    void CheckDashCoolDown()
+    {
+
+        if (DefaultDashCoolDown < MaxDashCoolDown)
+        {
+            DefaultDashCoolDown += Time.deltaTime / 2;
+
+        }
+        else
+        {
+            if (playerControll.isAtack || playerControll.IsAnimationPlaying("ULTIMATE", 0))
+            {
+                CanDash = false;
+            }
+            else
+            {
+                CanDash = true;
+            }
+            
+        }
+
+        float newScale = DefaultDashCoolDown / MaxDashCoolDown;
+        DashBar.fillAmount = newScale;
 
 
     }

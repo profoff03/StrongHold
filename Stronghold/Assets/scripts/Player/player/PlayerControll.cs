@@ -49,6 +49,7 @@ public class PlayerControll : MonoBehaviour
 
     internal bool isAtack = false;
 
+    private bool canWalk = true;
 
     private float main_time = 0;
 
@@ -244,7 +245,21 @@ public class PlayerControll : MonoBehaviour
         if (!IsAnimationPlaying("Death", 0) && !IsAnimationPlaying("ULTIMATE", 0) && !isStan)
         {
             RotateFromMouseVector(); //mouse rotate
-            if (IsAnimationPlaying("movement", 0))
+            if ((Input.GetKeyDown(KeyCode.Space) || !canWalk) && hud.CanDash)
+            {
+                if (canWalk) 
+                {
+                    _playerAnimator.SetTrigger("isDash");
+                    hud.DefaultDashCoolDown = 0;
+                    canWalk = false;
+                    StartCoroutine(setCanWalkTrue());
+                    
+                }
+                if (_movementVector.magnitude == 0) _movementVector = transform.forward;
+                
+                _playerRigidbody.AddForce(_movementVector * _movementSpeed * 3000);
+            }
+            else if (IsAnimationPlaying("movement", 0) && canWalk)
                 _playerRigidbody.AddForce(_movementVector * _movementSpeed * 1000);
         }
         else
@@ -254,7 +269,12 @@ public class PlayerControll : MonoBehaviour
         }
 
     }
-
+    private IEnumerator setCanWalkTrue()
+    {
+        yield return new WaitForSeconds(0.5f);
+        hud.CanDash = false;
+        canWalk = true;
+    }
 
     private void PushEnemy(float force=0)
     {

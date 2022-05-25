@@ -6380,6 +6380,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 121.7
       objectReference: {fileID: 0}
+    - target: {fileID: 6279160569767335425, guid: 82ae5b5309c523941841cea6c394c2df, type: 3}
+      propertyPath: MaxDashCoolDown
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 6279160569992311167, guid: 82ae5b5309c523941841cea6c394c2df, type: 3}
       propertyPath: m_LocalRotation.w
       value: 0.28797182
@@ -6451,6 +6455,10 @@ PrefabInstance:
     - target: {fileID: 6487038331757336340, guid: 82ae5b5309c523941841cea6c394c2df, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9052551071906752726, guid: 82ae5b5309c523941841cea6c394c2df, type: 3}
+      propertyPath: m_FillAmount
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 7275899883977385845, guid: 82ae5b5309c523941841cea6c394c2df, type: 3}

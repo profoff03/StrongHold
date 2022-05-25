@@ -5432,6 +5432,8 @@ MonoBehaviour:
   Shield: {fileID: 6863866104808600707}
   MaxSmokeCoolDown: 18
   SmokeBar: {fileID: 1315629236704320438}
+  MaxDashCoolDown: 5
+  DashBar: {fileID: 9052551071906752726}
   Ultimate: {fileID: 3532662719244495729}
   HPBar: {fileID: 1002288035885985926}
   maxHP: 100
