@@ -56,6 +56,7 @@ public class BigOrkBoss : MonoBehaviour
 
     internal bool isFirstState = false;
     bool firstStateStart = false;
+    bool secondStateStart = false;
 
     bool isHome = false;
 
@@ -114,6 +115,8 @@ public class BigOrkBoss : MonoBehaviour
         canvas.worldCamera = Camera.main;
         canvas.transform.rotation = canvas.worldCamera.transform.rotation;
         #endregion
+
+        StartCoroutine(startDoingCor());
     }
 
     // Update is called once per frame
@@ -125,11 +128,9 @@ public class BigOrkBoss : MonoBehaviour
             {
                 if (!nearOther)
                 {
-                    if (startDoing)
-                    {
-                        StartCoroutine(startDoingCor());
-                    }
-                    else
+                    if(startDoing) _rb.AddForce(transform.forward * 70000 * Time.deltaTime, ForceMode.Acceleration);
+                    
+                    if (!startDoing)
                     {
                         RotateToTarget();
                         canvas.transform.LookAt(canvas.worldCamera.transform);
@@ -235,8 +236,14 @@ public class BigOrkBoss : MonoBehaviour
             } 
         }
 
+        if (health <= 500 && !secondStateStart)
+        {
+            firstStateStart = false;
+            secondStateStart = true;
+        }
+        
 
-        if (!firstStateStart && !isFirstState && maxHealth - health <= 1000 && maxHealth - health > 500)
+        if (!firstStateStart && !isFirstState && health <= 1000)
         {
             isHome = false;
             Debug.Log("firstState");
@@ -273,12 +280,13 @@ public class BigOrkBoss : MonoBehaviour
 
     private IEnumerator startDoingCor()
     {
-        _rb.AddForce(transform.forward * 70000 * Time.deltaTime, ForceMode.Acceleration);
+
         _animator.SetBool("isRun", true);
         yield return new WaitForSeconds(2);
-        //_animator.SetBool("isRun", false);
-        //_rb.AddForce(Vector3.zero);
+        _animator.SetBool("isRun", false);
+        _rb.AddForce(Vector3.zero);
         startDoing = false;
+        
         
     }
 
