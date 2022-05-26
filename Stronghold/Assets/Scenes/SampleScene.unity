@@ -181,7 +181,7 @@ MonoBehaviour:
   portal: {fileID: 0}
   explosionFX: {fileID: 1056904543853562, guid: 4cf45cdce36e66e4a93614abb5ae7821, type: 3}
   enemyStartForce: 200
-  spawnDelay: 1.2
+  spawnDelay: 0
 --- !u!1001 &2077522
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4624,7 +4624,7 @@ GameObject:
   - component: {fileID: 314852300}
   m_Layer: 0
   m_Name: float (5)
-  m_TagString: Untagged
+  m_TagString: dirt
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4
@@ -6352,6 +6352,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1002288035885985926, guid: 82ae5b5309c523941841cea6c394c2df, type: 3}
+      propertyPath: m_FillAmount
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2118908906417928717, guid: 82ae5b5309c523941841cea6c394c2df, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 0
@@ -14854,7 +14858,7 @@ GameObject:
   - component: {fileID: 1138366917}
   m_Layer: 0
   m_Name: float (8)
-  m_TagString: Untagged
+  m_TagString: dirt
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4
@@ -17442,7 +17446,7 @@ GameObject:
   - component: {fileID: 1389384696}
   m_Layer: 0
   m_Name: float (3)
-  m_TagString: Untagged
+  m_TagString: dirt
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4
@@ -17840,7 +17844,7 @@ GameObject:
   - component: {fileID: 1421092819}
   m_Layer: 0
   m_Name: float (1)
-  m_TagString: Untagged
+  m_TagString: dirt
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4
@@ -18210,7 +18214,7 @@ GameObject:
   - component: {fileID: 1440141023}
   m_Layer: 0
   m_Name: float (6)
-  m_TagString: Untagged
+  m_TagString: dirt
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4
@@ -18948,7 +18952,7 @@ GameObject:
   - component: {fileID: 1499047879}
   m_Layer: 0
   m_Name: floats
-  m_TagString: Untagged
+  m_TagString: dirt
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4
@@ -19287,7 +19291,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 290493900005447811, guid: 5e0b03516ec83794db4caffc7d76cde0, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 290493900005447811, guid: 5e0b03516ec83794db4caffc7d76cde0, type: 3}
       propertyPath: m_TagString
@@ -20432,7 +20436,7 @@ GameObject:
   - component: {fileID: 1570100419}
   m_Layer: 0
   m_Name: float (4)
-  m_TagString: Untagged
+  m_TagString: dirt
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4
@@ -20616,7 +20620,7 @@ GameObject:
   - component: {fileID: 1615261411}
   m_Layer: 0
   m_Name: float (7)
-  m_TagString: Untagged
+  m_TagString: dirt
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 12
@@ -21775,7 +21779,7 @@ GameObject:
   - component: {fileID: 1723369309}
   m_Layer: 0
   m_Name: float
-  m_TagString: Untagged
+  m_TagString: dirt
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 12
@@ -24851,7 +24855,7 @@ GameObject:
   - component: {fileID: 2146279764}
   m_Layer: 0
   m_Name: float (2)
-  m_TagString: Untagged
+  m_TagString: dirt
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4

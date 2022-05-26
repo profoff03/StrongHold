@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 2918082357091296253}
   - component: {fileID: 3386024679037157110}
   - component: {fileID: 8883036972080693077}
+  - component: {fileID: 929984905624104406}
+  - component: {fileID: 4578484516933792601}
   m_Layer: 0
   m_Name: runningParticle
   m_TagString: EnemyHit
@@ -27,7 +29,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 290493900005447811}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: 8.93, z: 8.75}
+  m_LocalPosition: {x: 0, y: 8.81, z: 11.14}
   m_LocalScale: {x: 0.67, y: 0.67, z: 1.16}
   m_Children: []
   m_Father: {fileID: 3571661095977826493}
@@ -4814,12 +4816,38 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 290493900005447811}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 4.25
+  m_Radius: 5
   m_Height: 1
   m_Direction: 1
-  m_Center: {x: 0, y: -1.32, z: 3.29}
+  m_Center: {x: 0, y: -1.32, z: 4.73}
+--- !u!114 &929984905624104406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 290493900005447811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53a722708be09f6449255129b3023038, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _boss: {fileID: 3898903049559064494}
+  _damage: 5
+--- !u!114 &4578484516933792601
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 290493900005447811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 948059066681b9a448cb569669a68ba8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &706095008224241379
 GameObject:
   m_ObjectHideFlags: 0
@@ -5350,7 +5378,7 @@ GameObject:
   - component: {fileID: -7236340010565350378}
   m_Layer: 0
   m_Name: orkBoossss
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5438,7 +5466,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 0
   maxHealth: 1500
-  dmg: 6
+  dmg: 5
   slashsounds:
   - {fileID: 8300000, guid: f2bb59d9a4cccc74bb689a53aba53373, type: 3}
   - {fileID: 8300000, guid: 9c92a9835e42bc446bac8f5f8b704a0b, type: 3}
