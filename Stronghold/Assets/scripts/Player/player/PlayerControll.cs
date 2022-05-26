@@ -176,7 +176,7 @@ public class PlayerControll : MonoBehaviour
             _playerAnimator.SetTrigger("isLive");
             hud.HP = 100f;
         }
-        if (!IsAnimationPlaying("Death", 0) && !IsAnimationPlaying("ULTIMATE", 0) && !isStan)
+        if (!IsAnimationPlaying("Death", 0) && !IsAnimationPlaying("ULTIMATE", 0) && !isStan && canWalk)
         {
             _movementVector = CalculateMovementVector();
            if (_movementVector.magnitude != 0)
@@ -245,22 +245,14 @@ public class PlayerControll : MonoBehaviour
         if (!IsAnimationPlaying("Death", 0) && !IsAnimationPlaying("ULTIMATE", 0) && !isStan)
         {
             RotateFromMouseVector(); //mouse rotate
-            if ((Input.GetKeyDown(KeyCode.Space) || !canWalk) && hud.CanDash)
-            {
-                if (canWalk) 
-                {
-                    _playerAnimator.SetTrigger("isDash");
-                    hud.DefaultDashCoolDown = 0;
-                    canWalk = false;
-                    StartCoroutine(setCanWalkTrue());
-                    
-                }
-                if (_movementVector.magnitude == 0) _movementVector = transform.forward;
-                
-                _playerRigidbody.AddForce(_movementVector * _movementSpeed * 3000);
-            }
-            else if (IsAnimationPlaying("movement", 0) && canWalk)
+            
+            if (IsAnimationPlaying("movement", 0))
                 _playerRigidbody.AddForce(_movementVector * _movementSpeed * 1000);
+            else if (IsAnimationPlaying("dash", 0))
+            {
+                if (!isMove) _movementVector = transform.forward;
+                _playerRigidbody.AddForce(_movementVector.normalized * _movementSpeed * 3000);
+            }
         }
         else
         {

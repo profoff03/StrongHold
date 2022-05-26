@@ -648,7 +648,10 @@ AnimatorStateTransition:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: 
-  m_Conditions: []
+  m_Conditions:
+  - m_ConditionMode: 2
+    m_ConditionEvent: isDash
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -8060783824154256360}
   m_Solo: 0
@@ -730,7 +733,7 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: -734917615993790009, guid: b1e1856ae7a6eb6479395074790eb18b, type: 3}
     m_Threshold: 0
-    m_Position: {x: 0, y: 1}
+    m_Position: {x: 0, y: 0.5}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Blend
@@ -738,7 +741,7 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: 6900579379311186702, guid: b1e1856ae7a6eb6479395074790eb18b, type: 3}
     m_Threshold: 0.25
-    m_Position: {x: 0, y: -1}
+    m_Position: {x: 0, y: -0.5}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Blend
@@ -746,7 +749,7 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: -3112626769614841174, guid: b1e1856ae7a6eb6479395074790eb18b, type: 3}
     m_Threshold: 0.5
-    m_Position: {x: 1, y: 0}
+    m_Position: {x: 0.5, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Blend
@@ -754,7 +757,7 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: 1505482495060631583, guid: b1e1856ae7a6eb6479395074790eb18b, type: 3}
     m_Threshold: 0.75
-    m_Position: {x: -1, y: 0}
+    m_Position: {x: -0.5, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Blend
@@ -813,6 +816,12 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
+  - m_Name: isDash
+    m_Type: 4
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 0}
   - m_Name: isDie
     m_Type: 9
     m_DefaultFloat: 0
@@ -850,12 +859,6 @@ AnimatorController:
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
   - m_Name: isStrongAtack
-    m_Type: 9
-    m_DefaultFloat: 0
-    m_DefaultInt: 0
-    m_DefaultBool: 0
-    m_Controller: {fileID: 0}
-  - m_Name: isDash
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -1001,13 +1004,13 @@ AnimatorStateMachine:
     m_Position: {x: 880, y: 90, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 3214556347550331722}
-    m_Position: {x: 980, y: -220, z: 0}
+    m_Position: {x: 1060, y: -160, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -626360686222240916}
     m_Position: {x: 1150, y: -430, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 3933147846513908319}
-    m_Position: {x: 550, y: -290, z: 0}
+    m_Position: {x: 810, y: -400, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -179156242473702419}
     m_Position: {x: -90, y: -350, z: 0}
@@ -1032,8 +1035,8 @@ AnimatorStateMachine:
   m_EntryTransitions: []
   m_StateMachineTransitions: {}
   m_StateMachineBehaviours: []
-  m_AnyStatePosition: {x: -150, y: -130, z: 0}
-  m_EntryPosition: {x: 50, y: 50, z: 0}
+  m_AnyStatePosition: {x: -90, y: -100, z: 0}
+  m_EntryPosition: {x: 150, y: 230, z: 0}
   m_ExitPosition: {x: 1130, y: -10, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
   m_DefaultState: {fileID: -8060783824154256360}

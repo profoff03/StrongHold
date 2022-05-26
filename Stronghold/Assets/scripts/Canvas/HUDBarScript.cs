@@ -58,20 +58,11 @@ public class HUDBarScript : MonoBehaviour
     {
         CheckDashCoolDown();
 
-
-
         CheckShieldCoolDown();
-        if (Input.GetMouseButton(1) && !playerControll.isStan)
-        {
-            UseShield();
-
-        }
 
         CheckSmokeCoolDown();
-        if (Input.GetKey(KeyCode.G) && !playerControll.isStan)
-        {
-            UseSmoke();
-        }
+        
+        
 
        
 
@@ -86,10 +77,10 @@ public class HUDBarScript : MonoBehaviour
     void CheckDashCoolDown()
     {
 
-        if (DefaultDashCoolDown < MaxDashCoolDown)
+        if (DefaultDashCoolDown < MaxDashCoolDown && !playerControll._playerAnimator.GetBool("isDash"))
         {
             DefaultDashCoolDown += Time.deltaTime / 2;
-
+            CanDash = false;
         }
         else
         {
@@ -101,7 +92,17 @@ public class HUDBarScript : MonoBehaviour
             {
                 CanDash = true;
             }
-            
+
+            if (CanDash && Input.GetKeyDown(KeyCode.Space) && !playerControll.isStan)
+            {
+                playerControll._playerAnimator.SetBool("isDash", true);
+                UseDash();
+            }
+            else
+            {
+                playerControll._playerAnimator.SetBool("isDash", false);
+            }
+
         }
 
         float newScale = DefaultDashCoolDown / MaxDashCoolDown;
@@ -129,9 +130,10 @@ public class HUDBarScript : MonoBehaviour
             {
                 CanTakeShields = true;
             }
-            if (CanTakeShields && Input.GetKey(KeyCode.Mouse1))
+            if (CanTakeShields && Input.GetKey(KeyCode.Mouse1) && !playerControll.isStan)
             {
                 playerControll._playerAnimator.SetBool("isShield", true);
+                UseShield();
             }
             else
             {
@@ -164,9 +166,10 @@ public class HUDBarScript : MonoBehaviour
             {
                 CanSmoke = true;
             }
-            if (CanSmoke && Input.GetKey(KeyCode.G) && !playerControll.isStan)
+            if (CanSmoke && Input.GetKeyDown(KeyCode.G) && !playerControll.isStan)
             {
                 playerControll._playerAnimator.SetBool("isSmoke", true);
+                UseSmoke();
                 playerControll.SpawnBomb();
 
                
@@ -202,6 +205,16 @@ public class HUDBarScript : MonoBehaviour
         HPBar.fillAmount = HP;
     }
 
+    void UseDash()
+    {
+        if (DefaultDashCoolDown < MaxDashCoolDown) return;
+
+        if (playerControll._playerAnimator.GetBool("isDash") == true)
+        {
+            DefaultDashCoolDown = 0;
+        }
+
+    }
     void UseShield()
     {
         if (DefaultShieldCoolDown < MaxShieldCoolDown) return;

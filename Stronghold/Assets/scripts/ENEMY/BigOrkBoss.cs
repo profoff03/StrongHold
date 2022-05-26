@@ -394,7 +394,7 @@ public class BigOrkBoss : MonoBehaviour
             (
             _agent.transform.rotation,
             Quaternion.LookRotation(lookVector, Vector3.up),
-            RotationSpeed * Time.deltaTime * 4.0f
+            RotationSpeed * Time.deltaTime
             );
     }
     private void RotateToHome()
@@ -449,6 +449,7 @@ public class BigOrkBoss : MonoBehaviour
         {
             inSmoke = true;
             _animator.SetBool("isRun", false);
+            StartCoroutine(outSmoke());
             
         }
 
@@ -459,10 +460,10 @@ public class BigOrkBoss : MonoBehaviour
 
     }
 
-    private void OnTriggerExit(Collider other)
-    {      
+    private IEnumerator outSmoke()
+    {
+        yield return new WaitForSeconds(15);
         inSmoke = false;
-
     }
     private void OnTriggerStay(Collider other)
     {
