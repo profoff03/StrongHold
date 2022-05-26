@@ -169,13 +169,6 @@ public class PlayerControll : MonoBehaviour
     void Update()
     {
 
-        
-        if (Input.GetKeyDown(KeyCode.L) && IsAnimationPlaying("Death", 0))
-        {
-            Time.timeScale = 1f;
-            _playerAnimator.SetTrigger("isLive");
-            hud.HP = 100f;
-        }
         if (!IsAnimationPlaying("Death", 0) && !IsAnimationPlaying("ULTIMATE", 0) && !isStan && canWalk)
         {
             _movementVector = CalculateMovementVector();
@@ -252,6 +245,8 @@ public class PlayerControll : MonoBehaviour
             {
                 if (!isMove) _movementVector = transform.forward;
                 _playerRigidbody.AddForce(_movementVector.normalized * _movementSpeed * 3000);
+                _playerAnimator.SetBool("isDash", false);
+                //StartCoroutine(setDashFalse());
             }
         }
         else
@@ -261,11 +256,10 @@ public class PlayerControll : MonoBehaviour
         }
 
     }
-    private IEnumerator setCanWalkTrue()
+    private IEnumerator setDashFalse()
     {
-        yield return new WaitForSeconds(0.5f);
-        hud.CanDash = false;
-        canWalk = true;
+        yield return new WaitForSeconds(0.1f);
+        _playerAnimator.SetBool("isDash", false);
     }
 
     private void PushEnemy(float force=0)

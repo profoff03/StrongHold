@@ -234,6 +234,7 @@ public class secondPortal : MonoBehaviour
                 allEnemyDie = true;
                 orkBoss.allDie = allEnemyDie;
                 orkBoss.isFirstState = false;
+                orkBoss.canRush = true;
                 orkBoss.atkDelay = orkBoss.curAtkDelay;
             }
             yield return new WaitForSeconds(5);

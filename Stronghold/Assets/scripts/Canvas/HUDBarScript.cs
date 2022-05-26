@@ -84,7 +84,7 @@ public class HUDBarScript : MonoBehaviour
         }
         else
         {
-            if (playerControll.isAtack || playerControll.IsAnimationPlaying("ULTIMATE", 0))
+            if (playerControll.IsAnimationPlaying("ULTIMATE", 0))
             {
                 CanDash = false;
             }
@@ -98,10 +98,7 @@ public class HUDBarScript : MonoBehaviour
                 playerControll._playerAnimator.SetBool("isDash", true);
                 UseDash();
             }
-            else
-            {
-                playerControll._playerAnimator.SetBool("isDash", false);
-            }
+            
 
         }
 

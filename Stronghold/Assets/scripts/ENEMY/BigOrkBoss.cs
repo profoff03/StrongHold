@@ -6,13 +6,29 @@ using UnityEngine.UI;
 
 public class BigOrkBoss : MonoBehaviour
 {
-    [SerializeField]
-    float health;
+    Rigidbody _rb;
+    CameraMove shake;
+    Transform home;
+    secondPortal spawner;
     private Canvas canvas;
     private Slider healthSlider;
+    GameObject _target;
+    Animator _animator;
+    NavMeshAgent _agent;
+    PlayerControll _playerControl;
 
-    secondPortal spawner;
+    [Header("Health and DMG")]
+    [SerializeField]
+    float health;
+    
+    [SerializeField]
+    float maxHealth;
 
+    [SerializeField]
+    float dmg;
+
+
+    [Header("Sounds")]
     AudioSource audioSource;
     [SerializeField]
     AudioClip[] slashsounds;
@@ -23,13 +39,13 @@ public class BigOrkBoss : MonoBehaviour
     [SerializeField]
     AudioClip roaringSounds;
 
-    Rigidbody _rb;
-    CameraMove shake;
 
+    [Header("Particle")]
     [SerializeField]
     GameObject kickParticle;
 
-    Transform home;
+    [SerializeField]
+    GameObject dashParticle;
 
     [SerializeField]
     GameObject groundAtackParticle;
@@ -38,14 +54,12 @@ public class BigOrkBoss : MonoBehaviour
     [SerializeField]
     GameObject blood;
 
-    GameObject _target;
-   
-    Animator _animator;
-    NavMeshAgent _agent;
-    PlayerControll _playerControl;
 
+    #region bool
     bool isDoKick = false;
     bool isDoGroundAtk = false;
+    bool isRush = false;
+    internal bool canRush = false;
 
     bool can = true;
     bool canRun = true;
@@ -61,15 +75,12 @@ public class BigOrkBoss : MonoBehaviour
     bool isHome = false;
 
     internal bool allDie = false;
+    #endregion
 
-    float RotationSpeed;
 
-    [SerializeField]
-    float dmg;
 
-    [SerializeField]
-    float maxHealth;
 
+    [Header("distance")]
     [SerializeField]
     float vewDist;
 
@@ -81,11 +92,15 @@ public class BigOrkBoss : MonoBehaviour
 
     bool startDoing = true;
 
+    [Header("delay")]
     [SerializeField]
     internal float atkDelay;
     internal float curAtkDelay;
 
+    [SerializeField]
+    float dashDelay;
 
+    float RotationSpeed;
     void Start()
     {
         spawner = GameObject.Find("secondSpawner").GetComponent<secondPortal>();
@@ -132,16 +147,46 @@ public class BigOrkBoss : MonoBehaviour
                     
                     if (!startDoing)
                     {
-                        RotateToTarget();
+                        if (!isRush)
+                            RotateToTarget();
+                        
                         canvas.transform.LookAt(canvas.worldCamera.transform);
                         float distance = Vector3.Distance(_agent.transform.position, _target.transform.position);
-                        if (distance < vewDist && distance > kickDist && distance > groundAtackDist && canRun && !IsAnimationPlaying("kick", 0) && !IsAnimationPlaying("groundAtack", 0))
+                        
+                        if ((distance < vewDist && 
+                            distance > kickDist 
+                            && distance > groundAtackDist
+                            && canRun|| isRush)
+                            && !IsAnimationPlaying("kick", 0) 
+                            && !IsAnimationPlaying("groundAtack", 0) )
                         {
-                            RotateToTarget();
-                            _rb.AddForce(transform.forward * 30000 * Time.deltaTime, ForceMode.Acceleration);
-                            _animator.SetBool("isRun", true);
+                            
+                            
+
+                            if (canRush) 
+                            {
+                                _rb.AddForce(transform.forward * 80000 * Time.deltaTime, ForceMode.Acceleration);
+                                if (!isRush)
+                                {
+                                    StartCoroutine(rushFalse());
+                                }
+                                isRush = true;
+                                _animator.SetBool("isRush", true);
+                            } 
+                            
+                            
+                            
+                            if (!canRush)
+                            {
+                                _rb.AddForce(transform.forward * 30000 * Time.deltaTime, ForceMode.Acceleration);
+                                _animator.SetBool("isRun", true);
+                            }
+                            
+                        
+                        
+                        
                         }
-                        if (distance < kickDist)
+                        if (distance < kickDist && !isRush)
                         {
                             _animator.SetBool("isRun", false);
                             RotateToTarget();
@@ -162,7 +207,7 @@ public class BigOrkBoss : MonoBehaviour
 
 
                         }
-                        else if (distance < groundAtackDist && distance > kickDist)
+                        else if (distance < groundAtackDist && distance > kickDist && !isRush)
                         {
                             _animator.SetBool("isRun", false);
                             if (!isDoGroundAtk)
@@ -257,6 +302,17 @@ public class BigOrkBoss : MonoBehaviour
 
     void roaringTrue() => spawner.roaring = true;
 
+    private IEnumerator rushFalse()
+    {
+        dashParticle.SetActive(true);
+        yield return new WaitForSeconds(2);
+        isRush = false;
+        canRush = false;
+        dashParticle.SetActive(false);
+        _animator.SetBool("isRush", false);
+        yield return new WaitForSeconds(dashDelay);
+        canRush = true;
+    }
     void playRoaringSound()
     {
         audioSource.volume = 0.5f;

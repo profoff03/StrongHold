@@ -5453,7 +5453,7 @@ MonoBehaviour:
   MaxStamina: 100
   StaminaBar: {fileID: 7896415661881872966}
   StaminaIncreasedPerSecond: 5
-  regTime: 5
+  regTime: 6
 --- !u!1 &6279160569992311160
 GameObject:
   m_ObjectHideFlags: 0
