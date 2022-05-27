@@ -5414,9 +5414,9 @@ Animator:
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 77fe768f079fae349b843b8b69cd2913, type: 3}
   m_Controller: {fileID: 9100000, guid: a699f69475a62a34cbcf2bb3065271bd, type: 2}
-  m_CullingMode: 1
+  m_CullingMode: 0
   m_UpdateMode: 1
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
@@ -5449,9 +5449,9 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 4
-  m_Height: 15
+  m_Height: 14.4
   m_Direction: 1
-  m_Center: {x: 0, y: 7.58, z: 1.1999999}
+  m_Center: {x: 0, y: 7.35, z: 1.1999999}
 --- !u!114 &3898903049559064494
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5480,11 +5480,13 @@ MonoBehaviour:
   dashParticle: {fileID: 290493900005447811}
   groundAtackParticle: {fileID: 1812710422880096, guid: 3880daeda09abd04daa08703e695f73e, type: 3}
   blood: {fileID: 3583297492628234557, guid: c7f60a0d96c56984687ba9c38727b0f4, type: 3}
+  canJump: 0
   vewDist: 90
   kickDist: 25
   groundAtackDist: 35
   atkDelay: 10
   dashDelay: 8
+  jumpDelay: 0
 --- !u!195 &3898903049559064495
 NavMeshAgent:
   m_ObjectHideFlags: 0

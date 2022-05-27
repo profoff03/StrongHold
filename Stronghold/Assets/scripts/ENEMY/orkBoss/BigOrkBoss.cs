@@ -61,6 +61,10 @@ public class BigOrkBoss : MonoBehaviour
     internal bool isRush = false;
     internal bool canRush = false;
 
+    internal bool isJump = false;
+    public bool canJump = false;
+    private bool canAddForce = false;
+
     bool can = true;
     bool canRun = true;
     bool canKick = true;
@@ -99,6 +103,9 @@ public class BigOrkBoss : MonoBehaviour
 
     [SerializeField]
     float dashDelay;
+
+    [SerializeField]
+    float jumpDelay;
 
     float RotationSpeed;
     void Start()
@@ -147,7 +154,7 @@ public class BigOrkBoss : MonoBehaviour
                     
                     if (!startDoing)
                     {
-                        if (!isRush)
+                        if (!isRush && !isJump)
                             RotateToTarget();
                         
                         canvas.transform.LookAt(canvas.worldCamera.transform);
@@ -156,14 +163,25 @@ public class BigOrkBoss : MonoBehaviour
                         if ((distance < vewDist && 
                             distance > kickDist 
                             && distance > groundAtackDist
-                            && canRun|| isRush)
+                            && canRun|| isRush || isJump)
                             && !IsAnimationPlaying("kick", 0) 
                             && !IsAnimationPlaying("groundAtack", 0) )
                         {
                             
+                            if (canJump)
+                            {
+                                if (canAddForce)
+                                    _rb.AddForce(transform.forward * 80000 * Time.deltaTime, ForceMode.Acceleration);
+                                if (!isJump)
+                                {
+                                    StartCoroutine(jumpFalse());
+                                }
+                                isJump = true;
+                                _animator.SetTrigger("isJump");
+                            }
                             
 
-                            if (canRush) 
+                            if (canRush && !canJump) 
                             {
                                 _rb.AddForce(transform.forward * 80000 * Time.deltaTime, ForceMode.Acceleration);
                                 if (!isRush)
@@ -172,21 +190,21 @@ public class BigOrkBoss : MonoBehaviour
                                 }
                                 isRush = true;
                                 _animator.SetBool("isRush", true);
-                            } 
+                            } //rushLogic
                             
                             
                             
-                            if (!canRush)
+                            if (!canRush && !canJump)
                             {
                                 _rb.AddForce(transform.forward * 30000 * Time.deltaTime, ForceMode.Acceleration);
                                 _animator.SetBool("isRun", true);
-                            }
+                            }//simpleRunLogic
+                            
                             
                         
                         
-                        
                         }
-                        if (distance < kickDist && !isRush)
+                        if (distance < kickDist && !isRush && !isJump)
                         {
                             _animator.SetBool("isRun", false);
                             RotateToTarget();
@@ -207,7 +225,7 @@ public class BigOrkBoss : MonoBehaviour
 
 
                         }
-                        else if (distance < groundAtackDist && distance > kickDist && !isRush)
+                        else if (distance < groundAtackDist && distance > kickDist && !isRush && !isJump)
                         {
                             _animator.SetBool("isRun", false);
                             if (!isDoGroundAtk && !isRush)
@@ -301,6 +319,8 @@ public class BigOrkBoss : MonoBehaviour
     }
 
     void roaringTrue() => spawner.roaring = true;
+    void canAddForceTrue() => canAddForce = true;
+    void canAddForceFalse() => canAddForce = false;
 
     private IEnumerator rushFalse()
     {
@@ -315,6 +335,20 @@ public class BigOrkBoss : MonoBehaviour
         
         canRush = true;
     }
+
+    private IEnumerator jumpFalse()
+    {
+
+        yield return new WaitForSeconds(2);
+        isJump = false;
+        canJump = false;
+        yield return new WaitForSeconds(jumpDelay);
+
+        canJump = true;
+    }
+
+
+
     void playRoaringSound()
     {
         audioSource.volume = 0.5f;
