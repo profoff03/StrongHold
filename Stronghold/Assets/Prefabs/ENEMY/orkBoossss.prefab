@@ -5484,7 +5484,7 @@ MonoBehaviour:
   kickDist: 25
   groundAtackDist: 35
   atkDelay: 8
-  dashDelay: 8
+  dashDelay: 5
   jumpDelay: 6
 --- !u!195 &3898903049559064495
 NavMeshAgent:
