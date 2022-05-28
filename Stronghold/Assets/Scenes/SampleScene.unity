@@ -19427,11 +19427,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3571661095977826493, guid: 5e0b03516ec83794db4caffc7d76cde0, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.000005722046
+      value: 44.8
       objectReference: {fileID: 0}
     - target: {fileID: 3571661095977826493, guid: 5e0b03516ec83794db4caffc7d76cde0, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 539.7261
+      value: 506.9
       objectReference: {fileID: 0}
     - target: {fileID: 3571661095977826493, guid: 5e0b03516ec83794db4caffc7d76cde0, type: 3}
       propertyPath: m_LocalRotation.w
@@ -19460,6 +19460,18 @@ PrefabInstance:
     - target: {fileID: 3571661095977826493, guid: 5e0b03516ec83794db4caffc7d76cde0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3898903049559064493, guid: 5e0b03516ec83794db4caffc7d76cde0, type: 3}
+      propertyPath: m_Interpolate
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3898903049559064493, guid: 5e0b03516ec83794db4caffc7d76cde0, type: 3}
+      propertyPath: m_CollisionDetection
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3898903049559064494, guid: 5e0b03516ec83794db4caffc7d76cde0, type: 3}
+      propertyPath: atkDelay
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 3898903049559064494, guid: 5e0b03516ec83794db4caffc7d76cde0, type: 3}
       propertyPath: jumpDelay

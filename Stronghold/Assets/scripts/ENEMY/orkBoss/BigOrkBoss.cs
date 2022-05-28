@@ -167,11 +167,11 @@ public class BigOrkBoss : MonoBehaviour
                             && !IsAnimationPlaying("kick", 0) 
                             && !IsAnimationPlaying("groundAtack", 0) )
                         {
-                            
+                            if (canAddForce)
+                                _rb.AddForce(transform.forward * 80000 * Time.deltaTime, ForceMode.Acceleration);
                             if (canJump)
                             {
-                                if (canAddForce)
-                                    _rb.AddForce(transform.forward * 80000 * Time.deltaTime, ForceMode.Acceleration);
+                                
                                 if (!isJump)
                                 {
                                     StartCoroutine(jumpFalse());
@@ -191,10 +191,10 @@ public class BigOrkBoss : MonoBehaviour
                                 isRush = true;
                                 _animator.SetBool("isRush", true);
                             } //rushLogic
-                            
-                            
-                            
-                            if (!canRush && !canJump)
+
+
+
+                            if (!canRush && !canJump && !isJump)
                             {
                                 _rb.AddForce(transform.forward * 30000 * Time.deltaTime, ForceMode.Acceleration);
                                 _animator.SetBool("isRun", true);
@@ -339,9 +339,9 @@ public class BigOrkBoss : MonoBehaviour
     private IEnumerator jumpFalse()
     {
 
+        canJump = false;
         yield return new WaitForSeconds(2);
         isJump = false;
-        canJump = false;
         yield return new WaitForSeconds(jumpDelay);
 
         canJump = true;
