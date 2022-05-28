@@ -234,7 +234,17 @@ public class secondPortal : MonoBehaviour
                 allEnemyDie = true;
                 orkBoss.allDie = allEnemyDie;
                 orkBoss.isFirstState = false;
-                orkBoss.canRush = true;
+                
+                if (orkBoss.firstStateStart)
+                    orkBoss.canRush = true;
+                
+                if (orkBoss.secondStateStart)
+                {
+                    orkBoss.canJump = true;
+                    orkBoss.canRush = false;
+                }
+                   
+
                 orkBoss.atkDelay = orkBoss.curAtkDelay;
             }
             yield return new WaitForSeconds(5);
@@ -242,7 +252,7 @@ public class secondPortal : MonoBehaviour
 
     }
 
-
+    
     void destroyPortal()
     {
         Instantiate(explosionFX, transform.position, Quaternion.identity, transform);

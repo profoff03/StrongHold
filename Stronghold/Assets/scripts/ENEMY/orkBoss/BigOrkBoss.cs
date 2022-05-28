@@ -62,7 +62,7 @@ public class BigOrkBoss : MonoBehaviour
     internal bool canRush = false;
 
     internal bool isJump = false;
-    public bool canJump = false;
+    internal bool canJump = false;
     private bool canAddForce = false;
 
     bool can = true;
@@ -73,8 +73,9 @@ public class BigOrkBoss : MonoBehaviour
     bool inSmoke = false;
 
     internal bool isFirstState = false;
-    bool firstStateStart = false;
-    bool secondStateStart = false;
+    internal bool firstStateStart = false;
+    internal bool secondStateStart = false;
+
 
     bool isHome = false;
 
@@ -304,7 +305,7 @@ public class BigOrkBoss : MonoBehaviour
             firstStateStart = false;
             secondStateStart = true;
         }
-        
+
 
         if (!firstStateStart && !isFirstState && health <= 1000)
         {
@@ -312,7 +313,7 @@ public class BigOrkBoss : MonoBehaviour
             Debug.Log("firstState");
             isFirstState = true;
             firstStateStart = true;
-            atkDelay = Mathf.Round(atkDelay/2f);
+            atkDelay = Mathf.Round(atkDelay/1.4f);
             curAtkDelay = atkDelay;
         }
     
@@ -321,6 +322,15 @@ public class BigOrkBoss : MonoBehaviour
     void roaringTrue() => spawner.roaring = true;
     void canAddForceTrue() => canAddForce = true;
     void canAddForceFalse() => canAddForce = false;
+
+    void playRoaringSound()
+    {
+        audioSource.volume = 0.5f;
+        audioSource.pitch = 1.5f;
+        audioSource.PlayOneShot(roaringSounds);
+    }
+    void StartGroundAtk() => StartCoroutine(groundAtack());
+    void StartJumpAtk() => StartCoroutine(jumpAtack());
 
     private IEnumerator rushFalse()
     {
@@ -335,12 +345,11 @@ public class BigOrkBoss : MonoBehaviour
         
         canRush = true;
     }
-
     private IEnumerator jumpFalse()
     {
 
         canJump = false;
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(4);
         isJump = false;
         yield return new WaitForSeconds(jumpDelay);
 
@@ -348,27 +357,7 @@ public class BigOrkBoss : MonoBehaviour
     }
 
 
-
-    void playRoaringSound()
-    {
-        audioSource.volume = 0.5f;
-        audioSource.pitch = 1.5f;
-        audioSource.PlayOneShot(roaringSounds);
-    }
    
-    
-    public bool IsAnimationPlaying(string animationName, int index)
-    {
-        // берем информацию о состоянии
-        var animatorStateInfo = _animator.GetCurrentAnimatorStateInfo(index);
-        // смотрим, есть ли в нем имя какой-то анимации, то возвращаем true
-        if (animatorStateInfo.IsName(animationName))
-            return true;
-
-        return false;
-    }
-
-    void StartGroundAtk() => StartCoroutine(groundAtack());
 
     private IEnumerator startDoingCor()
     {
@@ -388,14 +377,7 @@ public class BigOrkBoss : MonoBehaviour
         canRun = true;
     }
 
-    private IEnumerator kickDelay()
-    {
-        yield return new WaitForSeconds(atkDelay);
-
-        isDoKick = false;
-        isDoGroundAtk = false;
-        can = true;
-    }
+    
     private IEnumerator groundAtkDelay()
     {
         yield return new WaitForSeconds(atkDelay);
@@ -416,6 +398,7 @@ public class BigOrkBoss : MonoBehaviour
         
         
     }
+    
     private IEnumerator kikcAtack()
     {
 
@@ -425,21 +408,44 @@ public class BigOrkBoss : MonoBehaviour
 
         
         if (can)
-        {
-
-            Instantiate(kickParticle, transform.position, transform.rotation);
+        {        
+            Instantiate(kickParticle, transform.position,transform.rotation);
             shake.Shake();
-            DoStunHit();
+            DoStunHit(new Vector3(0, 5f, 6f), 15);
             can = false;
         }
-        _playerControl._playerRigidbody.AddForce(_agent.transform.forward * Time.deltaTime * 20000, ForceMode.Impulse);
+        _playerControl._playerRigidbody.AddForce(transform.forward * Time.deltaTime * 20000, ForceMode.Impulse);
         canKick = false;
         yield return new WaitForSeconds(1);
         _agent.tag = "Untagged";
-        
-       
-    }
 
+
+    }
+    private IEnumerator kickDelay()
+    {
+        yield return new WaitForSeconds(atkDelay);
+
+        isDoKick = false;
+        isDoGroundAtk = false;
+        can = true;
+    }
+    
+    private IEnumerator jumpAtack()
+    {
+
+        for (float i = 0; i < 10; i++)
+            Instantiate(kickParticle, transform.position, Quaternion.Euler(new Vector3(0, i * 500)));
+        
+        Instantiate(kickParticle, transform.position, transform.rotation);
+        shake.Shake(); 
+        yield return new WaitForSeconds(0.2f);
+        DoStunHit(Vector3.zero, 30);
+        yield return new WaitForSeconds(0.5f);
+        _agent.tag = "Untagged";
+
+
+    } 
+    
     private IEnumerator changeDistanation()
     {
         _animator.SetBool("isRun", true);
@@ -449,7 +455,11 @@ public class BigOrkBoss : MonoBehaviour
         nearOther = false;
     }
 
-
+    private IEnumerator outSmoke()
+    {
+        yield return new WaitForSeconds(15);
+        inSmoke = false;
+    }
 
     void DoGroundHit(Vector3 center)
     {
@@ -463,12 +473,12 @@ public class BigOrkBoss : MonoBehaviour
         Destroy(sphereCollider, 0.2f);
         Destroy(sphereCollider.GetComponent<DamageProperty>(), 0.2f);
     }
-    void DoStunHit()
+    void DoStunHit( Vector3 center, float r)
     {
         var sphereCollider = gameObject.AddComponent<SphereCollider>();
         sphereCollider.isTrigger = true;
-        sphereCollider.radius = 15f;
-        sphereCollider.center = new Vector3(0, 5f, 6f);
+        sphereCollider.radius = r;
+        sphereCollider.center = center;
         sphereCollider.tag = "StunHit";
         sphereCollider.gameObject.AddComponent<DamageProperty>();
         sphereCollider.GetComponent<DamageProperty>().Damage = dmg;
@@ -500,6 +510,7 @@ public class BigOrkBoss : MonoBehaviour
             RotationSpeed * Time.deltaTime * 4.0f
             );
     }
+    
     private void TakeDamage(float? dmg)
     {
         dmg ??= 0;
@@ -529,6 +540,8 @@ public class BigOrkBoss : MonoBehaviour
     {
         Destroy(gameObject);
     }
+    
+    
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Hit"))
@@ -551,11 +564,7 @@ public class BigOrkBoss : MonoBehaviour
 
     }
 
-    private IEnumerator outSmoke()
-    {
-        yield return new WaitForSeconds(15);
-        inSmoke = false;
-    }
+    
     private void OnTriggerStay(Collider other)
     {
         if (other.gameObject.CompareTag("Smoke"))
@@ -564,4 +573,17 @@ public class BigOrkBoss : MonoBehaviour
         }
 
     }
+
+
+    public bool IsAnimationPlaying(string animationName, int index)
+    {
+        // берем информацию о состоянии
+        var animatorStateInfo = _animator.GetCurrentAnimatorStateInfo(index);
+        // смотрим, есть ли в нем имя какой-то анимации, то возвращаем true
+        if (animatorStateInfo.IsName(animationName))
+            return true;
+
+        return false;
+    }
+
 }

@@ -188,8 +188,9 @@ public class HUDBarScript : MonoBehaviour
         Debug.Log($"Получен удар на {dmg}");
 
         dmg ??= 0;
+
         
-        HP -= (float)dmg/100;
+        //HP -= (float)dmg/100;
         
 
         if (HP <= 0.001) HP = 0f;

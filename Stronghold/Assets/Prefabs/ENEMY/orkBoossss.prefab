@@ -5416,7 +5416,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: a699f69475a62a34cbcf2bb3065271bd, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 1
-  m_ApplyRootMotion: 0
+  m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
@@ -5480,13 +5480,12 @@ MonoBehaviour:
   dashParticle: {fileID: 290493900005447811}
   groundAtackParticle: {fileID: 1812710422880096, guid: 3880daeda09abd04daa08703e695f73e, type: 3}
   blood: {fileID: 3583297492628234557, guid: c7f60a0d96c56984687ba9c38727b0f4, type: 3}
-  canJump: 0
   vewDist: 90
   kickDist: 25
   groundAtackDist: 35
-  atkDelay: 10
+  atkDelay: 8
   dashDelay: 8
-  jumpDelay: 0
+  jumpDelay: 6
 --- !u!195 &3898903049559064495
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -5506,7 +5505,7 @@ NavMeshAgent:
   m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 15
-  m_BaseOffset: 0
+  m_BaseOffset: -0.2
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
 --- !u!82 &-7236340010565350378

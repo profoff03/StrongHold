@@ -208,10 +208,17 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.5034473
+      - time: 0.46043655
         functionName: canAddForceFalse
         data: 
         objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.48878112
+        functionName: StartJumpAtk
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: e3d933ba19d26aa4491c4d72e11e7bbc, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
