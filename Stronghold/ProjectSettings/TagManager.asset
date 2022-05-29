@@ -12,6 +12,7 @@ TagManager:
   - dirt
   - Push
   - StunHit
+  - float
   layers:
   - Default
   - TransparentFX

@@ -16,50 +16,63 @@ public class orkWithAxeBrain : MonoBehaviour
 
 
     bool isAtack = false;
-    Vector3 whereAtackDistance;
+    bool inSmoke = false;
+    bool isForwardMove = false;
+
+    //bool isChangeDistanation = false;
+
+    bool canAtack = true;
+
     float health;
+
     private Canvas canvas;
     private Slider healthSlider;
 
     [SerializeField]
-    float moveSpeed;
-    [SerializeField]
     float maxHealth;
+
     [SerializeField]
     float dmg;
+
     [SerializeField]
+    [Range(21f, 55f)]
     float vewDistance;
+
     [SerializeField]
     float atackDistance;
+
     [SerializeField]
-    [Range(1f,15f)]
+    [Range(11f, 30f)]
     float goBackDistance;
+
     [SerializeField]
     float stayTime;
-    float start = 0;
+
     private Vector3 _force;
+
     bool nearOther = false;
 
-    bool inSmoke = false;
+    float RotationSpeed;
 
     void Start()
     {
+
         _camera = Camera.main;
         _myColider = GetComponent<CapsuleCollider>();
         _agent = (NavMeshAgent)this.GetComponent("NavMeshAgent");
         _target = GameObject.Find("Player");
         _playerAnimator = _target.GetComponent<Animator>();
-       
+
+        RotationSpeed = _agent.angularSpeed / 2;
+
         _animator = GetComponent<Animator>();
         _audioSource = GetComponents<AudioSource>();
         #region health
-
-       
         health = maxHealth;
-        
+
         canvas = _agent.transform.Find("HealthBar").gameObject.GetComponent<Canvas>();
         healthSlider = _agent.transform.Find("HealthBar/Panel/Slider").gameObject.GetComponent<Slider>();
-        
+
         healthSlider.maxValue = maxHealth;
         healthSlider.value = health;
         canvas.worldCamera = _camera;
@@ -69,95 +82,107 @@ public class orkWithAxeBrain : MonoBehaviour
     void Update()
     {
         transform.position += _force;
-        float distance = Vector3.Distance(_agent.transform.position, _target.transform.position);
         if (!inSmoke)
         {
             if (!nearOther)
             {
                 if (!IsAnimationPlayerPlaying("Death", 0))
                 {
-                    if (!isAtack)
+                    float distance = Vector3.Distance(_agent.transform.position, _target.transform.position);
+                    if (distance < vewDistance)
                     {
-                        if (distance < vewDistance && distance >= atackDistance)
+                        RotateToTarget();
+                        if (!isAtack)
                         {
-                            _agent.SetDestination(_target.transform.position);
-                            _animator.SetBool("isRunForward", true);
 
-                        }
-                        else if (distance < vewDistance && distance < atackDistance)
-                        {
-                            _agent.velocity = Vector3.zero;
-                            _agent.SetDestination(_target.transform.position);
-                            _animator.SetBool("isRunForward", false);
-                            _animator.SetInteger("AtackPhase", Random.Range(0, 10));
-                            whereAtackDistance = _agent.transform.position;
-                            start = Time.time;
-                        }
-                        else
-                        {
-                            _agent.velocity = Vector3.zero;
-                            _animator.SetBool("isRunForward", false);
-
-                        }
-                    }
-                    else
-                    {
-                        if (distance > 25f)
-                        {
-                            isAtack = false;
-                            _animator.SetBool("isRunBack", false);
                             _animator.SetBool("isRunLeft", false);
+
+                            if (distance > atackDistance)
+                            {
+                                _animator.SetBool("isRunForward", true);
+                                _animator.SetInteger("AtackPhase", 0);
+                            }
+
+                            if (distance <= atackDistance)
+                            {
+                                _animator.SetBool("isRunForward", false);
+                                int r = Random.Range(1, 10);
+                                _animator.SetInteger("AtackPhase", r);
+                            }
                         }
                         else
                         {
-                            float dist = Vector3.Distance(_agent.transform.position, whereAtackDistance);
                             _animator.SetInteger("AtackPhase", 0);
-                            if (dist < goBackDistance)
+                            if (canAtack)
                             {
-                                _animator.SetBool("isRunBack", true);
-                                isAtack = true;
-
+                                
+                                canAtack = false;
+                                StartCoroutine(atackDelay());
                             }
-                            else if (dist >= goBackDistance)
+
+
+                            if (distance <= goBackDistance && !IsAnimationPlaying("RunLeft", 0) && !isForwardMove)
                             {
-
-                                if (Time.time - start <= stayTime)
-                                {
-
-                                    _animator.SetBool("isRunLeft", true);
-                                    _agent.SetDestination(_target.transform.position);
-                                }
-                                else
-                                {
-                                    _animator.SetBool("isRunBack", false);
-                                    _animator.SetBool("isRunLeft", false);
-                                    isAtack = false;
-                                }
-
+                                _animator.SetBool("isRunForward", false);
+                                _animator.SetInteger("AtackPhase", 0);
+                                _animator.SetBool("isRunBack", true);
+                            }
+                            else if (!isForwardMove)
+                            {
+                                _animator.SetBool("isRunForward", false);
+                                _animator.SetInteger("AtackPhase", 0);
+                                _animator.SetBool("isRunBack", false);
+                                _animator.SetBool("isRunLeft", true);
                             }
 
                         }
 
                     }
-
                 }
-                else
-                {
-                    _animator.SetInteger("AtackPhase", 0);
-                }
-            }
-            else
-            {
-                StartCoroutine(changeDistanation());
 
             }
+
         }
-        
-         
-        
+        else
+        {
+            isAtack = false;
+            canAtack = true;
+            _animator.SetBool("isRunForward", false);
+            _animator.SetBool("isRunBack", false);
+            _animator.SetBool("isRunLeft", false);
+        }
+
 
         canvas.transform.LookAt(canvas.worldCamera.transform);
     }
+    
+
+    private IEnumerator forwardRun()
+    {
+
+        yield return new WaitForSeconds(0.3f);
+        isForwardMove = false;
+        _animator.SetBool("isRunForward", false);
+        _animator.SetBool("isRunLeft", true);
+
+
+    }
+
+    private IEnumerator atackDelay()
+    {
+
+        yield return new WaitForSeconds(stayTime);
+        isAtack = false;
+        canAtack = true;
+    }
+
+    private IEnumerator outSmoke(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        inSmoke = false;
+    }
+
+
     void CkeckAtack()
     {
         isAtack = true;
@@ -175,10 +200,34 @@ public class orkWithAxeBrain : MonoBehaviour
         sphereCollider.GetComponent<DamageProperty>().Damage = dmg;
         Destroy(sphereCollider, 0.1f);
         Destroy(sphereCollider.GetComponent<DamageProperty>(), 0.1f);
-
-
     }
 
+
+    private void RotateToTarget()
+    {
+        Vector3 lookVector = _target.transform.position - _agent.transform.position;
+        lookVector.y = 0;
+        if (lookVector == Vector3.zero) return;
+        _agent.transform.rotation = Quaternion.RotateTowards
+            (
+            _agent.transform.rotation,
+            Quaternion.LookRotation(lookVector, Vector3.up),
+            RotationSpeed * Time.deltaTime * 4.0f
+            );
+    }
+
+    private void RotateToTargetSide()
+    {
+        Vector3 lookVector = _target.transform.position + new Vector3(100,0,0);
+        lookVector.y = 0;
+        if (lookVector == Vector3.zero) return;
+        _agent.transform.rotation = Quaternion.RotateTowards
+            (
+            _agent.transform.rotation,
+            Quaternion.LookRotation(lookVector, Vector3.up),
+            RotationSpeed * Time.deltaTime * 4.0f
+            );
+    }
 
     public bool IsAnimationPlayerPlaying(string animationName, int index)
     {
@@ -195,7 +244,7 @@ public class orkWithAxeBrain : MonoBehaviour
             return true;
 
         return false;
-    } 
+    }
 
     private void Kill()
     {
@@ -207,7 +256,7 @@ public class orkWithAxeBrain : MonoBehaviour
         if (IsAnimationPlayerPlaying("Strong", 0))
         {
             _animator.SetTrigger("strongReact");
-            
+
         }
         else
         {
@@ -235,11 +284,46 @@ public class orkWithAxeBrain : MonoBehaviour
         {
             TakeDamage(other.GetComponent<DamageProperty>()?.Damage);
             //_playerControl._weponColider.tag = "Untagged";
-            
+
 
         }
-        
-        
+        else if (other.gameObject.CompareTag("Enemy"))
+        {
+            //nearOther = true;
+        }
+
+        if (other.gameObject.CompareTag("Smoke"))
+        {
+            inSmoke = true;
+
+            Debug.Log(1);
+            float t = GameObject.Find("FX_Grenade_Smoke_01(Clone)").GetComponent<smokeTimer>().startTime;
+            if (15f - t > 0)
+                StartCoroutine(outSmoke(15f - t));
+            else inSmoke = false;
+        }
+
+        if (other.gameObject.CompareTag("Untagged") && isAtack)
+        {
+            if (IsAnimationPlaying("RunBack", 0))
+            {
+                _animator.SetInteger("AtackPhase", 0);
+                _animator.SetBool("isRunBack", false);
+                _animator.SetBool("isRunLeft", true);
+            }
+            else if (IsAnimationPlaying("RunLeft", 0))
+            {
+                isForwardMove = true;
+                _animator.SetBool("isRunLeft", false);
+                _animator.SetBool("isRunForward", true);
+                StartCoroutine(forwardRun());
+            }
+
+        }
+
+
+
+
         if (other.gameObject.CompareTag("Push"))
         {
             var control = other.gameObject.transform.parent.gameObject.GetComponent<PlayerControll>();
@@ -248,35 +332,11 @@ public class orkWithAxeBrain : MonoBehaviour
             Debug.Log(direction);
             StartCoroutine(Push(direction.normalized * control._puchForce));
         }
-        else if (other.gameObject.CompareTag("Enemy"))
-        {
-            nearOther = true;
-        }
-
-        if (other.gameObject.CompareTag("Smoke"))
-        {
-            inSmoke = true;
-            _animator.SetBool("isRunForward", false);
-            _animator.SetBool("isRunBack", false);
-            _animator.SetBool("isRunLeft", false);
-        }
-        else
-        {
-            inSmoke = false;
-            isAtack = false;
-        }
 
 
     }
-    private IEnumerator changeDistanation()
-    {
-        _animator.SetBool("isRunForward", true);
-        _agent.SetDestination(_target.transform.position + new Vector3(100, 0, 0));
-        yield return new WaitForSeconds(2);
-        nearOther = false;
-        _animator.SetBool("isRunForward", false);
-    }
-    
+
+
     private IEnumerator Push(Vector3 force)
     {
         _force = force.normalized;
@@ -284,13 +344,5 @@ public class orkWithAxeBrain : MonoBehaviour
         _force.x = 0;
         _force.z = 0;
         _force.y = 0;
-    }
-	private void OnTriggerStay(Collider other)
-    {
-        if (other.gameObject.CompareTag("Smoke"))
-        {
-            inSmoke = true;
-        }
-        
     }
 }

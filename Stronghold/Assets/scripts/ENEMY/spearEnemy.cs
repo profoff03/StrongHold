@@ -230,6 +230,8 @@ public class spearEnemy : MonoBehaviour
         _agent.SetDestination(_target.transform.position + new Vector3(100, 0, 0));
         yield return new WaitForSeconds(2);
         _animator.SetBool("isRunForward", false);
+        isTired = false;
+        iSee = false;
         nearOther = false;
     }
 

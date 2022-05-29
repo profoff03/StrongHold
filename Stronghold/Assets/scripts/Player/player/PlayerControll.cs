@@ -378,15 +378,7 @@ public class PlayerControll : MonoBehaviour
 
         #endregion
 
-        #region Moving Global coordinates
-
-        //Vector3 cameraR = _mainCamera.right;
-        //Vector3 cameraF = _mainCamera.forward;
-
-        //cameraF.y = 0;
-        //cameraR.y = 0;
-
-        #endregion
+        
 
         Vector3 movementVector = playerF.normalized * v + playerR.normalized * h;//cameraF.normalized* v +cameraR.normalized * h;
         movementVector = Vector3.ClampMagnitude(movementVector, 1);

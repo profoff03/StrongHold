@@ -118,12 +118,12 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 638160447445578694}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 4
   m_Height: 9.96
   m_Direction: 1
-  m_Center: {x: 0.03186035, y: 4.965079, z: 0}
+  m_Center: {x: 0.03, y: 4.9, z: 0}
 --- !u!82 &295648069526047569
 AudioSource:
   m_ObjectHideFlags: 0
@@ -349,9 +349,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   dmg: 1
-  vewDistance: 60
+  vewDistance: 55
   atackDistance: 10
-  goBackDistance: 18
+  goBackDistance: 20
   stayTime: 10
 --- !u!195 &295648069526047568
 NavMeshAgent:

@@ -251,6 +251,13 @@ public class BigOrkBoss : MonoBehaviour
                     StartCoroutine(changeDistanation());
                 }
             }
+            else
+            {
+                isRush = false;
+                isJump = false;
+                isDoKick = false;
+                isDoGroundAtk=false;
+            }
 
         }
         else if (isHome)
@@ -401,17 +408,12 @@ public class BigOrkBoss : MonoBehaviour
     
     private IEnumerator kikcAtack()
     {
-
-        
-        
         yield return new WaitForSeconds(0.6f);
-
-        
         if (can)
         {        
             Instantiate(kickParticle, transform.position,transform.rotation);
             shake.Shake();
-            DoStunHit(new Vector3(0, 5f, 6f), 15);
+            DoStunHit(new Vector3(0, 5f, 6f), 20);
             can = false;
         }
         _playerControl._playerRigidbody.AddForce(transform.forward * Time.deltaTime * 20000, ForceMode.Impulse);
@@ -455,9 +457,9 @@ public class BigOrkBoss : MonoBehaviour
         nearOther = false;
     }
 
-    private IEnumerator outSmoke()
+    private IEnumerator outSmoke(float delay)
     {
-        yield return new WaitForSeconds(15);
+        yield return new WaitForSeconds(delay);
         inSmoke = false;
     }
 
@@ -552,9 +554,12 @@ public class BigOrkBoss : MonoBehaviour
         if (other.gameObject.CompareTag("Smoke"))
         {
             inSmoke = true;
-            _animator.SetBool("isRun", false);
-            StartCoroutine(outSmoke());
-            
+
+            Debug.Log(1);
+            float t = GameObject.Find("FX_Grenade_Smoke_01(Clone)").GetComponent<smokeTimer>().startTime;
+            if (15f - t > 0)
+                StartCoroutine(outSmoke(15f - t));
+            else inSmoke = false;
         }
 
         if (other.gameObject.CompareTag("Enemy"))
