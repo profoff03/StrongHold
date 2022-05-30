@@ -8356,7 +8356,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1485466043327710, guid: 3e914ef784028124db1daf7002a87cc8, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1485466043327710, guid: 3e914ef784028124db1daf7002a87cc8, type: 3}
       propertyPath: m_TagString
@@ -8580,8 +8580,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 4, y: 1, z: 2}
-  m_Center: {x: 0.52, y: 0, z: 1.26}
+  m_Size: {x: 3.82, y: 0.87, z: 1.7}
+  m_Center: {x: 0.43, y: 0, z: 1}
 --- !u!82 &7879769966758223632
 AudioSource:
   m_ObjectHideFlags: 0
@@ -8915,8 +8915,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2.9, y: 0.4, z: 2.89}
-  m_Center: {x: 1.44, y: 0, z: 1.7}
+  m_Size: {x: 1.8, y: 0.4, z: 2.2000003}
+  m_Center: {x: 0.8, y: 0, z: 1.3}
 --- !u!82 &8163045121724891565
 AudioSource:
   m_ObjectHideFlags: 0
@@ -9262,8 +9262,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2.25, y: 1, z: 3.87}
-  m_Center: {x: 1.21, y: 0, z: 0.67}
+  m_Size: {x: 2, y: 0.73, z: 2.4}
+  m_Center: {x: 1.095, y: -0.133, z: 0.26}
 --- !u!82 &2405427637553052201
 AudioSource:
   m_ObjectHideFlags: 0
@@ -9906,8 +9906,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2, y: 1, z: 4}
-  m_Center: {x: 1.45, y: 0, z: 0}
+  m_Size: {x: 1.7, y: 1, z: 3.01}
+  m_Center: {x: 1.32, y: 0, z: 0.3}
 --- !u!82 &2763740643589936134
 AudioSource:
   m_ObjectHideFlags: 0
@@ -10241,8 +10241,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2.6, y: 0.4, z: 3}
-  m_Center: {x: 1.36, y: 0, z: 0.57}
+  m_Size: {x: 2, y: 0.40000004, z: 2.36}
+  m_Center: {x: 1.08, y: 0, z: 0.25}
 --- !u!82 &1557477972282704011
 AudioSource:
   m_ObjectHideFlags: 0

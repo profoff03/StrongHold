@@ -80,6 +80,7 @@ GameObject:
   - component: {fileID: 295648069526047573}
   - component: {fileID: 295648069526047568}
   - component: {fileID: 7920060439074708930}
+  - component: {fileID: 8402602899354584777}
   m_Layer: 0
   m_Name: orkWithTorch
   m_TagString: Enemy
@@ -107,6 +108,7 @@ Transform:
   - {fileID: 8244673536115585622}
   - {fileID: 459665656146985596}
   - {fileID: 5254065380360424700}
+  - {fileID: 5530829059043639082}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -120,8 +122,8 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 4
-  m_Height: 9.96
+  m_Radius: 3.5
+  m_Height: 9.75
   m_Direction: 1
   m_Center: {x: 0.03, y: 4.9, z: 0}
 --- !u!82 &295648069526047569
@@ -327,7 +329,7 @@ Animator:
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 02653907b2c11dd4fbe362c49b926b38, type: 3}
   m_Controller: {fileID: 9100000, guid: 90cd4d4b84d3bf0449e96cd9b7871639, type: 2}
-  m_CullingMode: 0
+  m_CullingMode: 1
   m_UpdateMode: 1
   m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
@@ -391,6 +393,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!136 &8402602899354584777
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 638160447445578694}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 4
+  m_Height: 9.75
+  m_Direction: 1
+  m_Center: {x: 0.03, y: 4.9, z: 0}
 --- !u!1 &798039729979610172
 GameObject:
   m_ObjectHideFlags: 0
@@ -1271,6 +1287,51 @@ Transform:
   m_Father: {fileID: 3842425894128902464}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6541793552895501886
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5530829059043639082}
+  - component: {fileID: 3575155781530867863}
+  m_Layer: 0
+  m_Name: Sphere
+  m_TagString: EnemyForward
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5530829059043639082
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6541793552895501886}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 5.76, z: 3.27}
+  m_LocalScale: {x: 2.6454, y: 2.6454, z: 2.6454}
+  m_Children: []
+  m_Father: {fileID: 256954935957186940}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &3575155781530867863
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6541793552895501886}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 2
+  m_Height: 3
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: -0.41}
 --- !u!1 &6681948183744366025
 GameObject:
   m_ObjectHideFlags: 0

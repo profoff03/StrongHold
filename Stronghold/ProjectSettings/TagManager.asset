@@ -13,6 +13,7 @@ TagManager:
   - Push
   - StunHit
   - float
+  - EnemyForward
   layers:
   - Default
   - TransparentFX

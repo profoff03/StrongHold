@@ -78,6 +78,7 @@ GameObject:
   - component: {fileID: 1850729038340315811}
   - component: {fileID: 1850729038340315822}
   - component: {fileID: 1248570907069404456}
+  - component: {fileID: 2970245783697449434}
   m_Layer: 0
   m_Name: orkWithAxe
   m_TagString: Enemy
@@ -99,6 +100,7 @@ Transform:
   - {fileID: 7103707608606640128}
   - {fileID: 978134587486183187}
   - {fileID: 6151766163020089108}
+  - {fileID: 3465276944587107505}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -112,7 +114,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 5
+  m_Radius: 3.5
   m_Height: 9.96
   m_Direction: 1
   m_Center: {x: 0.03, y: 4.9, z: 0}
@@ -383,6 +385,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!136 &2970245783697449434
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1544300986710262308}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 4
+  m_Height: 9.96
+  m_Direction: 1
+  m_Center: {x: 0.03, y: 4.9, z: 0}
 --- !u!1 &1632118345895601630
 GameObject:
   m_ObjectHideFlags: 0
@@ -834,6 +850,51 @@ Transform:
   m_Father: {fileID: 2947130851659665570}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5060799942557290187
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3465276944587107505}
+  - component: {fileID: 3969272183992905902}
+  m_Layer: 0
+  m_Name: Sphere
+  m_TagString: EnemyForward
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3465276944587107505
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5060799942557290187}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.53, y: 5.73, z: 3.38}
+  m_LocalScale: {x: 2.0515835, y: 2.0515835, z: 2.0515835}
+  m_Children: []
+  m_Father: {fileID: 2172324072956287134}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &3969272183992905902
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5060799942557290187}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 2
+  m_Height: 3.17
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: -0.41}
 --- !u!1 &6065669223700494023
 GameObject:
   m_ObjectHideFlags: 0
@@ -1235,6 +1296,10 @@ PrefabInstance:
     - target: {fileID: 5544048763577791305, guid: 7f8e977530447dd4ba3a8b483ef06a6b, type: 3}
       propertyPath: m_AnchorMin.x
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5544048764510069121, guid: 7f8e977530447dd4ba3a8b483ef06a6b, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5544048764510069122, guid: 7f8e977530447dd4ba3a8b483ef06a6b, type: 3}
       propertyPath: m_Name
