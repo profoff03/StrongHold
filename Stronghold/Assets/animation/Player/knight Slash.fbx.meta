@@ -65,7 +65,7 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.4257028
+      - time: 0.5006016
         functionName: PlayThirdSlash
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 91b501fb8d1c41e4dbc7c64d45b835e0, type: 3}
@@ -108,7 +108,7 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.10240964
+      - time: 0.13884689
         functionName: Play4Slash
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 91b501fb8d1c41e4dbc7c64d45b835e0, type: 3}

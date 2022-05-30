@@ -171,8 +171,11 @@ public class PlayerControll : MonoBehaviour
 
         if (!IsAnimationPlaying("Death", 0) && !IsAnimationPlaying("ULTIMATE", 0) && !isStan && canWalk)
         {
-            _movementVector = CalculateMovementVector();
-           if (_movementVector.magnitude != 0)
+            if (!IsAnimationPlaying("dash", 0))
+                _movementVector = CalculateMovementVector();
+           
+            
+            if (_movementVector.magnitude != 0)
             {
                 isMove = true;
             }
@@ -237,16 +240,21 @@ public class PlayerControll : MonoBehaviour
     {
         if (!IsAnimationPlaying("Death", 0) && !IsAnimationPlaying("ULTIMATE", 0) && !isStan)
         {
-            RotateFromMouseVector(); //mouse rotate
-            
+            if (!IsAnimationPlaying("dash", 0))
+                RotateFromMouseVector(); //mouse rotate
+
             if (IsAnimationPlaying("movement", 0))
+            {
+                
                 _playerRigidbody.AddForce(_movementVector * _movementSpeed * 1000);
+            } 
             else if (IsAnimationPlaying("dash", 0))
             {
+                SetTriggerUntagged();
                 if (!isMove) _movementVector = transform.forward;
                 _playerRigidbody.AddForce(_movementVector.normalized * _movementSpeed * 3000);
                 _playerAnimator.SetBool("isDash", false);
-                //StartCoroutine(setDashFalse());
+               
             }
         }
         else
@@ -255,11 +263,6 @@ public class PlayerControll : MonoBehaviour
             _playerAnimator.SetFloat("Vertical", 0);
         }
 
-    }
-    private IEnumerator setDashFalse()
-    {
-        yield return new WaitForSeconds(0.1f);
-        _playerAnimator.SetBool("isDash", false);
     }
 
     private void PushEnemy(float force=0)
@@ -320,7 +323,7 @@ public class PlayerControll : MonoBehaviour
     void Play4Slash()
     {
         _4Slash.SetActive(true);
-        AudioSource audioSource = _ThirdSlash.GetComponentInParent<AudioSource>();
+        AudioSource audioSource = _4Slash.GetComponentInParent<AudioSource>();
         audioSource.pitch = UnityEngine.Random.Range(0.9f, 1.1f);
         audioSource.Play();
         

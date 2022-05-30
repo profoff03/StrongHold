@@ -5,6 +5,8 @@ using UnityEngine.AI;
 
 public class firstPortal : MonoBehaviour
 {
+    AudioSource[] mainAudioSourse;
+
     [SerializeField]
     Transform startEnemy;
 
@@ -40,7 +42,7 @@ public class firstPortal : MonoBehaviour
     [System.Obsolete]
     void Start()
     {
-
+        mainAudioSourse = Camera.main.GetComponents<AudioSource>();
         StartCoroutine(CheckFirstEnemy());
         stoneWallParticles = stoneParticles.GetComponentsInChildren<ParticleSystem>();
     }
@@ -52,6 +54,7 @@ public class firstPortal : MonoBehaviour
         if (distance <= 150f && !wallEnable)
         {
             StartCoroutine(enableWall());
+            StartCoroutine(changeMusicToBattle());
             //Debug.Log(distance);
         }
 
@@ -127,7 +130,7 @@ public class firstPortal : MonoBehaviour
     {
         foreach (GameObject enemy in enemyPrefabs)
         {
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 2; i++)
             {
                 GameObject thisEnemy = Instantiate(enemy, transform.position, transform.rotation, transform);
                 //Animator anim = thisEnemy.GetComponent<Animator>();
@@ -153,6 +156,40 @@ public class firstPortal : MonoBehaviour
         }
     }
 
+    private IEnumerator changeMusicToBattle()
+    {
+        while (mainAudioSourse[0].volume > 0)
+        {
+            mainAudioSourse[0].volume -= 0.1f;
+            yield return new WaitForSeconds(0.1f);
+        }
+        if (mainAudioSourse[0].volume == 0)
+        {
+            while (mainAudioSourse[1].volume <= 0.7)
+            {
+                mainAudioSourse[1].volume += 0.1f;
+                yield return new WaitForSeconds(0.2f);
+            }
+        }
+    }
+
+    private IEnumerator changeMusicToMain()
+    {
+        while (mainAudioSourse[1].volume > 0)
+        {
+            mainAudioSourse[1].volume -= 0.1f;
+            yield return new WaitForSeconds(0.1f);
+        }
+        if (mainAudioSourse[1].volume == 0)
+        {
+            while (mainAudioSourse[0].volume <= 0.7)
+            {
+                mainAudioSourse[0].volume += 0.1f;
+                yield return new WaitForSeconds(0.2f);
+            }
+        }
+    }
+
     void destroyPortal()
     {
         Instantiate(explosionFX, transform.position, Quaternion.identity,transform);
@@ -163,5 +200,7 @@ public class firstPortal : MonoBehaviour
         }
         Destroy(portal, 1.5f);
         Destroy(firstPortalLoc, 5f);
+
+        StartCoroutine(changeMusicToMain());
     }
 }

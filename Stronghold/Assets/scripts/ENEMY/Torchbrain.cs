@@ -19,6 +19,7 @@ public class Torchbrain : MonoBehaviour
     bool isForwardMove = false;
 
     bool isChangeDistanation = false;
+    bool isNear = false;
 
     bool canAtack = true;
 
@@ -91,7 +92,7 @@ public class Torchbrain : MonoBehaviour
                     RotateToTarget();
                     if (!isAtack)
                     {
-
+                        _animator.SetBool("isRunBack", false);
                         _animator.SetBool("isRunLeft", false);
 
                         if (distance > atackDistance)
@@ -151,8 +152,10 @@ public class Torchbrain : MonoBehaviour
 
     private IEnumerator changeDistanation()
     {
-        yield return new WaitForSeconds(1.4f);
+        yield return new WaitForSeconds(1f);
         isChangeDistanation = false;
+        yield return new WaitForSeconds(1f);
+        isNear = false;
     }
 
 
@@ -206,8 +209,14 @@ public class Torchbrain : MonoBehaviour
     {
         Vector3 lookVector;
        
-        if (isChangeDistanation  && !IsAnimationPlaying("SecondAtack", 0) && !IsAnimationPlaying("FirstAtack", 0))
-            lookVector = rotationSide * Camera.main.transform.position;
+        if (isChangeDistanation  
+            && !IsAnimationPlaying("SecondAtack", 0) 
+            && !IsAnimationPlaying("FirstAtack", 0) 
+            && !IsAnimationPlaying("runLeft", 0) 
+            && !IsAnimationPlaying("RunBack", 0))
+        {  
+            lookVector = rotationSide * Camera.main.transform.position - _target.transform.position;
+        }
         else 
             lookVector = _target.transform.position - _agent.transform.position;
 
@@ -281,15 +290,8 @@ public class Torchbrain : MonoBehaviour
 
 
         }
-        else if (other.gameObject.CompareTag("Enemy") )
-        {
-            
-            rotationSide = Random.Range(-10, 10);
-            if (rotationSide >= 0) rotationSide = 1;
-            else if (rotationSide < 0) rotationSide = -1;
-            StartCoroutine(changeDistanation());
-            isChangeDistanation = true;
-        }
+        
+        
 
         if (other.gameObject.CompareTag("Smoke"))
         {
@@ -301,6 +303,42 @@ public class Torchbrain : MonoBehaviour
             else inSmoke = false;
         }
 
+        
+
+        if (other.gameObject.CompareTag("Push"))
+        {
+            var control = other.gameObject.transform.parent.gameObject.GetComponent<PlayerControll>();
+            var direction = transform.position - control.transform.position;
+            direction.y = 0;
+            Debug.Log(direction);
+            StartCoroutine(Push(direction.normalized * control._puchForce));
+        }
+
+
+    }
+    private void OnTriggerStay(Collider other)
+    {
+        if (!IsAnimationPlaying("SecondAtack", 0) && !IsAnimationPlaying("FirstAtack", 0) && !isNear)
+        {
+            if (other.gameObject.CompareTag("Enemy"))
+            {
+
+
+                
+                if (!isChangeDistanation)
+                {
+                    rotationSide = Random.Range(-10, 10);
+                    if (rotationSide >= 0) rotationSide = 1;
+                    else if (rotationSide <0) rotationSide = -1;
+
+                    StartCoroutine(changeDistanation());
+                }
+                isChangeDistanation = true;
+                isNear = true;
+
+
+            }
+        }
         if (other.gameObject.CompareTag("Untagged") && isAtack)
         {
             if (IsAnimationPlaying("RunBack", 0))
@@ -318,21 +356,18 @@ public class Torchbrain : MonoBehaviour
             }
 
         }
-
-        if (other.gameObject.CompareTag("Push"))
-        {
-            var control = other.gameObject.transform.parent.gameObject.GetComponent<PlayerControll>();
-            var direction = transform.position - control.transform.position;
-            direction.y = 0;
-            Debug.Log(direction);
-            StartCoroutine(Push(direction.normalized * control._puchForce));
-        }
-
-
     }
-
-
-
+    //private void OnTriggerExit(Collider other)
+    //{
+    //    if (!IsAnimationPlaying("SecondAtack", 0) && !IsAnimationPlaying("FirstAtack", 0)) 
+    //    {
+    //        if (other.gameObject.CompareTag("Enemy"))
+    //        {
+    //            isChangeDistanation = false;
+    //        }
+    //    }
+            
+    //}
     private IEnumerator Push(Vector3 force)
     {
         _force = force.normalized;
