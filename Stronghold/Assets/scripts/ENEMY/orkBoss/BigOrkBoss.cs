@@ -320,7 +320,7 @@ public class BigOrkBoss : MonoBehaviour
             Debug.Log("firstState");
             isFirstState = true;
             firstStateStart = true;
-            atkDelay = Mathf.Round(atkDelay/1.4f);
+            atkDelay = Mathf.Round(atkDelay/1.2f);
             curAtkDelay = atkDelay;
         }
     
@@ -555,8 +555,8 @@ public class BigOrkBoss : MonoBehaviour
         {
             inSmoke = true;
 
-            Debug.Log(1);
-            float t = GameObject.Find("FX_Grenade_Smoke_01(Clone)").GetComponent<smokeTimer>().startTime;
+            
+            float t = GameObject.Find("FX_Grenade_Smoke_01(Clone)").GetComponent<smokeTimer>()._smokeTime;
             if (15f - t > 0)
                 StartCoroutine(outSmoke(15f - t));
             else inSmoke = false;

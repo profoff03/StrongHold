@@ -4,11 +4,17 @@ using UnityEngine;
 
 public class smokeTimer : MonoBehaviour
 {
-    internal float startTime;
+    private float _startTime;
+    internal float _smokeTime;
 
-    void Start()
+    private void Start()
     {
-        startTime = Time.time;
+        _startTime = Time.time;
+    }
+
+    private void Update()
+    {
+        _smokeTime = Time.time - _startTime;  
     }
 
 

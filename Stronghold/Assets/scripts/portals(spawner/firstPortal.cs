@@ -82,7 +82,6 @@ public class firstPortal : MonoBehaviour
         {
             if(startEnemy.GetChildCount() <= 1)
             {
-                Debug.Log("allDie");
                 allEnemyDie = true;
                 StartCoroutine(SpawnEnemyFirstWave());
             }
@@ -116,7 +115,6 @@ public class firstPortal : MonoBehaviour
         {
             if (transform.GetChildCount() == 0)
             {
-                Debug.Log("allDie");
                 allEnemyDie = true;
                 StartCoroutine(SpawnEnemySecondWave());
             }
@@ -132,12 +130,9 @@ public class firstPortal : MonoBehaviour
         {
             for (int i = 0; i < 2; i++)
             {
-                GameObject thisEnemy = Instantiate(enemy, transform.position, transform.rotation, transform);
-                //Animator anim = thisEnemy.GetComponent<Animator>();
+                Instantiate(enemy, transform.position, transform.rotation, transform);
                 
-                //anim.SetBool("isRunForward", true);
                 yield return new WaitForSeconds(spawnDelay);
-                //anim.SetBool("isRunForward", false);
             }
         }
         yield return new WaitForSeconds(4);
@@ -199,7 +194,7 @@ public class firstPortal : MonoBehaviour
             particle.Play();
         }
         Destroy(portal, 1.5f);
-        Destroy(firstPortalLoc, 5f);
+        Destroy(firstPortalLoc, 2f);
 
         StartCoroutine(changeMusicToMain());
     }
