@@ -348,6 +348,7 @@ public class PlayerControll : MonoBehaviour
         }
         if (other.gameObject.CompareTag("StunHit"))
         {
+            _playerAnimator.SetBool("isDash", false);
             _playerAnimator.SetTrigger("isStun");
             hud.TakeDamage(other.GetComponent<DamageProperty>()?.Damage);
             isStan = true;

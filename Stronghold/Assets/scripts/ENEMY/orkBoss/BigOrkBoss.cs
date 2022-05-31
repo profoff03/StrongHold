@@ -6,26 +6,28 @@ using UnityEngine.UI;
 
 public class BigOrkBoss : MonoBehaviour
 {
-    Rigidbody _rb;
-    CameraMove shake;
-    Transform home;
-    secondPortal spawner;
+    private Rigidbody _rb;
+    private CameraMove shake;
+    private Transform home;
+    private secondPortal spawner;
     private Canvas canvas;
     private Slider healthSlider;
-    GameObject _target;
+    private GameObject _target;
     internal Animator _animator;
-    NavMeshAgent _agent;
-    PlayerControll _playerControl;
+    private NavMeshAgent _agent;
+    private PlayerControll _playerControl;
+
+    private Collider _collider;
 
     [Header("Health and DMG")]
     [SerializeField]
-    float health;
+    private float health;
     
     [SerializeField]
-    float maxHealth;
+    private float maxHealth;
 
     [SerializeField]
-    float dmg;
+    private float dmg;
 
 
     [Header("Sounds")]
@@ -111,6 +113,8 @@ public class BigOrkBoss : MonoBehaviour
     float RotationSpeed;
     void Start()
     {
+        _collider = GetComponent<Collider>();
+
         spawner = GameObject.Find("secondSpawner").GetComponent<secondPortal>();
 
         home = GameObject.Find("bossHome").GetComponent<Transform>();
@@ -175,6 +179,7 @@ public class BigOrkBoss : MonoBehaviour
                                 
                                 if (!isJump)
                                 {
+                                    _animator.SetBool("isRun", false);
                                     StartCoroutine(jumpFalse());
                                 }
                                 isJump = true;
@@ -187,6 +192,7 @@ public class BigOrkBoss : MonoBehaviour
                                 _rb.AddForce(transform.forward * 80000 * Time.deltaTime, ForceMode.Acceleration);
                                 if (!isRush)
                                 {
+                                    _animator.SetBool("isRun", false);
                                     StartCoroutine(rushFalse());
                                 }
                                 isRush = true;
@@ -354,9 +360,10 @@ public class BigOrkBoss : MonoBehaviour
     }
     private IEnumerator jumpFalse()
     {
-
+        _collider.isTrigger = true;
         canJump = false;
         yield return new WaitForSeconds(4);
+        _collider.isTrigger = false;
         isJump = false;
         yield return new WaitForSeconds(jumpDelay);
 

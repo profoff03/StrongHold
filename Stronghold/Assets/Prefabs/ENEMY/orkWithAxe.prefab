@@ -395,7 +395,7 @@ MonoBehaviour:
   maxHealth: 250
   dmg: 5
   vewDistance: 70
-  atackDistance: 10
+  atackDistance: 12
   goBackDistance: 16
   stayTime: 6
 --- !u!1 &1632118345895601630

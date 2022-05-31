@@ -148,6 +148,7 @@ public class Torchbrain : MonoBehaviour
             {
                 isAtack = false;
                 canAtack = true;
+                _animator.SetInteger("AtackPhase", 0);
                 _animator.SetBool("isRunForward", false);
                 _animator.SetBool("isRunBack", false);
                 _animator.SetBool("isRunLeft", false);
@@ -212,7 +213,7 @@ public class Torchbrain : MonoBehaviour
     {
         var sphereCollider = gameObject.AddComponent<SphereCollider>();
         sphereCollider.isTrigger = true;
-        sphereCollider.radius = 8f;
+        sphereCollider.radius = 9f;
         sphereCollider.center = new Vector3(0, 5f, 4f);
         sphereCollider.tag = "EnemyHit";
         sphereCollider.gameObject.AddComponent<DamageProperty>();
@@ -273,15 +274,20 @@ public class Torchbrain : MonoBehaviour
 
     private void TakeDamage(float? dmg)
     {
-        if (IsAnimationPlayerPlaying("Strong", 0))
+        if (!IsAnimationPlaying("FirstAtack", 0) && !IsAnimationPlaying("SecondAtack", 0))
         {
-            _animator.SetTrigger("strongReact");
+            if (IsAnimationPlayerPlaying("Strong", 0))
+            {
+                _animator.SetTrigger("strongReact");
 
+            }
+            else
+            {
+                _animator.SetTrigger("react");
+            }
         }
-        else
-        {
-            _animator.SetTrigger("react");
-        }
+
+        
         int soundNumber = Random.Range(0, 20);
         if (soundNumber <= 10) soundNumber = 0;
         if (soundNumber > 10) soundNumber = 1;
@@ -295,7 +301,7 @@ public class Torchbrain : MonoBehaviour
         if (health == 0) Kill();
         healthSlider.value = health;
 
-        _myColider.tag = "Untagged";
+        _myColider.tag = "Enemy";
     }
 
     private void OnTriggerEnter(Collider other)
