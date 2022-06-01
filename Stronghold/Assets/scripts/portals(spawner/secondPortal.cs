@@ -9,8 +9,6 @@ public class secondPortal : MonoBehaviour
 
     Transform[] spawnerTransforms;
 
-    [SerializeField]
-    Transform trigger;
 
     [SerializeField]
     Transform startEnemy;
@@ -48,6 +46,8 @@ public class secondPortal : MonoBehaviour
     bool detroyPortal = false;
     bool wallEnable = false;
 
+    bool playerEnter = false;
+
     internal bool roaring = false;
 
     [System.Obsolete]
@@ -63,11 +63,10 @@ public class secondPortal : MonoBehaviour
     [System.Obsolete]
     private void Update()
     {
-        float distance = Vector3.Distance(playerTransform.position, transform.position);
-        float trigDistance = Vector3.Distance(playerTransform.position, trigger.position);
+        //float distance = Vector3.Distance(playerTransform.position, transform.position);
 
         if (detroyPortal) portal.transform.position -= new Vector3(0, 0.2f, 0);
-        if ((trigDistance <=50f) && !wallEnable)
+        if (playerEnter && !wallEnable)
         {
             StartCoroutine(enableWall());
             StartCoroutine(changeMusicToBattle());
@@ -265,5 +264,11 @@ public class secondPortal : MonoBehaviour
         Destroy(firstPortalLoc, 5f);
 
         StartCoroutine(changeMusicToMain());
+    }
+
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player")) playerEnter = true;
     }
 }

@@ -162,7 +162,7 @@ public class Torchbrain : MonoBehaviour
     private IEnumerator startDoing()
     {
         _animator.SetBool("isRunForward", true);
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(3);
         _animator.SetBool("isRunForward", false);
         isStartDoing = false;
     }

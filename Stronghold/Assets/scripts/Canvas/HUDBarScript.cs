@@ -119,7 +119,7 @@ public class HUDBarScript : MonoBehaviour
         }
         else
         {
-            if (playerControll.isAtack || playerControll.IsAnimationPlaying("ULTIMATE", 0))
+            if (playerControll.isAtack || playerControll.IsAnimationPlaying("Death", 0) || playerControll.IsAnimationPlaying("ULTIMATE", 0) || playerControll.isStan)
             {
                 CanTakeShields = false;
             }

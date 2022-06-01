@@ -392,10 +392,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02318141b9a2f445b509407699a3c56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 250
+  maxHealth: 300
   dmg: 5
   vewDistance: 70
-  atackDistance: 12
+  atackDistance: 11
   goBackDistance: 16
   stayTime: 6
 --- !u!1 &1632118345895601630
