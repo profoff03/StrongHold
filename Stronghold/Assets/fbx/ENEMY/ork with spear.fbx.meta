@@ -175,14 +175,7 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events:
-      - time: 0.90133035
-        functionName: canDo
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 15c4700034de3f8408ec03c0dbeb88bd, type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
+      events: []
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
@@ -211,14 +204,7 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events:
-      - time: 0.7955912
-        functionName: canDo
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 15c4700034de3f8408ec03c0dbeb88bd, type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
+      events: []
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
@@ -247,21 +233,7 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events:
-      - time: 0.49499
-        functionName: DoHit
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 15c4700034de3f8408ec03c0dbeb88bd, type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 1
-        functionName: CkeckAtack
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 15c4700034de3f8408ec03c0dbeb88bd, type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
+      events: []
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
@@ -305,13 +277,6 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.8234395
-        functionName: canDo
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 15c4700034de3f8408ec03c0dbeb88bd, type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
@@ -348,7 +313,7 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.532909
+      - time: 0.83859646
         functionName: CkeckAtack
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 15c4700034de3f8408ec03c0dbeb88bd, type: 3}

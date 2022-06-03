@@ -7,83 +7,81 @@ using UnityEngine.UI;
 public class spearEnemy : MonoBehaviour
 {
     GameObject _target;
-    Camera _camera;
-
-    [SerializeField]
-    GameObject _stayPositions;
-    
-    Transform[] _stayPosTransforms;  
-    Transform _home;
-
-    CapsuleCollider _myColider;
-    
-    PlayerControll _playerControl;
     NavMeshAgent _agent;
-    
     Animator _playerAnimator;
     Animator _animator;
-
     AudioSource[] _audioSource;
+    CapsuleCollider _myColider;
+    Camera _camera;
+    
+    [SerializeField]
+    Transform[] homePos;
+    Transform home;
 
+    bool isStartDoing = true;
+
+    bool isAtack = false;
+    bool isStab = false;
+    bool isSlash = false;
+    bool isStunAtk = false;
+    
     bool inSmoke = false;
-
-    bool nearOther = false;
-
-    private float RotationSpeed;
-    private Vector3 _force;
-
-    bool cantDo = false;
-    bool iSee = false;
-    bool isTired = false;
-    bool isStunAtack = false;
     bool isHome = false;
+    bool findPos = false;
+
+    bool isChangeDistanation = false;
+    bool isNear = false;
+
+    bool canAtack = true;
+    bool canRun = true;
 
     float health;
+
     private Canvas canvas;
     private Slider healthSlider;
+
     [SerializeField]
     float maxHealth;
-    
-    Vector3 playerPos;
-
-    float distance;
 
     [SerializeField]
+    float dmg;
+
+    [SerializeField]
+    [Range(21f, 100f)]
     float vewDistance;
 
     [SerializeField]
     float atackDistance;
 
     [SerializeField]
+    [Range(11f, 30f)]
     float goBackDistance;
 
     [SerializeField]
-    float dmg;  
-
-    [SerializeField]
     float stayTime;
+
     [SerializeField]
-    float tiredTime;
+    float slashDelay;
 
+    private Vector3 _force;
 
-    float startSpeed;
-    float startVewTime = 0;
-    float startTiredTime = 0;
+    float rotationSide;
+
+    float RotationSpeed;
 
     void Start()
     {
+
         _camera = Camera.main;
-        _audioSource = GetComponents<AudioSource>();
         _myColider = GetComponent<CapsuleCollider>();
         _agent = (NavMeshAgent)this.GetComponent("NavMeshAgent");
         _target = GameObject.Find("Player");
         _playerAnimator = _target.GetComponent<Animator>();
-        _playerControl = _target.GetComponent<PlayerControll>();
-        _animator = GetComponent<Animator>();
-        RotationSpeed = _agent.angularSpeed/2;
-        startSpeed = _agent.speed;
-        _stayPosTransforms = _stayPositions.GetComponentsInChildren<Transform>();
 
+        RotationSpeed = _agent.angularSpeed / 2;
+
+        _animator = GetComponent<Animator>();
+        _audioSource = GetComponents<AudioSource>();
         #region health
         health = maxHealth;
 
@@ -96,163 +94,270 @@ public class spearEnemy : MonoBehaviour
         canvas.transform.rotation = canvas.worldCamera.transform.rotation;
         #endregion
 
+
+        StartCoroutine(startDoing());
     }
-    void FixedUpdate()
+    void Update()
     {
-        if (!inSmoke)
+        transform.position += _force;
+        if (!isStartDoing)
         {
-            if (!nearOther)
+            if (!inSmoke)
             {
-                if (!IsAnimationPlaying("react", 0) && !IsAnimationPlaying("reactStrong", 0) && !cantDo)
+                if (!IsAnimationPlayerPlaying("Death", 0))
                 {
-                    if (!iSee)
+                    float distance = Vector3.Distance(_agent.transform.position, _target.transform.position);
+                    
+                    if (!isAtack)
                     {
-                        distance = Vector3.Distance(_agent.transform.position, _target.transform.position);
-
-                        if (distance <= vewDistance && !isTired)
+                        RotateToTarget(_target.transform);
+                        if (distance < vewDistance)
                         {
-                            iSee = true;
-                            startVewTime = Time.time;
-                            isStunAtack = false;
-                            isHome = false;
-                            _animator.SetBool("isHome", isHome);
-                        }
-                        if (isTired)
-                        {
-
-
-                            if (Vector3.Distance(_agent.transform.position, _home.position) <= goBackDistance)
+                            if (distance > atackDistance)
                             {
-                                if (Vector3.Distance(_agent.transform.position, _home.position) <= atackDistance)
-                                {
-                                    isHome = true;
-                                    _animator.SetBool("isHome", isHome);
-                                    _animator.SetBool("isRunForward", false);
-                                    RotateToTarget();
-                                }
+                                _animator.SetBool("isRunForward", true);
+                            }
 
-                                if (isHome && isTired && distance <= atackDistance)
+                            if (distance <= atackDistance)
+                            {
+                                if (!isStab)
                                 {
+                                    isStab = true;
                                     _animator.SetTrigger("isStab");
                                 }
+                                _animator.SetBool("isRunForward", false);
 
-
-                                if (Time.time - startTiredTime >= tiredTime)
-                                {
-                                    isTired = false;
-
-                                }
-
-                            }
-                            if (!IsAnimationPlaying("Stab", 0) && !IsAnimationPlaying("atack", 0) && Time.time - startTiredTime >= 3f && !isHome)
-                            {
-                                _agent.speed = 0;
-                                if (Vector3.Distance(_target.transform.position, _home.position) >= goBackDistance)
-                                {
-
-                                    if (distance <= atackDistance && !isStunAtack && Time.time - startTiredTime >= 4f)
-                                    {
-                                        _agent.speed = 0;
-                                        _animator.SetBool("isRunForward", false);
-                                        RotateToTarget();
-                                        _animator.SetBool("isAtack", true);
-
-
-                                    }
-                                    else if (!IsAnimationPlaying("atack", 0))
-                                    {
-                                        _agent.speed = startSpeed;
-                                        _agent.SetDestination(_home.position);
-                                        _animator.SetBool("isRunForward", true);
-
-                                    }
-                                }
-                                else
-                                {
-                                    _home = _stayPosTransforms[Random.Range(0, _stayPosTransforms.Length)];
-                                    RotateToTarget();
-                                }
                             }
                         }
-
-
                     }
-                    else
+                    else if (!isHome)
                     {
-                        distance = Vector3.Distance(_agent.transform.position, _target.transform.position);
-                        if (Time.time - startVewTime >= stayTime)
+                        if (!findPos)
                         {
-                            _agent.speed = startSpeed;
-                            _agent.SetDestination(playerPos);
-                            //_agent.transform.position += transform.forward * moveSpeed * Time.deltaTime;
+                            home = homePos[Random.Range(0, homePos.Length)];
+                            isStab = false;
+                            findPos = true;
 
-                            float distToDistanation = Vector3.Distance(_agent.transform.position, playerPos);
-                            _animator.SetBool("isRunForward", true);
-                            if (distToDistanation <= atackDistance)
-                            {
-                                _agent.speed = 0;
-                                iSee = false;
-                                isTired = true;
-                                startTiredTime = Time.time;
-                                _home = _stayPosTransforms[Random.Range(0, _stayPosTransforms.Length)];
-                                _animator.SetBool("isRunForward", false);
-                            }
+                            StartCoroutine(waitRunForAtk());
                         }
                         else
                         {
-                            _agent.speed = 0;
-                            RotateToTarget();
-                            playerPos = _target.transform.position;
+                            
+                            var distanceToHome = Vector3.Distance(_agent.transform.position, home.transform.position);
+                            
+                            if (distance < atackDistance && !canRun)
+                            {
+                                
+                                _animator.SetBool("isRunForward", false);
+                                RotateToTarget(_target.transform);
+                                if (!isStunAtk)
+                                {
+                                    isStunAtk = true;
+                                    StartCoroutine(StunAtackDelay());
+                                }
+                                
+                                
+                            }
+                            else if (canRun)
+                            {
+                                RotateToTarget(home);
+                                _animator.SetBool("isRunForward", true);
+                            } 
 
+                            if (distanceToHome < atackDistance) 
+                            {
+                                isHome = true;
+                                _animator.SetBool("isRunForward",false);
+                            }
+                                
+                        }
+
+                    }else if (isHome)
+                    {
+                        RotateToTarget(_target.transform);
+                        if (distance <= atackDistance)
+                        {
+                            if (!isSlash)
+                            {
+                                _animator.SetTrigger("isSlash");
+                                StartCoroutine(slashDelayCor());
+                                isSlash = true;
+                            }
 
                         }
 
+                        if (canAtack)
+                        {
+                            StartCoroutine(atackDelay());
+                            canAtack = false;
+                        }
                     }
+
+
                 }
             }
             else
             {
-                StartCoroutine(changeDistanation());
+                BoolStateFalse();
+                canAtack = true;
+                canRun = true;
+                _animator.SetBool("isRunForward", false);
             }
         }
-        
 
 
         canvas.transform.LookAt(canvas.worldCamera.transform);
-
-
-
-
     }
-    private IEnumerator changeDistanation()
+
+    private IEnumerator startDoing()
     {
         _animator.SetBool("isRunForward", true);
-        _agent.SetDestination(_target.transform.position + new Vector3(100, 0, 0));
         yield return new WaitForSeconds(2);
         _animator.SetBool("isRunForward", false);
-        isTired = false;
-        iSee = false;
-        nearOther = false;
+        isStartDoing = false;
     }
 
-    void canDo()
+
+    private IEnumerator changeDistanation()
     {
-        cantDo = false;
-        _agent.speed = startSpeed;
+        
+        isChangeDistanation = false;
+        yield return new WaitForSeconds(0.5f);
+        isNear = false;
+        
     }
-    private void TakeDamage(float? dmg)
+
+    private IEnumerator StunAtackDelay()
     {
-        cantDo = true;
-        _agent.speed = 0;
-        if (IsAnimationPlayerPlaying("Strong", 0))
+        yield return new WaitForSeconds(0.6f);
+        _animator.SetTrigger("isAtack");
+        yield return new WaitForSeconds(1.5f);
+        canRun = true;
+        yield return new WaitForSeconds(0.5f);
+        isStunAtk = false;
+    }
+
+    private IEnumerator waitRunForAtk()
+    {
+        yield return new WaitForSeconds(2f);
+        canRun = false;
+    }
+
+
+    private IEnumerator atackDelay()
+    {
+
+        yield return new WaitForSeconds(stayTime);
+        BoolStateFalse();
+        canRun = true;
+        canAtack = true;
+    }
+
+    private IEnumerator slashDelayCor()
+    {
+        yield return new WaitForSeconds(slashDelay);
+        isSlash= false;
+    }
+
+    private IEnumerator outSmoke(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        inSmoke = false;
+    }
+
+
+    void CkeckAtack()
+    {
+        isAtack = true;
+        _myColider.tag = "Enemy";
+    }
+
+    void DoHit()
+    {
+        var sphereCollider = gameObject.AddComponent<SphereCollider>();
+        sphereCollider.isTrigger = true;
+        sphereCollider.radius = 9f;
+        sphereCollider.center = new Vector3(0, 5f, 4f);
+        sphereCollider.tag = "EnemyHit";
+        sphereCollider.gameObject.AddComponent<DamageProperty>();
+        sphereCollider.GetComponent<DamageProperty>().Damage = dmg;
+        Destroy(sphereCollider, 0.1f);
+        Destroy(sphereCollider.GetComponent<DamageProperty>(), 0.1f);
+    }
+    void DoStunHit()
+    {
+        var sphereCollider = gameObject.AddComponent<SphereCollider>();
+        sphereCollider.isTrigger = true;
+        sphereCollider.radius = 9f;
+        sphereCollider.center = new Vector3(0, 5f, 4f);
+        sphereCollider.tag = "StunHit";
+        sphereCollider.gameObject.AddComponent<DamageProperty>();
+        sphereCollider.GetComponent<DamageProperty>().Damage = dmg;
+        Destroy(sphereCollider, 0.1f);
+        Destroy(sphereCollider.GetComponent<DamageProperty>(), 0.1f);
+    }
+
+    private void RotateToTarget(Transform target)
+    {
+        Vector3 lookVector;
+
+        if (isChangeDistanation)
         {
-            _animator.SetTrigger("strongReact");
-
+            lookVector = rotationSide * Camera.main.transform.position - target.position;
         }
         else
+            lookVector = target.position - _agent.transform.position;
+
+
+        lookVector.y = 0;
+        if (lookVector == Vector3.zero) return;
+        _agent.transform.rotation = Quaternion.RotateTowards
+            (
+            _agent.transform.rotation,
+            Quaternion.LookRotation(lookVector, Vector3.up),
+            RotationSpeed * Time.deltaTime
+            );
+    }
+
+
+    public bool IsAnimationPlayerPlaying(string animationName, int index)
+    {
+        var animatorStateInfo = _playerAnimator.GetCurrentAnimatorStateInfo(index);
+        if (animatorStateInfo.IsName(animationName))
+            return true;
+
+        return false;
+    } //Check animation state
+    public bool IsAnimationPlaying(string animationName, int index)
+    {
+        var animatorStateInfo = _animator.GetCurrentAnimatorStateInfo(index);
+        if (animatorStateInfo.IsName(animationName))
+            return true;
+
+        return false;
+    }
+
+    private void Kill()
+    {
+        Destroy(gameObject);
+    }
+
+    private void TakeDamage(float? dmg)
+    {
+        if (!IsAnimationPlaying("Stab", 0) && !IsAnimationPlaying("slash", 0) && !IsAnimationPlaying("Run", 0))
         {
-            _animator.SetTrigger("react");
+            if (IsAnimationPlayerPlaying("Strong", 0))
+            {
+                _animator.SetTrigger("strongReact");
+
+            }
+            else
+            {
+                _animator.SetTrigger("react");
+            }
         }
+
+
         int soundNumber = Random.Range(0, 20);
         if (soundNumber <= 10) soundNumber = 0;
         if (soundNumber > 10) soundNumber = 1;
@@ -266,79 +371,7 @@ public class spearEnemy : MonoBehaviour
         if (health == 0) Kill();
         healthSlider.value = health;
 
-        _myColider.tag = "Untagged";
-    }
-
-    private void Kill()
-    {
-        Destroy(gameObject);
-    }
-
-    public bool IsAnimationPlaying(string animationName, int index)
-    {
-        // берем информацию о состоянии
-        var animatorStateInfo = _animator.GetCurrentAnimatorStateInfo(index);
-        // смотрим, есть ли в нем имя какой-то анимации, то возвращаем true
-        if (animatorStateInfo.IsName(animationName))
-            return true;
-
-        return false;
-    }
-    public bool IsAnimationPlayerPlaying(string animationName, int index)
-    {
-        var animatorStateInfo = _playerAnimator.GetCurrentAnimatorStateInfo(index);
-        if (animatorStateInfo.IsName(animationName))
-            return true;
-
-        return false;
-    }
-
-    private void RotateToTarget()
-    {
-        Vector3 lookVector = _target.transform.position - _agent.transform.position;
-        lookVector.y = 0;
-        if (lookVector == Vector3.zero) return;
-        _agent.transform.rotation = Quaternion.RotateTowards
-            (
-            _agent.transform.rotation,
-            Quaternion.LookRotation(lookVector, Vector3.up),
-            RotationSpeed * Time.deltaTime * 4.0f
-            );
-    }
-    void CkeckAtack()
-    {
         _myColider.tag = "Enemy";
-    }
-
-
-    void DoStunHit()
-    {
-        isStunAtack = true;
-        _animator.SetBool("isAtack", false);
-
-
-        var sphereCollider = gameObject.AddComponent<SphereCollider>();
-        sphereCollider.isTrigger = true;
-        sphereCollider.radius = 6f;
-        sphereCollider.center = new Vector3(0, 5f, 4f);
-        sphereCollider.tag = "StunHit";
-        sphereCollider.gameObject.AddComponent<DamageProperty>();
-        sphereCollider.GetComponent<DamageProperty>().Damage = dmg;
-        Destroy(sphereCollider, 0.1f);
-        Destroy(sphereCollider.GetComponent<DamageProperty>(), 0.1f);
-    }
-
-    void DoHit()
-    {
-        var sphereCollider = gameObject.AddComponent<SphereCollider>();
-        sphereCollider.isTrigger = true;
-        sphereCollider.radius = 7f;
-        sphereCollider.center = new Vector3(0, 5f, 4f);
-        sphereCollider.tag = "EnemyHit";
-        sphereCollider.gameObject.AddComponent<DamageProperty>();
-        sphereCollider.GetComponent<DamageProperty>().Damage = dmg;
-        Destroy(sphereCollider, 0.1f);
-        Destroy(sphereCollider.GetComponent<DamageProperty>(), 0.1f);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -346,27 +379,21 @@ public class spearEnemy : MonoBehaviour
         if (other.gameObject.CompareTag("Hit"))
         {
             TakeDamage(other.GetComponent<DamageProperty>()?.Damage);
-            //_playerControl._weponColider.tag = "Untagged";
+        }
 
 
-        }
-        else if (other.gameObject.CompareTag("Enemy"))
-        {
-            nearOther = true;
-        }
 
         if (other.gameObject.CompareTag("Smoke"))
         {
             inSmoke = true;
-            _animator.SetBool("isRunForward", false);
-            _animator.SetBool("isRunBack", false);
-            _animator.SetBool("isRunLeft", false);
+
+            float t = GameObject.Find("FX_Grenade_Smoke_01(Clone)").GetComponent<smokeTimer>()._smokeTime;
+            if (15f - t > 0)
+                StartCoroutine(outSmoke(15f - t));
+            else inSmoke = false;
         }
-        else
-        {
-            inSmoke = false;
-            
-        }
+
+
 
         if (other.gameObject.CompareTag("Push"))
         {
@@ -377,15 +404,31 @@ public class spearEnemy : MonoBehaviour
             StartCoroutine(Push(direction.normalized * control._puchForce));
         }
 
+
     }
     private void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.CompareTag("Smoke"))
+        if (!isNear)
         {
-            inSmoke = true;
-        }
+            if (other.gameObject.CompareTag("Enemy"))
+            {
+                if (!isChangeDistanation)
+                {
+                    rotationSide = Random.Range(-10, 10);
+                    if (rotationSide >= 0) rotationSide = 1;
+                    else if (rotationSide < 0) rotationSide = -1;
 
+                    StartCoroutine(changeDistanation());
+                }
+                isChangeDistanation = true;
+                isNear = true;
+
+
+            }
+        }
+        
     }
+
     private IEnumerator Push(Vector3 force)
     {
         _force = force.normalized;
@@ -395,4 +438,13 @@ public class spearEnemy : MonoBehaviour
         _force.y = 0;
     }
 
+    private void BoolStateFalse()
+    {
+        isStunAtk = false;
+        findPos = false;
+        isAtack = false;
+        isHome = false;
+        isSlash = false;
+    }
 }
+
