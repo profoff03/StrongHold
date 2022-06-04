@@ -17,7 +17,6 @@ public class Torchbrain : MonoBehaviour
     
     
     CapsuleCollider _myColider;
-    Camera _camera;
 
     bool isStartDoing = true;
 
@@ -64,7 +63,6 @@ public class Torchbrain : MonoBehaviour
     void Start()
     {
 
-        _camera = Camera.main;
         _myColider = GetComponent<CapsuleCollider>();
         _agent = (NavMeshAgent)this.GetComponent("NavMeshAgent");
         _target = GameObject.Find("Player");
@@ -82,7 +80,7 @@ public class Torchbrain : MonoBehaviour
 
         healthSlider.maxValue = maxHealth;
         healthSlider.value = health;
-        canvas.worldCamera = _camera;
+        canvas.worldCamera = Camera.main;
         canvas.transform.rotation = canvas.worldCamera.transform.rotation;
         #endregion
 
@@ -101,9 +99,10 @@ public class Torchbrain : MonoBehaviour
                     float distance = Vector3.Distance(_agent.transform.position, _target.transform.position);
                     if (distance < vewDistance)
                     {
-                        RotateToTarget();
+                        
                         if (!isAtack)
                         {
+                            RotateToTarget();
                             _animator.SetBool("isRunBack", false);
                             _animator.SetBool("isRunLeft", false);
 
@@ -122,6 +121,7 @@ public class Torchbrain : MonoBehaviour
                         }
                         else
                         {
+                            RotateToTargetOnly();
                             _animator.SetInteger("AtackPhase", 0);
                             if (canAtack)
                             {
@@ -164,6 +164,11 @@ public class Torchbrain : MonoBehaviour
         canvas.transform.LookAt(canvas.worldCamera.transform);
     }
 
+    
+    
+    
+    
+    
     private IEnumerator startDoing()
     {
         _animator.SetBool("isRunForward", true);
@@ -175,7 +180,7 @@ public class Torchbrain : MonoBehaviour
     
     private IEnumerator changeDistanation()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
         isChangeDistanation = false;
         yield return new WaitForSeconds(0.5f);
         isNear = false;
@@ -232,13 +237,11 @@ public class Torchbrain : MonoBehaviour
     {
         Vector3 lookVector;
        
-        if (isChangeDistanation  
+        if (isChangeDistanation
             && !IsAnimationPlaying("SecondAtack", 0) 
-            && !IsAnimationPlaying("FirstAtack", 0) 
-            && !IsAnimationPlaying("runLeft", 0) 
-            && !IsAnimationPlaying("RunBack", 0))
+            && !IsAnimationPlaying("FirstAtack", 0)) 
         {  
-            lookVector = rotationSide * Camera.main.transform.position - _target.transform.position;
+            lookVector = rotationSide * transform.position;
         }
         else 
             lookVector = _target.transform.position - _agent.transform.position;
@@ -253,7 +256,19 @@ public class Torchbrain : MonoBehaviour
             RotationSpeed * Time.deltaTime
             );
     }
-
+    private void RotateToTargetOnly()
+    {
+        Vector3 lookVector;
+        lookVector = _target.transform.position - _agent.transform.position;
+        lookVector.y = 0;
+        if (lookVector == Vector3.zero) return;
+        _agent.transform.rotation = Quaternion.RotateTowards
+            (
+            _agent.transform.rotation,
+            Quaternion.LookRotation(lookVector, Vector3.up),
+            RotationSpeed * Time.deltaTime
+            );
+    }
 
     public bool IsAnimationPlayerPlaying(string animationName, int index)
     {
@@ -346,29 +361,27 @@ public class Torchbrain : MonoBehaviour
     }
     private void OnTriggerStay(Collider other)
     {
-        if (!IsAnimationPlaying("SecondAtack", 0) && !IsAnimationPlaying("FirstAtack", 0) && !isNear)
+        if (!IsAnimationPlaying("SecondAtack", 0) && !IsAnimationPlaying("FirstAtack", 0))
         {
             if (other.gameObject.CompareTag("Enemy"))
             {
-
-
-                
                 if (!isChangeDistanation)
                 {
+                    StartCoroutine(changeDistanation());
                     rotationSide = Random.Range(-10, 10);
                     if (rotationSide >= 0) rotationSide = 1;
-                    else if (rotationSide <0) rotationSide = -1;
-
-                    StartCoroutine(changeDistanation());
+                    else if (rotationSide < 0) rotationSide = -1; 
                 }
+                
                 isChangeDistanation = true;
-                isNear = true;
+                //isNear = true;
 
 
             }
         }
         if (other.gameObject.CompareTag("Untagged") && isAtack)
         {
+            
             if (IsAnimationPlaying("RunBack", 0))
             {
                 _animator.SetInteger("AtackPhase", 0);

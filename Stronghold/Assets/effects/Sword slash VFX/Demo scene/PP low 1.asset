@@ -1,5 +1,54 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-4378419641800289351
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1cb7e9e120078f43bce4f0b1be547a7, type: 3}
+  m_Name: AmbientOcclusion
+  m_EditorClassIdentifier: 
+  active: 1
+  enabled:
+    overrideState: 1
+    value: 1
+  mode:
+    overrideState: 0
+    value: 1
+  intensity:
+    overrideState: 1
+    value: 0.3
+  color:
+    overrideState: 1
+    value: {r: 0.8018868, g: 0.31170264, b: 0, a: 1}
+  ambientOnly:
+    overrideState: 0
+    value: 1
+  noiseFilterTolerance:
+    overrideState: 0
+    value: 0
+  blurTolerance:
+    overrideState: 0
+    value: -4.6
+  upsampleTolerance:
+    overrideState: 0
+    value: -12
+  thicknessModifier:
+    overrideState: 0
+    value: 1.71
+  directLightingStrength:
+    overrideState: 0
+    value: 0
+  radius:
+    overrideState: 0
+    value: 0.25
+  quality:
+    overrideState: 0
+    value: 2
 --- !u!114 &-3332923821276628599
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -27,10 +76,10 @@ MonoBehaviour:
     value: {x: 0.5, y: 0.5}
   intensity:
     overrideState: 1
-    value: 0.3
+    value: 0.326
   smoothness:
     overrideState: 1
-    value: 0.79
+    value: 0.512
   roundness:
     overrideState: 0
     value: 1
@@ -60,6 +109,7 @@ MonoBehaviour:
   - {fileID: 6890962305805956277}
   - {fileID: 2544764400394367777}
   - {fileID: -3332923821276628599}
+  - {fileID: -4378419641800289351}
 --- !u!114 &2544764400394367777
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -113,22 +163,22 @@ MonoBehaviour:
     value: 1
   temperature:
     overrideState: 1
-    value: 7.7
+    value: 9
   tint:
     overrideState: 1
-    value: -0.9
+    value: -12
   colorFilter:
     overrideState: 1
-    value: {r: 0.9736239, g: 1, b: 0.9575472, a: 1}
+    value: {r: 0.9109053, g: 0.8632076, b: 1, a: 1}
   hueShift:
-    overrideState: 0
-    value: -1
+    overrideState: 1
+    value: -7
   saturation:
     overrideState: 1
     value: 14.3
   brightness:
     overrideState: 1
-    value: 11.9
+    value: 33
   postExposure:
     overrideState: 1
     value: 0.6
@@ -164,13 +214,13 @@ MonoBehaviour:
     value: 110
   lift:
     overrideState: 1
-    value: {x: 0.9344163, y: 0.952832, z: 1, w: 0.02695418}
+    value: {x: 0.9012642, y: 0.9605674, z: 1, w: -0.02366864}
   gamma:
     overrideState: 1
-    value: {x: 1, y: 0.9696075, z: 0.91078764, w: -0.09433972}
+    value: {x: 0.9991868, y: 1, z: 0.9483926, w: 0}
   gain:
-    overrideState: 0
-    value: {x: 0.99999934, y: 0.9999999, z: 1, w: 0.0025244094}
+    overrideState: 1
+    value: {x: 1, y: 0.9486373, z: 0.93902045, w: 0.0025244094}
   masterCurve:
     overrideState: 1
     value:

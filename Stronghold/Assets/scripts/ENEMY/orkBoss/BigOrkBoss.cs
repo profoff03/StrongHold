@@ -259,6 +259,7 @@ public class BigOrkBoss : MonoBehaviour
             }
             else
             {
+                _animator.SetBool("isRun", false);
                 isRush = false;
                 isJump = false;
                 isDoKick = false;
@@ -491,7 +492,7 @@ public class BigOrkBoss : MonoBehaviour
         sphereCollider.tag = "StunHit";
         sphereCollider.gameObject.AddComponent<DamageProperty>();
         sphereCollider.GetComponent<DamageProperty>().Damage = dmg;
-        Destroy(sphereCollider, 0.1f);
+        Destroy(sphereCollider, 0.6f);
         Destroy(sphereCollider.GetComponent<DamageProperty>(), 0.1f);
     }
 

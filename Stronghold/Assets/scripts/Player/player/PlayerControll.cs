@@ -346,6 +346,7 @@ public class PlayerControll : MonoBehaviour
             hud.TakeDamage(other.GetComponent<DamageProperty>()?.Damage);
             Instantiate(blood, transform.position, Quaternion.Euler(-90f, 0f, 0f));
         }
+        
         if (other.gameObject.CompareTag("StunHit"))
         {
             _playerAnimator.SetBool("isDash", false);
