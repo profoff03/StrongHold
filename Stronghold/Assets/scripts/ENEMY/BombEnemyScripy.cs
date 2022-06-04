@@ -5,6 +5,8 @@ using UnityEngine.AI;
 
 public class BombEnemyScripy : MonoBehaviour
 {
+    bool isStartDoing = true;
+
     private GameObject _target;
     private bool _isSees;
     private Animator _animator;
@@ -38,6 +40,7 @@ public class BombEnemyScripy : MonoBehaviour
         _isSees = false;
         _target = GameObject.Find("Player");
         _rotationSpeed = _agent.angularSpeed;
+        StartCoroutine(startDoing());
     }
 
     // Update is called once per frame
@@ -47,45 +50,56 @@ public class BombEnemyScripy : MonoBehaviour
 
         float DistanceToPlayer = Vector3.Distance(_agent.transform.position, _target.transform.position);
         //  Debug.Log(DistanceToPlayer);
-        if (!nearOther)
+        if (!isStartDoing)
         {
-            if (DistanceToPlayer < viewDistance)
+            if (!nearOther)
             {
-                _isSees = true;
-            }
-
-            if (_isSees)
-            {
-                //_agent.transform.position += transform.forward * moveSpeed * Time.deltaTime;
-
-                _animator.SetBool("isRunForward", true);
-                _agent.SetDestination(_target.transform.position);
-                _rb.AddForce(transform.forward * moveSpeed * Time.deltaTime * 100000);
-                RotateToTarget();
-            }
-
-            if (DistanceToPlayer < explosionDistance)
-            {
-                if (can)
+                if (DistanceToPlayer < viewDistance)
                 {
-                    Instantiate(_particleSystem, _target.transform.position, Quaternion.identity);
-                    var sphereCollider = gameObject.AddComponent<SphereCollider>();
-                    sphereCollider.isTrigger = true;
-                    sphereCollider.radius = 10f;
-                    sphereCollider.center = new Vector3(0, 5f, 4f);
-                    sphereCollider.tag = "EnemyHit";
-                    sphereCollider.gameObject.AddComponent<DamageProperty>();
-                    sphereCollider.GetComponent<DamageProperty>().Damage = bombDamage;
-
-                    Destroy(gameObject, 0.019f);
-                    can = false;
+                    _isSees = true;
                 }
 
+                if (_isSees)
+                {
+                    //_agent.transform.position += transform.forward * moveSpeed * Time.deltaTime;
 
+                    _animator.SetBool("isRunForward", true);
+                    _agent.SetDestination(_target.transform.position);
+                    _rb.AddForce(transform.forward * moveSpeed * Time.deltaTime * 100000);
+                    RotateToTarget();
+                }
+
+                if (DistanceToPlayer < explosionDistance)
+                {
+                    if (can)
+                    {
+                        Instantiate(_particleSystem, _target.transform.position, Quaternion.identity);
+                        var sphereCollider = gameObject.AddComponent<SphereCollider>();
+                        sphereCollider.isTrigger = true;
+                        sphereCollider.radius = 10f;
+                        sphereCollider.center = new Vector3(0, 5f, 4f);
+                        sphereCollider.tag = "EnemyHit";
+                        sphereCollider.gameObject.AddComponent<DamageProperty>();
+                        sphereCollider.GetComponent<DamageProperty>().Damage = bombDamage;
+
+                        Destroy(gameObject, 0.019f);
+                        can = false;
+                    }
+
+
+                }
             }
-        }
-        else StartCoroutine(changeDistanation());
+            else StartCoroutine(changeDistanation());
+        }else _rb.AddForce(transform.forward * moveSpeed * Time.deltaTime * 50000);
     }
+    private IEnumerator startDoing()
+    {
+        _animator.SetBool("isRunForward", true);
+        yield return new WaitForSeconds(2);
+        _animator.SetBool("isRunForward", false);
+        isStartDoing = false;
+    }
+
     private IEnumerator changeDistanation()
     {
         _animator.SetBool("isRunForward", true);

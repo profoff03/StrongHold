@@ -10,13 +10,22 @@ public class spearEnemy : MonoBehaviour
     NavMeshAgent _agent;
     Animator _playerAnimator;
     Animator _animator;
-    AudioSource[] _audioSource;
+    
+    AudioSource _audioSource;
+    [SerializeField]
+    AudioClip[] audioClips;
+    
+    
     CapsuleCollider _myColider;
     Camera _camera;
+    Rigidbody _myRigidbody;
     
     [SerializeField]
     Transform[] homePos;
     Transform home;
+
+    [SerializeField]
+    GameObject spearHit;
 
     bool isStartDoing = true;
 
@@ -63,6 +72,9 @@ public class spearEnemy : MonoBehaviour
     [SerializeField]
     float slashDelay;
 
+    [SerializeField]
+    float dashSpeed;
+
     private Vector3 _force;
 
     float rotationSide;
@@ -71,17 +83,22 @@ public class spearEnemy : MonoBehaviour
 
     void Start()
     {
+        spearHit.GetComponent<DamageProperty>().Damage = dmg;
 
         _camera = Camera.main;
+        _myRigidbody = GetComponent<Rigidbody>();
         _myColider = GetComponent<CapsuleCollider>();
-        _agent = (NavMeshAgent)this.GetComponent("NavMeshAgent");
+        
+        _agent = GetComponent<NavMeshAgent>();
         _target = GameObject.Find("Player");
+        
         _playerAnimator = _target.GetComponent<Animator>();
 
         RotationSpeed = _agent.angularSpeed / 2;
 
         _animator = GetComponent<Animator>();
-        _audioSource = GetComponents<AudioSource>();
+        _audioSource = GetComponent<AudioSource>();
+        
         #region health
         health = maxHealth;
 
@@ -116,10 +133,13 @@ public class spearEnemy : MonoBehaviour
                             if (distance > atackDistance)
                             {
                                 _animator.SetBool("isRunForward", true);
+                                spearHit.SetActive(true);
+                                _myRigidbody.AddForce(transform.forward * dashSpeed * 1000);
                             }
 
                             if (distance <= atackDistance)
                             {
+                                spearHit.SetActive(false);
                                 if (!isStab)
                                 {
                                     isStab = true;
@@ -147,7 +167,7 @@ public class spearEnemy : MonoBehaviour
                             
                             if (distance < atackDistance && !canRun)
                             {
-                                
+                                spearHit.SetActive(false);
                                 _animator.SetBool("isRunForward", false);
                                 RotateToTarget(_target.transform);
                                 if (!isStunAtk)
@@ -160,6 +180,7 @@ public class spearEnemy : MonoBehaviour
                             }
                             else if (canRun)
                             {
+                                
                                 RotateToTarget(home);
                                 _animator.SetBool("isRunForward", true);
                             } 
@@ -174,6 +195,7 @@ public class spearEnemy : MonoBehaviour
 
                     }else if (isHome)
                     {
+                        spearHit.SetActive(false);
                         RotateToTarget(_target.transform);
                         if (distance <= atackDistance)
                         {
@@ -229,7 +251,7 @@ public class spearEnemy : MonoBehaviour
 
     private IEnumerator StunAtackDelay()
     {
-        yield return new WaitForSeconds(0.6f);
+        yield return new WaitForSeconds(0.5f);
         _animator.SetTrigger("isAtack");
         yield return new WaitForSeconds(1.5f);
         canRun = true;
@@ -239,7 +261,9 @@ public class spearEnemy : MonoBehaviour
 
     private IEnumerator waitRunForAtk()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
+        spearHit.SetActive(true);
+        yield return new WaitForSeconds(0.5f); 
         canRun = false;
     }
 
@@ -361,8 +385,8 @@ public class spearEnemy : MonoBehaviour
         int soundNumber = Random.Range(0, 20);
         if (soundNumber <= 10) soundNumber = 0;
         if (soundNumber > 10) soundNumber = 1;
-        _audioSource[soundNumber].pitch = Random.Range(0.7f, 1.2f);
-        _audioSource[soundNumber].Play();
+        _audioSource.pitch = Random.Range(0.7f, 1.2f);
+        _audioSource.PlayOneShot(audioClips[soundNumber]);
 
         dmg ??= 0;
         health -= (float)dmg;
@@ -440,6 +464,7 @@ public class spearEnemy : MonoBehaviour
 
     private void BoolStateFalse()
     {
+        spearHit.SetActive(false);
         isStunAtk = false;
         findPos = false;
         isAtack = false;

@@ -10,7 +10,12 @@ public class Torchbrain : MonoBehaviour
     NavMeshAgent _agent;
     Animator _playerAnimator;
     Animator _animator;
-    AudioSource[] _audioSource;
+    
+    AudioSource _audioSource;
+    [SerializeField]
+    AudioClip[] audioClips;
+    
+    
     CapsuleCollider _myColider;
     Camera _camera;
 
@@ -68,7 +73,7 @@ public class Torchbrain : MonoBehaviour
         RotationSpeed = _agent.angularSpeed / 2;
 
         _animator = GetComponent<Animator>();
-        _audioSource = GetComponents<AudioSource>();
+        _audioSource = GetComponent<AudioSource>();
         #region health
         health = maxHealth;
 
@@ -291,8 +296,8 @@ public class Torchbrain : MonoBehaviour
         int soundNumber = Random.Range(0, 20);
         if (soundNumber <= 10) soundNumber = 0;
         if (soundNumber > 10) soundNumber = 1;
-        _audioSource[soundNumber].pitch = Random.Range(0.7f, 1.2f);
-        _audioSource[soundNumber].Play();
+        _audioSource.pitch = Random.Range(0.7f, 1.2f);
+        _audioSource.PlayOneShot(audioClips[soundNumber]);
 
         dmg ??= 0;
         health -= (float)dmg;
