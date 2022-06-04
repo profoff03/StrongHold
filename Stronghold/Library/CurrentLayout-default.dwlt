@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1920
     height: 1037
   m_ShowMode: 4
-  m_Title: Hierarchy
+  m_Title: Inspector
   m_RootView: {fileID: 2}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -122,7 +122,7 @@ MonoBehaviour:
   m_MinSize: {x: 781, y: 492}
   m_MaxSize: {x: 16006, y: 14042}
   vertical: 0
-  controlID: 5032
+  controlID: 181
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -147,7 +147,7 @@ MonoBehaviour:
   m_MinSize: {x: 505, y: 492}
   m_MaxSize: {x: 12005, y: 14042}
   vertical: 1
-  controlID: 5033
+  controlID: 63
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -173,7 +173,7 @@ MonoBehaviour:
   m_MinSize: {x: 505, y: 221}
   m_MaxSize: {x: 12005, y: 4021}
   vertical: 0
-  controlID: 5034
+  controlID: 64
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -430,9 +430,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 
+      m_SelectedIDs: f0060100
       m_LastClickedID: 0
-      m_ExpandedIDs: daa3ffff3afbffffa256000072580000fe580000ae5d0000d05d00005e660000746b0000
+      m_ExpandedIDs: 
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -543,7 +543,7 @@ MonoBehaviour:
   m_Rotation:
     m_Target: {x: 0.4048008, y: 0.18646462, z: -0.08483972, w: 0.89136803}
     speed: 2
-    m_Value: {x: 0.40472645, y: 0.18643038, z: -0.08482414, w: 0.8912043}
+    m_Value: {x: -0.4048008, y: -0.18646461, z: 0.08483972, w: -0.891368}
   m_Size:
     m_Target: 15.176458
     speed: 2
@@ -1014,22 +1014,22 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Prefabs/ENEMY
+    - Assets/fbx/ENEMY/materials
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 43
   m_LastFolders:
-  - Assets/Prefabs/ENEMY
+  - Assets/fbx/ENEMY/materials
   m_LastFoldersGridSize: 43
   m_LastProjectPath: E:\GameDev\StrongHold\Stronghold
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 314}
-    m_SelectedIDs: fe940000
-    m_LastClickedID: 38142
-    m_ExpandedIDs: 00000000a0940000a2940000a4940000a6940000a8940000aa940000ac940000ae940000b0940000b2940000b494000000ca9a3b
+    m_SelectedIDs: 42950000
+    m_LastClickedID: 38210
+    m_ExpandedIDs: 000000009494000096940000989400009a9400009c9400009e940000a0940000a2940000a4940000a6940000a8940000e694000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1057,7 +1057,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000a0940000a2940000a4940000a6940000a8940000aa940000ac940000ae940000b0940000b2940000b494000000ca9a3b
+    m_ExpandedIDs: 000000009494000096940000989400009a9400009c9400009e940000a0940000a2940000a4940000a6940000a8940000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
