@@ -120,7 +120,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 3.5
+  m_Radius: 2
   m_Height: 9.75
   m_Direction: 1
   m_Center: {x: 0.03, y: 4.9, z: 0}
@@ -254,7 +254,7 @@ MonoBehaviour:
   audioClips:
   - {fileID: 8300000, guid: 9c92a9835e42bc446bac8f5f8b704a0b, type: 3}
   - {fileID: 8300000, guid: f2bb59d9a4cccc74bb689a53aba53373, type: 3}
-  maxHealth: 250
+  maxHealth: 170
   dmg: 2
   vewDistance: 70
   atackDistance: 11

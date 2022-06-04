@@ -39,9 +39,9 @@ public class spearEnemy : MonoBehaviour
     bool findPos = false;
 
     bool isChangeDistanation = false;
-    bool isNear = false;
 
     bool canAtack = true;
+    bool canReact = true;
     bool canRun = true;
 
     float health;
@@ -61,10 +61,6 @@ public class spearEnemy : MonoBehaviour
 
     [SerializeField]
     float atackDistance;
-
-    [SerializeField]
-    [Range(11f, 30f)]
-    float goBackDistance;
 
     [SerializeField]
     float stayTime;
@@ -243,10 +239,16 @@ public class spearEnemy : MonoBehaviour
     private IEnumerator changeDistanation()
     {
         
-        isChangeDistanation = false;
-        yield return new WaitForSeconds(0.5f);
-        isNear = false;
         
+        yield return new WaitForSeconds(0.5f);
+        isChangeDistanation = false;
+
+    }
+
+    private IEnumerator reactDelay()
+    {
+        yield return new WaitForSeconds(2.5f);
+        canReact = true;
     }
 
     private IEnumerator StunAtackDelay()
@@ -368,8 +370,10 @@ public class spearEnemy : MonoBehaviour
 
     private void TakeDamage(float? dmg)
     {
-        if (!IsAnimationPlaying("Stab", 0) && !IsAnimationPlaying("slash", 0) && !IsAnimationPlaying("Run", 0))
+        if (!IsAnimationPlaying("Stab", 0) && !IsAnimationPlaying("slash", 0) && !IsAnimationPlaying("Run", 0) && canReact)
         {
+            canReact = false;
+            StartCoroutine(reactDelay());
             if (IsAnimationPlayerPlaying("Strong", 0))
             {
                 _animator.SetTrigger("strongReact");
@@ -432,25 +436,22 @@ public class spearEnemy : MonoBehaviour
     }
     private void OnTriggerStay(Collider other)
     {
-        if (!isNear)
+        if (!IsAnimationPlaying("Stab", 0) && !IsAnimationPlaying("slash", 0))
         {
             if (other.gameObject.CompareTag("Enemy"))
             {
                 if (!isChangeDistanation)
                 {
+                    StartCoroutine(changeDistanation());
                     rotationSide = Random.Range(-10, 10);
                     if (rotationSide >= 0) rotationSide = 1;
                     else if (rotationSide < 0) rotationSide = -1;
-
-                    StartCoroutine(changeDistanation());
                 }
                 isChangeDistanation = true;
-                isNear = true;
-
 
             }
         }
-        
+        if (other.gameObject.CompareTag("Untagged") && isAtack) isHome = true;
     }
 
     private IEnumerator Push(Vector3 force)

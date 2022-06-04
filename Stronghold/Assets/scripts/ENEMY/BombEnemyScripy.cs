@@ -7,6 +7,10 @@ public class BombEnemyScripy : MonoBehaviour
 {
     bool isStartDoing = true;
 
+    bool isChangeDistanation = false;
+
+    float rotationSide;
+
     private GameObject _target;
     private bool _isSees;
     private Animator _animator;
@@ -20,17 +24,14 @@ public class BombEnemyScripy : MonoBehaviour
     [SerializeField]
     float bombDamage;
     [SerializeField]
-    float RotationSpeed;
-    [SerializeField]
     float moveSpeed;
+
+    float RotationSpeed;
 
     Rigidbody _rb;
     bool can = true;
     private Vector3 _force;
 
-    bool nearOther = false;
-
-    float _rotationSpeed;
     // Start is called before the first frame update
     void Start()
     {
@@ -39,7 +40,7 @@ public class BombEnemyScripy : MonoBehaviour
         _agent = GetComponent<NavMeshAgent>();
         _isSees = false;
         _target = GameObject.Find("Player");
-        _rotationSpeed = _agent.angularSpeed;
+        RotationSpeed = _agent.angularSpeed / 2;
         StartCoroutine(startDoing());
     }
 
@@ -52,8 +53,6 @@ public class BombEnemyScripy : MonoBehaviour
         //  Debug.Log(DistanceToPlayer);
         if (!isStartDoing)
         {
-            if (!nearOther)
-            {
                 if (DistanceToPlayer < viewDistance)
                 {
                     _isSees = true;
@@ -85,9 +84,6 @@ public class BombEnemyScripy : MonoBehaviour
                         Destroy(gameObject, 0.019f);
                         can = false;
                     }
-
-
-                }
             }
             else StartCoroutine(changeDistanation());
         }else _rb.AddForce(transform.forward * moveSpeed * Time.deltaTime * 50000);
@@ -102,21 +98,29 @@ public class BombEnemyScripy : MonoBehaviour
 
     private IEnumerator changeDistanation()
     {
-        _animator.SetBool("isRunForward", true);
-        _agent.SetDestination(_target.transform.position + new Vector3(100, 0, 0));
+
         yield return new WaitForSeconds(2);
-        nearOther = false;
+        isChangeDistanation = false;
     }
     private void RotateToTarget()
     {
-        Vector3 lookVector = _target.transform.position - _agent.transform.position;
+        Vector3 lookVector;
+
+        if (isChangeDistanation)
+        {
+            lookVector = rotationSide * transform.position;
+        }
+        else
+            lookVector = _target.transform.position - _agent.transform.position;
+
+
         lookVector.y = 0;
         if (lookVector == Vector3.zero) return;
         _agent.transform.rotation = Quaternion.RotateTowards
             (
             _agent.transform.rotation,
             Quaternion.LookRotation(lookVector, Vector3.up),
-           _rotationSpeed * Time.deltaTime * RotationSpeed
+            RotationSpeed * Time.deltaTime
             );
     }
     
@@ -130,9 +134,17 @@ public class BombEnemyScripy : MonoBehaviour
             Debug.Log(direction);
             StartCoroutine(Push(direction.normalized * control._puchForce));
         }
-        else if (other.gameObject.CompareTag("Enemy"))
+        if (other.gameObject.CompareTag("Enemy"))
         {
-            nearOther = true;
+            if (!isChangeDistanation)
+            {
+                rotationSide = Random.Range(-10, 10);
+                if (rotationSide >= 0) rotationSide = 1;
+                else if (rotationSide < 0) rotationSide = -1;
+                StartCoroutine(changeDistanation());
+            }
+            isChangeDistanation = true;
+
         }
 
     }

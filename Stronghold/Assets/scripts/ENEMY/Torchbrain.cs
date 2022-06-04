@@ -25,9 +25,9 @@ public class Torchbrain : MonoBehaviour
     bool isForwardMove = false;
 
     bool isChangeDistanation = false;
-    bool isNear = false;
 
     bool canAtack = true;
+    bool canReact = true;
 
     float health;
 
@@ -182,8 +182,6 @@ public class Torchbrain : MonoBehaviour
     {
         yield return new WaitForSeconds(0.5f);
         isChangeDistanation = false;
-        yield return new WaitForSeconds(0.5f);
-        isNear = false;
     }
 
 
@@ -205,8 +203,13 @@ public class Torchbrain : MonoBehaviour
         isAtack = false;
         canAtack = true;
     }
+    private IEnumerator reactDelay()
+    {
+        yield return new WaitForSeconds(2.5f);
+        canReact = true;
+    }
 
-    private IEnumerator outSmoke(float delay)
+        private IEnumerator outSmoke(float delay)
     {
         yield return new WaitForSeconds(delay);
         inSmoke = false;
@@ -294,8 +297,10 @@ public class Torchbrain : MonoBehaviour
 
     private void TakeDamage(float? dmg)
     {
-        if (!IsAnimationPlaying("FirstAtack", 0) && !IsAnimationPlaying("SecondAtack", 0))
+        if (!IsAnimationPlaying("FirstAtack", 0) && !IsAnimationPlaying("SecondAtack", 0) && canReact)
         {
+            canReact = false;
+            StartCoroutine(reactDelay());
             if (IsAnimationPlayerPlaying("Strong", 0))
             {
                 _animator.SetTrigger("strongReact");
@@ -366,16 +371,13 @@ public class Torchbrain : MonoBehaviour
             if (other.gameObject.CompareTag("Enemy"))
             {
                 if (!isChangeDistanation)
-                {
-                    StartCoroutine(changeDistanation());
+                {          
                     rotationSide = Random.Range(-10, 10);
                     if (rotationSide >= 0) rotationSide = 1;
-                    else if (rotationSide < 0) rotationSide = -1; 
+                    else if (rotationSide < 0) rotationSide = -1;
+                    StartCoroutine(changeDistanation());
                 }
-                
                 isChangeDistanation = true;
-                //isNear = true;
-
 
             }
         }

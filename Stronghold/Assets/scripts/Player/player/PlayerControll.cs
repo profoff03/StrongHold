@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 
 public class PlayerControll : MonoBehaviour
@@ -420,7 +421,7 @@ public class PlayerControll : MonoBehaviour
 
     void Die()
     {
-        Time.timeScale = 0f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     
