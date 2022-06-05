@@ -449,7 +449,7 @@ public class BigOrkBoss : MonoBehaviour
         Instantiate(kickParticle, transform.position, transform.rotation);
         shake.Shake(); 
         yield return new WaitForSeconds(0.2f);
-        DoStunHit(Vector3.zero, 30);
+        DoStunHit(Vector3.zero, 25);
         yield return new WaitForSeconds(0.5f);
         _agent.tag = "Untagged";
 
