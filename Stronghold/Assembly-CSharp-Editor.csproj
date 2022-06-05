@@ -58,6 +58,8 @@
   <ItemGroup>
     <Compile Include="Assets\AssetStorePref\Prefab Brush\Scripts\Editor\PrefabBrush.cs" />
     <Compile Include="Assets\scripts\enviroment\Grass\Editor\GrassPainterEditor.cs" />
+    <Compile Include="Assets\AssetStorePref\Trails FX\Editor\TrailEffectEditor.cs" />
+    <Compile Include="Assets\AssetStorePref\Trails FX\Editor\TrailEffectProfileEditor.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

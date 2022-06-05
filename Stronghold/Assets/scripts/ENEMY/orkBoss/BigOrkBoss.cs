@@ -162,7 +162,7 @@ public class BigOrkBoss : MonoBehaviour
                         if (!isRush && !isJump)
                             RotateToTarget();
                         
-                        canvas.transform.LookAt(canvas.worldCamera.transform);
+                        
                         float distance = Vector3.Distance(_agent.transform.position, _target.transform.position);
                         
                         if ((distance < vewDist && 
@@ -173,7 +173,7 @@ public class BigOrkBoss : MonoBehaviour
                             && !IsAnimationPlaying("groundAtack", 0) )
                         {
                             if (canAddForce)
-                                _rb.AddForce(transform.forward * 80000 * Time.deltaTime, ForceMode.Acceleration);
+                                _rb.AddForce(transform.forward * 90000 * Time.deltaTime, ForceMode.Acceleration);
                             if (canJump)
                             {
                                 
@@ -189,7 +189,7 @@ public class BigOrkBoss : MonoBehaviour
 
                             if (canRush && !canJump) 
                             {
-                                _rb.AddForce(transform.forward * 80000 * Time.deltaTime, ForceMode.Acceleration);
+                                _rb.AddForce(transform.forward * 90000 * Time.deltaTime, ForceMode.Acceleration);
                                 if (!isRush)
                                 {
                                     _animator.SetBool("isRun", false);
@@ -203,7 +203,7 @@ public class BigOrkBoss : MonoBehaviour
 
                             if (!canRush && !canJump && !isJump)
                             {
-                                _rb.AddForce(transform.forward * 30000 * Time.deltaTime, ForceMode.Acceleration);
+                                _rb.AddForce(transform.forward * 40000 * Time.deltaTime, ForceMode.Acceleration);
                                 _animator.SetBool("isRun", true);
                             }//simpleRunLogic
                             
@@ -259,6 +259,7 @@ public class BigOrkBoss : MonoBehaviour
             }
             else
             {
+                _animator.SetBool("isRush", false);
                 _animator.SetBool("isRun", false);
                 isRush = false;
                 isJump = false;
@@ -330,7 +331,7 @@ public class BigOrkBoss : MonoBehaviour
             atkDelay = Mathf.Round(atkDelay/1.2f);
             curAtkDelay = atkDelay;
         }
-    
+        canvas.transform.LookAt(canvas.worldCamera.transform);
     }
 
     void roaringTrue() => spawner.roaring = true;

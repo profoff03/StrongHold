@@ -64,7 +64,7 @@ public class Torchbrain : MonoBehaviour
     {
 
         _myColider = GetComponent<CapsuleCollider>();
-        _agent = (NavMeshAgent)this.GetComponent("NavMeshAgent");
+        _agent = GetComponent<NavMeshAgent>();
         _target = GameObject.Find("Player");
         _playerAnimator = _target.GetComponent<Animator>();
 
@@ -75,8 +75,8 @@ public class Torchbrain : MonoBehaviour
         #region health
         health = maxHealth;
 
-        canvas = _agent.transform.Find("HealthBar").gameObject.GetComponent<Canvas>();
-        healthSlider = _agent.transform.Find("HealthBar/Panel/Slider").gameObject.GetComponent<Slider>();
+        canvas = transform.Find("HealthBar").gameObject.GetComponent<Canvas>();
+        healthSlider = transform.Find("HealthBar/Panel/Slider").gameObject.GetComponent<Slider>();
 
         healthSlider.maxValue = maxHealth;
         healthSlider.value = health;
