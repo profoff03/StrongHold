@@ -10,21 +10,28 @@ public class goblinBoss : MonoBehaviour
     private GameObject _target;
     private NavMeshAgent _agent;
     private Animator _animator;
+    private Animator _playerAnimator;
 
     private float _health;
 
     private Canvas _canvas;
     private Slider _healthSlider;
 
+    private AudioSource _audioSource;
+    [SerializeField]
+    private AudioClip[] _audioClips;
+
     private float _rotationSpeed;
 
+
     private bool _isAtack = false;
+    private bool _isTired = false;
     private bool _isSimpleAtack = false;
     private bool _isHome = false;
     private bool _canMove = true;
-    
-    
-    
+
+
+
     [SerializeField]
     private float _maxHealth;
 
@@ -33,6 +40,13 @@ public class goblinBoss : MonoBehaviour
     private Transform _posToStay;
     private Transform[] _home;
 
+    [SerializeField]
+    private float _dashDelay;
+    [SerializeField]
+    private float _tiredDelay;
+    [SerializeField]
+    private float _dashCountToTired;
+    private float _dashCount = 0;
 
     [SerializeField]
     private float _vewDistance;
@@ -48,10 +62,10 @@ public class goblinBoss : MonoBehaviour
         _agent = GetComponent<NavMeshAgent>();
         _target = GameObject.Find("Player");
         _animator = GetComponent<Animator>();
-
+        _playerAnimator = _target.GetComponent<Animator>();
         _home = _homeParent.GetComponentsInChildren<Transform>();
-
         _rotationSpeed = _agent.angularSpeed / 1.4f;
+        _audioSource = GetComponent<AudioSource>();
 
         #region health
         _health = _maxHealth;
@@ -70,8 +84,8 @@ public class goblinBoss : MonoBehaviour
     void Update()
     {
         float distance = Vector3.Distance(_agent.transform.position, _target.transform.position);
-        
-        if (!_isAtack)
+
+        if (!_isAtack && !_isTired)
         {
             RotateToTarget(_target.transform);
             if (distance < _vewDistance && distance > _atkDistance && _canMove)
@@ -80,11 +94,14 @@ public class goblinBoss : MonoBehaviour
             }
             else if (distance < _atkDistance && !_isSimpleAtack)
             {
+                _dashCount++;
                 _canMove = false;
                 _isSimpleAtack = true;
-                StartCoroutine(waitCor());
+                StartCoroutine(waitCor(1));
+                StartCoroutine(dashDelayCor());
                 _animator.SetTrigger("isSimpleAttack");
                 _posToStay = _home[Random.Range(0, _home.Length)];
+
             }
         }
         else
@@ -101,28 +118,57 @@ public class goblinBoss : MonoBehaviour
             }
             else
             {
+                if (_dashCount == _dashCountToTired && !_isTired)
+                {
+                    _isTired = true;
+                    _dashCount = 0;
+                }
                 RotateToTarget(_target.transform);
+                if (distance < _atkDistance && !_isTired)
+                {
+                    _posToStay = _home[Random.Range(0, _home.Length)];
+                    StopCoroutine("waitCor");
+                    _isHome = false;
+                    _canMove = false;
+                    StartCoroutine(waitCor(0.2f));
+                }
             }
+        }
+
+        if (_isTired)
+        {
+            _animator.SetBool("isTired", true);
+            StartCoroutine(tiredDelayCor());
         }
 
 
 
         _canvas.transform.LookAt(_canvas.worldCamera.transform);
     }
-
-
-    private IEnumerator waitCor()
+    private IEnumerator tiredDelayCor()
     {
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(_tiredDelay);
+        _animator.SetBool("isTired", false);
+        _isTired = false;
+    }
+
+    private IEnumerator waitCor(float delay)
+    {
+        yield return new WaitForSeconds(delay);
         transform.tag = "Enemy";
         _isAtack = true;
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(delay);
         _canMove = true;
-        yield return new WaitForSeconds(4);
+
+    }
+    private IEnumerator dashDelayCor()
+    {
+        yield return new WaitForSeconds(_dashDelay);
         _isAtack = false;
         _isSimpleAtack = false;
         _isHome = false;
     }
+
 
     void DoHit()
     {
@@ -149,5 +195,70 @@ public class goblinBoss : MonoBehaviour
             Quaternion.LookRotation(lookVector, Vector3.up),
             _rotationSpeed * Time.deltaTime
             );
+    }
+
+    private void Kill()
+    {
+        Destroy(gameObject);
+    }
+
+    private void TakeDamage(float? dmg)
+    {
+       
+       if (_isTired)
+        {
+            if (IsAnimationPlayerPlaying("Strong", 0))
+            {
+                _animator.SetTrigger("strongReact");
+
+            }
+            else
+            {
+                _animator.SetTrigger("react");
+            }
+        }
+        
+
+
+        int soundNumber = Random.Range(0, 20);
+        if (soundNumber <= 10) soundNumber = 0;
+        if (soundNumber > 10) soundNumber = 1;
+        _audioSource.pitch = Random.Range(0.7f, 1.2f);
+        _audioSource.PlayOneShot(_audioClips[soundNumber]);
+
+        dmg ??= 0;
+        _health -= (float)dmg;
+        if (_health <= 0.001) _health = 0f;
+
+        if (_health == 0) Kill();
+        _healthSlider.value = _health;
+
+        transform.tag = "Enemy";
+    }
+
+    public bool IsAnimationPlayerPlaying(string animationName, int index)
+    {
+        var animatorStateInfo = _playerAnimator.GetCurrentAnimatorStateInfo(index);
+        if (animatorStateInfo.IsName(animationName))
+            return true;
+
+        return false;
+    } //Check animation state
+    public bool IsAnimationPlaying(string animationName, int index)
+    {
+        var animatorStateInfo = _animator.GetCurrentAnimatorStateInfo(index);
+        if (animatorStateInfo.IsName(animationName))
+            return true;
+
+        return false;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Hit"))
+        {
+            TakeDamage(other.GetComponent<DamageProperty>()?.Damage);
+
+        }
     }
 }
