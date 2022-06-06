@@ -28,6 +28,7 @@ public class goblinBoss : MonoBehaviour
     private bool _isTired = false;
     private bool _isSimpleAtack = false;
     private bool _isHome = false;
+    private bool _isChangeHome = false;
     private bool _canMove = true;
 
 
@@ -97,7 +98,7 @@ public class goblinBoss : MonoBehaviour
                 _dashCount++;
                 _canMove = false;
                 _isSimpleAtack = true;
-                StartCoroutine(waitCor(1));
+                StartCoroutine(waitCor(0.5f));
                 StartCoroutine(dashDelayCor());
                 _animator.SetTrigger("isSimpleAttack");
                 _posToStay = _home[Random.Range(0, _home.Length)];
@@ -118,19 +119,19 @@ public class goblinBoss : MonoBehaviour
             }
             else
             {
+                _canMove = false;
                 if (_dashCount == _dashCountToTired && !_isTired)
                 {
                     _isTired = true;
                     _dashCount = 0;
                 }
                 RotateToTarget(_target.transform);
-                if (distance < _atkDistance && !_isTired)
+                if (distance < _atkDistance && !_isTired && !_isChangeHome)
                 {
+                    _isChangeHome = true;
                     _posToStay = _home[Random.Range(0, _home.Length)];
-                    StopCoroutine("waitCor");
-                    _isHome = false;
-                    _canMove = false;
-                    StartCoroutine(waitCor(0.2f));
+                    _isHome = false;                 
+                    StartCoroutine(changeHomeCor(0.6f));
                 }
             }
         }
@@ -152,6 +153,14 @@ public class goblinBoss : MonoBehaviour
         _isTired = false;
     }
 
+    private IEnumerator changeHomeCor(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        _canMove = true;
+        _isChangeHome = false;
+
+    }
+
     private IEnumerator waitCor(float delay)
     {
         yield return new WaitForSeconds(delay);
@@ -167,6 +176,8 @@ public class goblinBoss : MonoBehaviour
         _isAtack = false;
         _isSimpleAtack = false;
         _isHome = false;
+       
+
     }
 
 
