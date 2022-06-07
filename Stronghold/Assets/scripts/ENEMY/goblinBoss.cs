@@ -27,9 +27,10 @@ public class goblinBoss : MonoBehaviour
     private bool _isAtack = false;
     private bool _isTired = false;
     private bool _isSimpleAtack = false;
-    private bool _isHome = false;
-    private bool _isChangeHome = false;
+    private bool _isHome = true;
+    private bool _isFindPos = false;
     private bool _canMove = true;
+    private bool _waitRotateCorStart = false;
 
 
 
@@ -65,7 +66,7 @@ public class goblinBoss : MonoBehaviour
         _animator = GetComponent<Animator>();
         _playerAnimator = _target.GetComponent<Animator>();
         _home = _homeParent.GetComponentsInChildren<Transform>();
-        _rotationSpeed = _agent.angularSpeed / 1.4f;
+        _rotationSpeed = _agent.angularSpeed;
         _audioSource = GetComponent<AudioSource>();
 
         #region health
@@ -85,101 +86,103 @@ public class goblinBoss : MonoBehaviour
     void Update()
     {
         float distance = Vector3.Distance(_agent.transform.position, _target.transform.position);
-
-        if (!_isAtack && !_isTired)
+        RotateToTarget(_target.transform);
+        if (!_isTired)
         {
-            RotateToTarget(_target.transform);
-            if (distance < _vewDistance && distance > _atkDistance && _canMove)
+            if (!_isAtack && _isHome)
             {
-                transform.position += transform.forward * _speed * Time.deltaTime;
-            }
-            else if (distance < _atkDistance && !_isSimpleAtack)
-            {
-                _dashCount++;
-                _canMove = false;
-                _isSimpleAtack = true;
-                StartCoroutine(waitCor(0.5f));
-                StartCoroutine(dashDelayCor());
-                _animator.SetTrigger("isSimpleAttack");
-                _posToStay = _home[Random.Range(0, _home.Length)];
+                if (_canMove && _waitRotateCorStart) StartCoroutine(waitRotateToTarget(1));
 
-            }
-        }
-        else
-        {
-            if (!_isHome)
-            {
-                float distanceToHome = Vector3.Distance(_agent.transform.position, _posToStay.transform.position);
-                RotateToTarget(_posToStay);
-                if (distanceToHome > _atkDistance && _canMove)
+                RotateToTarget(_target.transform);
+                if (distance < _vewDistance && distance > _atkDistance && _canMove)
                 {
                     transform.position += transform.forward * _speed * Time.deltaTime;
+                    _animator.SetBool("isRun", true);
                 }
-                else if (distanceToHome < _atkDistance) _isHome = true;
+                else if (distance < _atkDistance && !_isSimpleAtack)
+                {
+                    _dashCount++;
+                    _waitRotateCorStart = false;
+                    _canMove = false;
+                    _isSimpleAtack = true;
+                    _isFindPos = false;
+                    StartCoroutine(dashDelayCor());
+                    StartCoroutine(waitRotateToHomeCor(0.6f));
+                    _animator.SetBool("isRun", false);
+                    _animator.SetTrigger("isSimpleAttack");
+
+                }
             }
-            else
+            else if (!_isHome)
             {
-                _canMove = false;
-                if (_dashCount == _dashCountToTired && !_isTired)
+                if (!_isFindPos)
+                {
+                    _posToStay = _home[Random.Range(0, _home.Length)];
+                    _isFindPos = true;
+                }
+
+                if (_canMove)
+                {
+                    _agent.transform.position = _posToStay.position;
+                    _isHome = true;
+                    _canMove = false;
+                }
+
+            }
+            else if (_isHome)
+            {
+                if (_dashCount == _dashCountToTired)
                 {
                     _isTired = true;
+                    _animator.SetBool("isTired", _isTired);
+                    StartCoroutine(tiredDelayCor());
                     _dashCount = 0;
-                }
-                RotateToTarget(_target.transform);
-                if (distance < _atkDistance && !_isTired && !_isChangeHome)
+                }else if (distance < _atkDistance)
                 {
-                    _isChangeHome = true;
-                    _posToStay = _home[Random.Range(0, _home.Length)];
-                    _isHome = false;                 
-                    StartCoroutine(changeHomeCor(0.6f));
+                    _isFindPos = false;
+                    _isHome = false;
+                    _canMove = true;
                 }
             }
         }
+        
 
-        if (_isTired)
-        {
-            _animator.SetBool("isTired", true);
-            StartCoroutine(tiredDelayCor());
-        }
+        
 
-
-
-        _canvas.transform.LookAt(_canvas.worldCamera.transform);
+            _canvas.transform.LookAt(_canvas.worldCamera.transform);
     }
+    private IEnumerator waitRotateToHomeCor(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        _isAtack = true;
+        _isHome = false;
+        yield return new WaitForSeconds(delay/2);
+        _canMove = true;
+    }
+    private IEnumerator waitRotateToTarget(float delay)
+    {
+        _waitRotateCorStart = true;
+        _canMove = false;
+        yield return new WaitForSeconds(delay);
+        _canMove = true;
+    }
+
     private IEnumerator tiredDelayCor()
     {
         yield return new WaitForSeconds(_tiredDelay);
-        _animator.SetBool("isTired", false);
         _isTired = false;
-    }
-
-    private IEnumerator changeHomeCor(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        _canMove = true;
-        _isChangeHome = false;
+        _animator.SetBool("isTired", _isTired);
 
     }
 
-    private IEnumerator waitCor(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        transform.tag = "Enemy";
-        _isAtack = true;
-        yield return new WaitForSeconds(delay);
-        _canMove = true;
-
-    }
     private IEnumerator dashDelayCor()
     {
         yield return new WaitForSeconds(_dashDelay);
+        _canMove = true;
         _isAtack = false;
-        _isSimpleAtack = false;
-        _isHome = false;
-       
+        _isSimpleAtack = false;   
 
     }
-
 
     void DoHit()
     {
