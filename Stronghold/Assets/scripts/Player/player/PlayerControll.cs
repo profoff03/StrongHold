@@ -24,6 +24,8 @@ public class PlayerControll : MonoBehaviour
 
     internal bool canThrowBomb = true;
 
+    internal bool _inSmoke = false;
+
     #region ForMovement
 
     private Vector3 _movementVector;
@@ -170,7 +172,7 @@ public class PlayerControll : MonoBehaviour
     void Update()
     {
 
-        if (!IsAnimationPlaying("Death", 0) && !IsAnimationPlaying("ULTIMATE", 0) && !isStan && canWalk)
+        if (!IsAnimationPlaying("Death", 0) && !IsAnimationPlaying("ULTIMATE", 0) && !isStan && !_inSmoke  && canWalk)
         {
             if (!IsAnimationPlaying("dash", 0))
                 _movementVector = CalculateMovementVector();
@@ -347,8 +349,17 @@ public class PlayerControll : MonoBehaviour
             hud.TakeDamage(other.GetComponent<DamageProperty>()?.Damage);
             Instantiate(blood, transform.position, Quaternion.Euler(-90f, 0f, 0f));
         }
-        
-        if (other.gameObject.CompareTag("StunHit"))
+
+        if (other.gameObject.CompareTag("EnemySmoke"))
+        {
+            _playerAnimator.SetBool("isDash", false);
+            _inSmoke = true;
+            _movementVector = Vector3.zero;
+            _playerAnimator.SetFloat("Horizontal", 0);
+            _playerAnimator.SetFloat("Vertical", 0);
+
+        }
+            if (other.gameObject.CompareTag("StunHit"))
         {
             _playerAnimator.SetBool("isDash", false);
             _playerAnimator.SetTrigger("isStun");

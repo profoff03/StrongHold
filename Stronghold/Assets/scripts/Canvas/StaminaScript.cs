@@ -41,7 +41,9 @@ public class StaminaScript : MonoBehaviour
     void Update()
     {
 
-        MinusStamina();
+        if (!playerControl._inSmoke && !playerControl.isStan)
+            MinusStamina();
+        
         if (UpdateStamina <= MaxStamina - 0.01 && UpdateStamina >= 1 && !IsRunning)
         {
             //animator.SetBool("isRunning", false);

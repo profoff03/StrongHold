@@ -155,7 +155,49 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.08267995
+        functionName: DoHit
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: d8a4d570458325149a3c73e4de50eed9, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.2513179
+        functionName: DoHit
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: d8a4d570458325149a3c73e4de50eed9, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.42191142
+        functionName: DoHit
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: d8a4d570458325149a3c73e4de50eed9, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.58537966
+        functionName: DoHit
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: d8a4d570458325149a3c73e4de50eed9, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.7515946
+        functionName: DoHit
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: d8a4d570458325149a3c73e4de50eed9, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.82935375
+        functionName: startSmokeDelayCor
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: d8a4d570458325149a3c73e4de50eed9, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}

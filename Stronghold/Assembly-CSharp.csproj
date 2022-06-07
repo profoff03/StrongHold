@@ -80,6 +80,7 @@
     <Compile Include="Assets\scripts\ENEMY\goblinBoss.cs" />
     <Compile Include="Assets\scripts\enviroment\SkyRotate.cs" />
     <Compile Include="Assets\scripts\playParticleSound.cs" />
+    <Compile Include="Assets\scripts\EnemyBomb.cs" />
     <Compile Include="Assets\AssetStorePref\Prefab Brush\Scripts\PB_Enums.cs" />
     <Compile Include="Assets\AssetStorePref\Trails FX\Scripts\TrailEffect.cs" />
     <Compile Include="Assets\scripts\enviroment\Grass\ShaderInteractor.cs" />

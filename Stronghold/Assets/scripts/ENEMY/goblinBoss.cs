@@ -8,6 +8,7 @@ public class goblinBoss : MonoBehaviour
 {
 
     private GameObject _target;
+    private PlayerControll _playerControl;
     private NavMeshAgent _agent;
     private Animator _animator;
     private Animator _playerAnimator;
@@ -18,24 +19,28 @@ public class goblinBoss : MonoBehaviour
     private Slider _healthSlider;
 
     private AudioSource _audioSource;
+
+    [SerializeField]
+    EnemyBomb bombPref;
     [SerializeField]
     private AudioClip[] _audioClips;
 
     private float _rotationSpeed;
 
 
-    private bool _isAtack = false;
-    private bool _isTired = false;
-    private bool _isSimpleAtack = false;
-    private bool _isHome = true;
-    private bool _isFindPos = false;
-    private bool _canMove = true;
-    private bool _waitRotateCorStart = false;
+    public bool _isAtack = false;
+    public bool _isTired = false;
+    public bool _isSimpleAtack = false;
+    public bool _isFastAtack = false;
+    public bool _isHome = true;
+    public bool _isFindPos = false;
+    public bool _canMove = true;
+    public bool _waitRotateCorStart = false;
 
-    private bool _canDoFirstStateActions = true;
-    private bool _secondWaveStart = false;
+    public bool _canDoFirstStateActions = true;
+    public bool _secondWaveStart = false;
     public bool _secondWave = false;
-    private bool _isThrowSmoke = false;
+    public bool _isThrowSmoke = false;
 
 
 
@@ -50,6 +55,8 @@ public class goblinBoss : MonoBehaviour
     [SerializeField]
     private float _dashDelay;
     [SerializeField]
+    private float _smokeDelay;
+    [SerializeField]
     private float _tiredDelay;
     [SerializeField]
     private float _dashCountToTired;
@@ -63,16 +70,20 @@ public class goblinBoss : MonoBehaviour
     private float _speed;
     [SerializeField]
     private float _dmg;
+    private float _startDmg;
 
     void Start()
     {
         _agent = GetComponent<NavMeshAgent>();
         _target = GameObject.Find("Player");
+        _playerControl = _target.GetComponent<PlayerControll>();
         _animator = GetComponent<Animator>();
         _playerAnimator = _target.GetComponent<Animator>();
         _home = _homeParent.GetComponentsInChildren<Transform>();
         _rotationSpeed = _agent.angularSpeed;
         _audioSource = GetComponent<AudioSource>();
+
+        _startDmg = _dmg;
 
         #region health
         _health = _maxHealth;
@@ -94,14 +105,34 @@ public class goblinBoss : MonoBehaviour
         RotateToTarget(_target.transform);
         if (!_isTired)
         {
-            if (_secondWave)
+            if (_secondWave && _isHome)
             {
                 if (!_isThrowSmoke) StartCoroutine(throwSmoke());
+
+                if (_playerControl._inSmoke)
+                {
+                    _dmg = 1;
+                    if (_canMove && _waitRotateCorStart) StartCoroutine(waitRotateToTarget(0.5f));
+                    RotateToTarget(_target.transform);
+                    if (distance < _vewDistance && distance > _atkDistance && _canMove)
+                    {
+                        transform.position += transform.forward * _speed * Time.deltaTime;
+                        _animator.SetBool("isRun", true);
+                    }
+                    else if (distance < _atkDistance && !_isFastAtack)
+                    {
+                        _isFastAtack = true;
+                        _animator.SetBool("isRun", false);
+                        _animator.SetTrigger("isAttack");
+                        
+
+                    }
+                }
+                else _dmg = _startDmg;
             }
             if (!_isAtack && _isHome)
             {
-                
-                
+
                 if (_canDoFirstStateActions)
                 {
                     if (_canMove && _waitRotateCorStart) StartCoroutine(waitRotateToTarget(1));
@@ -174,10 +205,34 @@ public class goblinBoss : MonoBehaviour
             _canvas.transform.LookAt(_canvas.worldCamera.transform);
     }
 
+    private void startSmokeDelayCor() => StartCoroutine(smokeDelay());
+    private IEnumerator smokeDelay()
+    {
+        _waitRotateCorStart = false;
+        _isFindPos = false;
+        _secondWave = false;
+        _isHome = false;
+        _isAtack = false;
+        _isSimpleAtack = false;
+        _canDoFirstStateActions = true;
+        
+        yield return new WaitForSeconds(1);
+        _canMove = true;
+        yield return new WaitForSeconds(_smokeDelay);
+        
+        _secondWave = true;
+        _isThrowSmoke = false;
+        _isFastAtack = false;
+        _canDoFirstStateActions = false;
+    }
+
     private IEnumerator throwSmoke()
     {
         _isThrowSmoke = true;
-        yield return new WaitForSeconds(0.2f);
+        SpawnBomb();
+        yield return new WaitForSeconds(7f);
+        _playerControl._inSmoke = false;
+
     }
 
     private IEnumerator waitRotateToHomeCor(float delay)
@@ -211,6 +266,17 @@ public class goblinBoss : MonoBehaviour
         _isAtack = false;
         _isSimpleAtack = false;   
 
+    }
+
+    internal void SpawnBomb()
+    {
+        var forward = transform.forward;
+        var bomb = Instantiate(bombPref,
+            transform.position + Vector3.up * 3.3F + forward * 10F,
+            Quaternion.identity);
+        // bomb.GetComponent<Rigidbody>().velocity = _playerRigidbody.velocity;
+        bomb.direction = (forward + transform.up / 2).normalized;
+        bomb.force = 70;
     }
 
     void DoHit()
