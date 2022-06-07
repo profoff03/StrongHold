@@ -375,21 +375,15 @@ public class PlayerControll : MonoBehaviour
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
 
-        #region Moving Local coordinates
-
         Vector3 playerR = transform.right;
         Vector3 playerF = transform.forward;
         playerR.y = 0;
         playerF.y = 0;
 
-        #endregion
-
-        
-
         Vector3 movementVector = playerF.normalized * v + playerR.normalized * h;//cameraF.normalized* v +cameraR.normalized * h;
         movementVector = Vector3.ClampMagnitude(movementVector, 1);
 
-        if (Input.GetKey(KeyCode.LeftShift) && v > 0 && h == 0 && StaminaScript.singleton.CanRunning )
+        if (Input.GetKey(KeyCode.LeftShift) && StaminaScript.singleton.CanRunning )
         {
 
             _playerAnimator.SetBool("isRunning", true);
@@ -440,27 +434,7 @@ public class PlayerControll : MonoBehaviour
 
     private void RotateFromMouseVector()
     {
-        #region old
-
-        // изначальный вариант
-        // Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
-        // if (Physics.Raycast(ray, out RaycastHit hitInfo, maxDistance: 300f))
-        // {
-        //     var target = hitInfo.point;
-        //     target.y = transform.position.y;
-        //     if (!isPlayer)
-        //     {
-        //         //transform.LookAt(target);
-        //         direction = target - transform.position;
-        //         // direction = mousePos - transform.position;
-        //         rotation = Quaternion.LookRotation(direction);
-        //         transform.rotation = Quaternion.Lerp(transform.rotation, rotation, rotationSpeed * Time.deltaTime);
-        //     }
-        //}
-
-        #endregion
-
-        //new
+        
         Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
         var camT = _camera.transform;
         var mousePos = camT.position + ray.direction * (transform.position - camT.position).magnitude;

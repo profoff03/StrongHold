@@ -12,7 +12,7 @@ public class goblinBoss : MonoBehaviour
     private Animator _animator;
     private Animator _playerAnimator;
 
-    private float _health;
+    public float _health;
 
     private Canvas _canvas;
     private Slider _healthSlider;
@@ -31,6 +31,11 @@ public class goblinBoss : MonoBehaviour
     private bool _isFindPos = false;
     private bool _canMove = true;
     private bool _waitRotateCorStart = false;
+
+    private bool _canDoFirstStateActions = true;
+    private bool _secondWaveStart = false;
+    public bool _secondWave = false;
+    private bool _isThrowSmoke = false;
 
 
 
@@ -89,28 +94,36 @@ public class goblinBoss : MonoBehaviour
         RotateToTarget(_target.transform);
         if (!_isTired)
         {
+            if (_secondWave)
+            {
+                if (!_isThrowSmoke) StartCoroutine(throwSmoke());
+            }
             if (!_isAtack && _isHome)
             {
-                if (_canMove && _waitRotateCorStart) StartCoroutine(waitRotateToTarget(1));
-
-                RotateToTarget(_target.transform);
-                if (distance < _vewDistance && distance > _atkDistance && _canMove)
+                
+                
+                if (_canDoFirstStateActions)
                 {
-                    transform.position += transform.forward * _speed * Time.deltaTime;
-                    _animator.SetBool("isRun", true);
-                }
-                else if (distance < _atkDistance && !_isSimpleAtack)
-                {
-                    _dashCount++;
-                    _waitRotateCorStart = false;
-                    _canMove = false;
-                    _isSimpleAtack = true;
-                    _isFindPos = false;
-                    StartCoroutine(dashDelayCor());
-                    StartCoroutine(waitRotateToHomeCor(0.6f));
-                    _animator.SetBool("isRun", false);
-                    _animator.SetTrigger("isSimpleAttack");
+                    if (_canMove && _waitRotateCorStart) StartCoroutine(waitRotateToTarget(1));
+                    RotateToTarget(_target.transform);
+                    if (distance < _vewDistance && distance > _atkDistance && _canMove)
+                    {
+                        transform.position += transform.forward * _speed * Time.deltaTime;
+                        _animator.SetBool("isRun", true);
+                    }
+                    else if (distance < _atkDistance && !_isSimpleAtack)
+                    {
+                        _dashCount++;
+                        _waitRotateCorStart = false;
+                        _canMove = false;
+                        _isSimpleAtack = true;
+                        _isFindPos = false;
+                        StartCoroutine(dashDelayCor());
+                        StartCoroutine(waitRotateToHomeCor(0.6f));
+                        _animator.SetBool("isRun", false);
+                        _animator.SetTrigger("isSimpleAttack");
 
+                    } 
                 }
             }
             else if (!_isHome)
@@ -146,11 +159,27 @@ public class goblinBoss : MonoBehaviour
             }
         }
         
+        if (_health <= 1000 && !_secondWaveStart)
+        {
+            _secondWaveStart = true;
+            _secondWave = true;
+            _canDoFirstStateActions = false;
 
+            _dashCountToTired++;
+            _tiredDelay++;
+            _dashDelay--;
+        }
         
 
             _canvas.transform.LookAt(_canvas.worldCamera.transform);
     }
+
+    private IEnumerator throwSmoke()
+    {
+        _isThrowSmoke = true;
+        yield return new WaitForSeconds(0.2f);
+    }
+
     private IEnumerator waitRotateToHomeCor(float delay)
     {
         yield return new WaitForSeconds(delay);
