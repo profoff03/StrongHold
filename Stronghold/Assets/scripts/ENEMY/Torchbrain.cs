@@ -6,6 +6,7 @@ using static UnityEngine.Mathf;
 
 public class Torchbrain : MonoBehaviour
 {
+    //true script for ork with axe and with torch
     GameObject _target;
     NavMeshAgent _agent;
     Animator _playerAnimator;

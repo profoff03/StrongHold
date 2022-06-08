@@ -28,19 +28,19 @@ public class goblinBoss : MonoBehaviour
     private float _rotationSpeed;
 
 
-    public bool _isAtack = false;
-    public bool _isTired = false;
-    public bool _isSimpleAtack = false;
-    public bool _isFastAtack = false;
-    public bool _isHome = true;
-    public bool _isFindPos = false;
-    public bool _canMove = true;
-    public bool _waitRotateCorStart = false;
+    private bool _isAtack = false;
+    private bool _isTired = false;
+    private bool _isSimpleAtack = false;
+    private bool _isFastAtack = false;
+    private bool _isHome = true;
+    private bool _isFindPos = false;
+    private bool _canMove = true;
+    private bool _waitRotateCorStart = false;
 
-    public bool _canDoFirstStateActions = true;
-    public bool _secondWaveStart = false;
-    public bool _secondWave = false;
-    public bool _isThrowSmoke = false;
+    private bool _canDoFirstStateActions = true;
+    private bool _secondWaveStart = false;
+    private bool _secondWave = false;
+    private bool _isThrowSmoke = false;
 
 
 
@@ -107,11 +107,15 @@ public class goblinBoss : MonoBehaviour
         {
             if (_secondWave && _isHome)
             {
-                if (!_isThrowSmoke) StartCoroutine(throwSmoke());
+                if (!_isThrowSmoke) 
+                {
+                    StartCoroutine(throwSmoke());
+                    StartCoroutine(checkPlayerInSmoke());
+                } 
 
                 if (_playerControl._inSmoke)
                 {
-                    _dmg = 1;
+                    _dmg = 4;
                     if (_canMove && _waitRotateCorStart) StartCoroutine(waitRotateToTarget(0.5f));
                     RotateToTarget(_target.transform);
                     if (distance < _vewDistance && distance > _atkDistance && _canMove)
@@ -124,11 +128,10 @@ public class goblinBoss : MonoBehaviour
                         _isFastAtack = true;
                         _animator.SetBool("isRun", false);
                         _animator.SetTrigger("isAttack");
-                        
 
                     }
                 }
-                else _dmg = _startDmg;
+               
             }
             if (!_isAtack && _isHome)
             {
@@ -190,7 +193,7 @@ public class goblinBoss : MonoBehaviour
             }
         }
         
-        if (_health <= 1000 && !_secondWaveStart)
+        if (_health <= 500 && !_secondWaveStart)
         {
             _secondWaveStart = true;
             _secondWave = true;
@@ -206,8 +209,18 @@ public class goblinBoss : MonoBehaviour
     }
 
     private void startSmokeDelayCor() => StartCoroutine(smokeDelay());
+    private IEnumerator checkPlayerInSmoke()
+    {
+        yield return new WaitForSeconds(4);
+        if (!_playerControl._inSmoke)
+        {
+            StartCoroutine(smokeDelay());
+        }
+    }
     private IEnumerator smokeDelay()
     {
+        _dmg = _startDmg;
+        _animator.SetBool("isRun", false);
         _waitRotateCorStart = false;
         _isFindPos = false;
         _secondWave = false;
@@ -284,7 +297,7 @@ public class goblinBoss : MonoBehaviour
         var sphereCollider = gameObject.AddComponent<SphereCollider>();
         sphereCollider.isTrigger = true;
         sphereCollider.radius = 2f;
-        sphereCollider.center = new Vector3(0, 2f, 3f);
+        sphereCollider.center = new Vector3(0, 2f, 2f);
         sphereCollider.tag = "EnemyHit";
         sphereCollider.gameObject.AddComponent<DamageProperty>();
         sphereCollider.GetComponent<DamageProperty>().Damage = _dmg;
