@@ -78,7 +78,8 @@ GameObject:
   - component: {fileID: 1248570907069404456}
   - component: {fileID: 2970245783697449434}
   - component: {fileID: 5453920081004096311}
-  - component: {fileID: 7291486208763546363}
+  - component: {fileID: 4721601257512337888}
+  - component: {fileID: 6690427013240491916}
   m_Layer: 0
   m_Name: orkWithAxe
   m_TagString: Enemy
@@ -323,7 +324,21 @@ MonoBehaviour:
   atackDistance: 11
   goBackDistance: 16
   stayTime: 6
---- !u!82 &7291486208763546363
+--- !u!136 &4721601257512337888
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1544300986710262308}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 4
+  m_Height: 9.75
+  m_Direction: 1
+  m_Center: {x: 0.03, y: 4.9, z: 0}
+--- !u!82 &6690427013240491916
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -335,7 +350,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 5057764460878180113, guid: b94ca0a2c38db5048850feaf332c4bcd, type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.3
+  m_Volume: 0.4
   m_Pitch: 1.3
   Loop: 0
   Mute: 0
@@ -355,22 +370,31 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0.5041275
+      value: 0.50761795
       inSlope: 0
       outSlope: 0
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.8748927
+      value: 0.46270734
+      inSlope: 1.3054816
+      outSlope: 1.3054816
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.111604005
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.9952698
-      value: 0.2479248
-      inSlope: 0
-      outSlope: 0
+      time: 1
+      value: 0.55174255
+      inSlope: 1.1141849
+      outSlope: 1.1141849
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
+      inWeight: 0.097156405
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4

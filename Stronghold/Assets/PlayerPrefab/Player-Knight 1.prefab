@@ -5547,6 +5547,7 @@ GameObject:
   - component: {fileID: 6279160569992311163}
   - component: {fileID: 4501895533616680363}
   - component: {fileID: 1878419650661887599}
+  - component: {fileID: 7439663943451223064}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -5719,7 +5720,103 @@ AudioSource:
   m_PlayOnAwake: 1
   m_Volume: 0.7
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!82 &7439663943451223064
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6279160569992311160}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: -3648944745556903292, guid: b94ca0a2c38db5048850feaf332c4bcd, type: 2}
+  m_audioClip: {fileID: 8300000, guid: 8697760c7b448854eb78d072a8d5af13, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 0
+  m_Pitch: 1
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -9533,9 +9630,9 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 3.1
-  m_Height: 8.3
+  m_Height: 9
   m_Direction: 1
-  m_Center: {x: -0.015777588, y: 4.3, z: 0.34000015}
+  m_Center: {x: 0, y: 4.59, z: 0}
 --- !u!82 &3872151551515680245
 AudioSource:
   m_ObjectHideFlags: 0
@@ -9548,7 +9645,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 5057764460878180113, guid: b94ca0a2c38db5048850feaf332c4bcd, type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.6
+  m_Volume: 0.15
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -9557,7 +9654,7 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 100
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
@@ -9663,7 +9760,7 @@ NavMeshAgent:
   m_AutoBraking: 0
   m_AutoRepath: 1
   m_Height: 9
-  m_BaseOffset: 0
+  m_BaseOffset: -0.41
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
 --- !u!114 &4954696172568417243
@@ -9678,7 +9775,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90ead7d111072a14680fb92fd6df8b74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  steps: {fileID: 8300000, guid: 7a75790979eba2d4d94aa4abb7b7e96b, type: 3}
+  dirtSteps:
+  - {fileID: 8300000, guid: 58c59db12ea34544dae27903e2c29294, type: 3}
+  woodSteps:
+  - {fileID: 8300000, guid: f0247c8107e862649b5c2c45cc950117, type: 3}
+  - {fileID: 8300000, guid: cee0716b2b435784b96e14066e4f4667, type: 3}
+  grassSteps:
+  - {fileID: 8300000, guid: 5375e76405742b143a52b25378f9c903, type: 3}
+  - {fileID: 8300000, guid: 7a1ebdc359129984bb0c095062ffc6ca, type: 3}
+  - {fileID: 8300000, guid: ce678848ef49b8c4c99552612cd0e951, type: 3}
 --- !u!114 &6279160570140273072
 MonoBehaviour:
   m_ObjectHideFlags: 0

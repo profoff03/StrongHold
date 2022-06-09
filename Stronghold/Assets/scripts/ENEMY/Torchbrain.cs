@@ -328,7 +328,7 @@ public class Torchbrain : MonoBehaviour
             StartCoroutine(reactDelay());
             if (IsAnimationPlayerPlaying("Strong", 0))
             {
-                _audioSource[1].PlayOneShot(strongHurtlClips[Random.Range(0, hurtlClips.Length)]);
+                _audioSource[1].PlayOneShot(strongHurtlClips[Random.Range(0, strongHurtlClips.Length)]);
                 _animator.SetTrigger("strongReact");
 
             }
