@@ -15,6 +15,7 @@ TagManager:
   - float
   - EnemyForward
   - EnemySmoke
+  - wood
   layers:
   - Default
   - TransparentFX
