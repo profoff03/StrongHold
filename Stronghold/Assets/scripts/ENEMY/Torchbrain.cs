@@ -12,11 +12,19 @@ public class Torchbrain : MonoBehaviour
     Animator _playerAnimator;
     Animator _animator;
     
-    AudioSource _audioSource;
+    AudioSource[] _audioSource;
     [SerializeField]
-    AudioClip[] audioClips;
-    
-    
+    AudioClip[] slashClips;
+    [SerializeField]
+    AudioClip[] seeGrowlClips;
+    [SerializeField]
+    AudioClip[] attackGrowlClips;
+    [SerializeField]
+    AudioClip[] hurtlClips;
+    [SerializeField]
+    AudioClip[] strongHurtlClips;
+
+
     CapsuleCollider _myColider;
 
     bool isStartDoing = true;
@@ -61,6 +69,8 @@ public class Torchbrain : MonoBehaviour
 
     float RotationSpeed;
 
+    bool seeSoundPlay = false;
+
     void Start()
     {
 
@@ -72,7 +82,8 @@ public class Torchbrain : MonoBehaviour
         RotationSpeed = _agent.angularSpeed / 2;
 
         _animator = GetComponent<Animator>();
-        _audioSource = GetComponent<AudioSource>();
+        _audioSource = GetComponents<AudioSource>();
+        _audioSource[1].maxDistance = vewDistance;
         #region health
         health = maxHealth;
 
@@ -100,6 +111,12 @@ public class Torchbrain : MonoBehaviour
                     float distance = Vector3.Distance(_agent.transform.position, _target.transform.position);
                     if (distance < vewDistance)
                     {
+                        if (!seeSoundPlay)
+                        {
+                            _audioSource[1].PlayOneShot(seeGrowlClips[Random.Range(0, seeGrowlClips.Length)]);
+                            StartCoroutine(seeSoundDelay()); 
+                            seeSoundPlay = true;
+                        }
                         
                         if (!isAtack)
                         {
@@ -117,6 +134,7 @@ public class Torchbrain : MonoBehaviour
                             {
                                 _animator.SetBool("isRunForward", false);
                                 int r = Random.Range(1, 10);
+                                
                                 _animator.SetInteger("AtackPhase", r);
                             }
                         }
@@ -165,11 +183,15 @@ public class Torchbrain : MonoBehaviour
         canvas.transform.LookAt(canvas.worldCamera.transform);
     }
 
-    
-    
-    
-    
-    
+
+    private IEnumerator seeSoundDelay()
+    {
+        yield return new WaitForSeconds(Random.Range(8,14));
+        seeSoundPlay = false;
+    }
+
+
+
     private IEnumerator startDoing()
     {
         _animator.SetBool("isRunForward", true);
@@ -225,6 +247,8 @@ public class Torchbrain : MonoBehaviour
 
     void DoHit()
     {
+        _audioSource[1].PlayOneShot(attackGrowlClips[Random.Range(0, attackGrowlClips.Length)]);
+
         var sphereCollider = gameObject.AddComponent<SphereCollider>();
         sphereCollider.isTrigger = true;
         sphereCollider.radius = 9f;
@@ -304,11 +328,13 @@ public class Torchbrain : MonoBehaviour
             StartCoroutine(reactDelay());
             if (IsAnimationPlayerPlaying("Strong", 0))
             {
+                _audioSource[1].PlayOneShot(strongHurtlClips[Random.Range(0, hurtlClips.Length)]);
                 _animator.SetTrigger("strongReact");
 
             }
             else
             {
+                _audioSource[1].PlayOneShot(hurtlClips[Random.Range(0, hurtlClips.Length)]);
                 _animator.SetTrigger("react");
             }
         }
@@ -317,8 +343,8 @@ public class Torchbrain : MonoBehaviour
         int soundNumber = Random.Range(0, 20);
         if (soundNumber <= 10) soundNumber = 0;
         if (soundNumber > 10) soundNumber = 1;
-        _audioSource.pitch = Random.Range(0.7f, 1.2f);
-        _audioSource.PlayOneShot(audioClips[soundNumber]);
+        _audioSource[0].pitch = Random.Range(0.7f, 1.2f);
+        _audioSource[0].PlayOneShot(slashClips[soundNumber]);
 
         dmg ??= 0;
         health -= (float)dmg;

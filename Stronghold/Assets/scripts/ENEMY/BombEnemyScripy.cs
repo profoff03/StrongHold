@@ -86,7 +86,7 @@ public class BombEnemyScripy : MonoBehaviour
                     }
             }
             else StartCoroutine(changeDistanation());
-        }else _rb.AddForce(transform.forward * moveSpeed * Time.deltaTime * 50000);
+        }else _rb.AddForce(transform.forward * moveSpeed * Time.deltaTime * 80000);
     }
     private IEnumerator startDoing()
     {
