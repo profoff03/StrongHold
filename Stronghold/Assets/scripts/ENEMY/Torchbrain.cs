@@ -24,6 +24,11 @@ public class Torchbrain : MonoBehaviour
     [SerializeField]
     AudioClip[] strongHurtlClips;
 
+    [SerializeField]
+    GameObject FirstAttackParticle;
+    [SerializeField]
+    GameObject SecondAttackParticle;
+
 
     CapsuleCollider _myColider;
 
@@ -238,16 +243,29 @@ public class Torchbrain : MonoBehaviour
         inSmoke = false;
     }
 
+    void FirstAtkEffect()
+    {
+        _audioSource[1].PlayOneShot(attackGrowlClips[Random.Range(0, attackGrowlClips.Length)]);
+        FirstAttackParticle.SetActive(true);
+    }
+    void SecondAtkEffect()
+    {
+        _audioSource[1].PlayOneShot(attackGrowlClips[Random.Range(0, attackGrowlClips.Length)]);
+        SecondAttackParticle.SetActive(true);
+    }
+
 
     void CkeckAtack()
     {
         isAtack = true;
+        FirstAttackParticle.SetActive(false);
+        SecondAttackParticle.SetActive(false);
         _myColider.tag = "Enemy";
     }
 
     void DoHit()
     {
-        _audioSource[1].PlayOneShot(attackGrowlClips[Random.Range(0, attackGrowlClips.Length)]);
+        
 
         var sphereCollider = gameObject.AddComponent<SphereCollider>();
         sphereCollider.isTrigger = true;
