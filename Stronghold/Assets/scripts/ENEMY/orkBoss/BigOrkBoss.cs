@@ -55,6 +55,8 @@ public class BigOrkBoss : MonoBehaviour
 
     [SerializeField]
     GameObject blood;
+    
+    goblinBossLocation _goblinBossLocation;
 
 
     #region bool
@@ -113,6 +115,8 @@ public class BigOrkBoss : MonoBehaviour
     float RotationSpeed;
     void Start()
     {
+        _goblinBossLocation = GameObject.Find("goblinBossLocation").GetComponent<goblinBossLocation>();
+
         _collider = GetComponent<Collider>();
 
         spawner = GameObject.Find("secondSpawner").GetComponent<secondPortal>();
@@ -549,7 +553,8 @@ public class BigOrkBoss : MonoBehaviour
     }
     private void Kill()
     {
-        Destroy(gameObject);
+        _goblinBossLocation.disablevillageWall();
+        Destroy(gameObject,0.4f);
     }
     
     

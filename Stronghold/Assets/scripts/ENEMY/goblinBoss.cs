@@ -27,6 +27,8 @@ public class goblinBoss : MonoBehaviour
 
     private float _rotationSpeed;
 
+    [SerializeField]
+    private goblinBossLocation _location;
 
     private bool _isAtack = false;
     private bool _isTired = false;
@@ -321,7 +323,9 @@ public class goblinBoss : MonoBehaviour
 
     private void Kill()
     {
-        Destroy(gameObject);
+        _location.disableBrigeWall();
+        _location.disableSpawnWall();
+        Destroy(gameObject, 0.4f);
     }
 
     private void TakeDamage(float? dmg)

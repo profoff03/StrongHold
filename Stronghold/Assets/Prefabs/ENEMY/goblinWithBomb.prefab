@@ -137,7 +137,7 @@ MonoBehaviour:
   viewDistance: 70
   explosionDistance: 5
   bombDamage: 4
-  moveSpeed: 5
+  moveSpeed: 10
   explosionTime: 3
 --- !u!195 &1087910559088355523
 NavMeshAgent:
