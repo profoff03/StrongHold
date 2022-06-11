@@ -6,7 +6,9 @@ using UnityEngine.AI;
 public class firstPortal : MonoBehaviour
 {
     AudioSource[] mainAudioSourse;
-
+    AudioSource playerAudioSource;
+    [SerializeField]
+    AudioClip explosionSound;
     [SerializeField]
     Transform startEnemy;
 
@@ -42,6 +44,7 @@ public class firstPortal : MonoBehaviour
     [System.Obsolete]
     void Start()
     {
+        playerAudioSource = playerTransform.GetComponent<AudioSource>();
         mainAudioSourse = Camera.main.GetComponents<AudioSource>();
         StartCoroutine(CheckFirstEnemy());
         stoneWallParticles = stoneParticles.GetComponentsInChildren<ParticleSystem>();
@@ -188,12 +191,13 @@ public class firstPortal : MonoBehaviour
     void destroyPortal()
     {
         Instantiate(explosionFX, transform.position, Quaternion.identity,transform);
+        playerAudioSource.PlayOneShot(explosionSound);
         detroyPortal = true;
         foreach (ParticleSystem particle in stoneWallParticles)
         {
             particle.Play();
         }
-        Destroy(portal, 1.5f);
+        Destroy(portal, 1.3f);
         Destroy(firstPortalLoc, 2f);
 
         StartCoroutine(changeMusicToMain());

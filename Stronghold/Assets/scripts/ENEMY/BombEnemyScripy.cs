@@ -5,11 +5,23 @@ using UnityEngine.AI;
 
 public class BombEnemyScripy : MonoBehaviour
 {
-    bool isStartDoing = true;
+    private bool isStartDoing = true;
 
-    bool isChangeDistanation = false;
+    private bool isChangeDistanation = false;
 
-    float rotationSide;
+    private float rotationSide;
+
+    private AudioSource playerAudioSource;
+    private AudioSource audioSource;
+    [SerializeField]
+    private AudioClip[] explosionSound;
+    [SerializeField]
+    private AudioClip[] loughSound;
+    [SerializeField]
+    private AudioClip fuseStartSound;
+    [SerializeField]
+    private AudioClip fuseSound;
+
 
     private GameObject _target;
     private bool _isSees;
@@ -18,18 +30,19 @@ public class BombEnemyScripy : MonoBehaviour
     [SerializeField]
     private ParticleSystem _particleSystem;
     [SerializeField]
-    float viewDistance;
+    private float viewDistance;
     [SerializeField]
-    float explosionDistance;
+    private float explosionDistance;
     [SerializeField]
-    float bombDamage;
+    private float bombDamage;
     [SerializeField]
-    float moveSpeed;
+    private float moveSpeed;
+    [SerializeField]
+    private float explosionTime;
+    private float RotationSpeed;
 
-    float RotationSpeed;
-
-    Rigidbody _rb;
-    bool can = true;
+    private Rigidbody _rb;
+    private bool can = true;
     private Vector3 _force;
 
     // Start is called before the first frame update
@@ -42,6 +55,8 @@ public class BombEnemyScripy : MonoBehaviour
         _target = GameObject.Find("Player");
         RotationSpeed = _agent.angularSpeed / 2;
         StartCoroutine(startDoing());
+        playerAudioSource = _target.GetComponent<AudioSource>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -53,41 +68,63 @@ public class BombEnemyScripy : MonoBehaviour
         //  Debug.Log(DistanceToPlayer);
         if (!isStartDoing)
         {
-                if (DistanceToPlayer < viewDistance)
-                {
-                    _isSees = true;
-                }
+            if (DistanceToPlayer < viewDistance && !_isSees)
+            {
+                _isSees = true;
+                audioSource.PlayOneShot(loughSound[Random.Range(0, loughSound.Length)]);
+                audioSource.PlayOneShot(fuseStartSound);
+                audioSource.PlayOneShot(fuseSound);
+                StartCoroutine(explosionTimer());
+                
+            }
+            else if (DistanceToPlayer > viewDistance) _isSees = false;
 
-                if (_isSees)
-                {
-                    //_agent.transform.position += transform.forward * moveSpeed * Time.deltaTime;
+            if (_isSees)
+            {
+                _animator.SetBool("isRunForward", true);
+                _agent.SetDestination(_target.transform.position);
+                _rb.AddForce(transform.forward * moveSpeed * Time.deltaTime * 100000);
+                RotateToTarget();
+            }
 
-                    _animator.SetBool("isRunForward", true);
-                    _agent.SetDestination(_target.transform.position);
-                    _rb.AddForce(transform.forward * moveSpeed * Time.deltaTime * 100000);
-                    RotateToTarget();
-                }
-
-                if (DistanceToPlayer < explosionDistance)
-                {
-                    if (can)
-                    {
-                        Instantiate(_particleSystem, _target.transform.position, Quaternion.identity);
-                        var sphereCollider = gameObject.AddComponent<SphereCollider>();
-                        sphereCollider.isTrigger = true;
-                        sphereCollider.radius = 10f;
-                        sphereCollider.center = new Vector3(0, 5f, 4f);
-                        sphereCollider.tag = "EnemyHit";
-                        sphereCollider.gameObject.AddComponent<DamageProperty>();
-                        sphereCollider.GetComponent<DamageProperty>().Damage = bombDamage;
-
-                        Destroy(gameObject, 0.019f);
-                        can = false;
-                    }
+            if (DistanceToPlayer < explosionDistance)
+            {
+                explosion();
             }
             else StartCoroutine(changeDistanation());
-        }else _rb.AddForce(transform.forward * moveSpeed * Time.deltaTime * 80000);
+        }
+        else _rb.AddForce(transform.forward * moveSpeed * Time.deltaTime * 80000);
     }
+    
+    private void explosion()
+    {
+        if (can)
+        {
+            moveSpeed = 0;
+            Instantiate(_particleSystem, transform.position, Quaternion.identity);
+            playerAudioSource.PlayOneShot(explosionSound[Random.Range(0,explosionSound.Length)]);
+            var sphereCollider = gameObject.AddComponent<SphereCollider>();
+            sphereCollider.isTrigger = true;
+            sphereCollider.radius = 10f;
+            sphereCollider.center = new Vector3(0, 5f, 4f);
+            sphereCollider.tag = "EnemyHit";
+            sphereCollider.gameObject.AddComponent<DamageProperty>();
+            sphereCollider.GetComponent<DamageProperty>().Damage = bombDamage;
+
+            Destroy(gameObject, 0.02f);
+            can = false;
+        }
+    }
+
+    private IEnumerator explosionTimer()
+    {
+        yield return new WaitForSeconds(explosionTime);
+        audioSource.PlayOneShot(fuseSound);
+        yield return new WaitForSeconds(explosionTime);
+        explosion();
+    }
+
+
     private IEnumerator startDoing()
     {
         _animator.SetBool("isRunForward", true);
