@@ -18,12 +18,16 @@ public class goblinBoss : MonoBehaviour
     private Canvas _canvas;
     private Slider _healthSlider;
 
-    private AudioSource _audioSource;
+    private AudioSource[] _audioSource;
 
     [SerializeField]
-    EnemyBomb bombPref;
+    EnemyBomb _bombPref;
     [SerializeField]
     private AudioClip[] _audioClips;
+    [SerializeField]
+    private AudioClip[] _atkVoiceSound;
+    [SerializeField]
+    private AudioClip[] _dashSound;
 
     private float _rotationSpeed;
 
@@ -43,6 +47,8 @@ public class goblinBoss : MonoBehaviour
     private bool _secondWaveStart = false;
     private bool _secondWave = false;
     private bool _isThrowSmoke = false;
+
+    private bool _soundIsPlay = false;
 
 
 
@@ -83,7 +89,7 @@ public class goblinBoss : MonoBehaviour
         _playerAnimator = _target.GetComponent<Animator>();
         _home = _homeParent.GetComponentsInChildren<Transform>();
         _rotationSpeed = _agent.angularSpeed;
-        _audioSource = GetComponent<AudioSource>();
+        _audioSource = GetComponents<AudioSource>();
 
         _startDmg = _dmg;
 
@@ -111,8 +117,9 @@ public class goblinBoss : MonoBehaviour
             {
                 if (!_isThrowSmoke) 
                 {
-                    StartCoroutine(throwSmoke());
+                    StartCoroutine(throwSmoke(distance));
                     StartCoroutine(checkPlayerInSmoke());
+                    _soundIsPlay = false;
                 } 
 
                 if (_playerControl._inSmoke)
@@ -124,12 +131,20 @@ public class goblinBoss : MonoBehaviour
                     {
                         transform.position += transform.forward * _speed * Time.deltaTime;
                         _animator.SetBool("isRun", true);
+                        if (!_soundIsPlay)
+                        {
+                            _soundIsPlay=true;
+                            _audioSource[2].PlayOneShot(_dashSound[Random.Range(0, _dashSound.Length)]);
+                        }
+                        
                     }
                     else if (distance < _atkDistance && !_isFastAtack)
                     {
+                        _soundIsPlay = false;
                         _isFastAtack = true;
                         _animator.SetBool("isRun", false);
                         _animator.SetTrigger("isAttack");
+                        _audioSource[1].PlayOneShot(_atkVoiceSound[Random.Range(0, _atkVoiceSound.Length)]);
 
                     }
                 }
@@ -146,10 +161,17 @@ public class goblinBoss : MonoBehaviour
                     {
                         transform.position += transform.forward * _speed * Time.deltaTime;
                         _animator.SetBool("isRun", true);
+                        if (!_soundIsPlay)
+                        {
+                            _soundIsPlay = true;
+                            _audioSource[2].PlayOneShot(_dashSound[Random.Range(0, _dashSound.Length)]);
+                        }
+
                     }
                     else if (distance < _atkDistance && !_isSimpleAtack)
                     {
                         _dashCount++;
+                        _soundIsPlay = false;
                         _waitRotateCorStart = false;
                         _canMove = false;
                         _isSimpleAtack = true;
@@ -158,7 +180,7 @@ public class goblinBoss : MonoBehaviour
                         StartCoroutine(waitRotateToHomeCor(0.6f));
                         _animator.SetBool("isRun", false);
                         _animator.SetTrigger("isSimpleAttack");
-
+                        _audioSource[1].PlayOneShot(_atkVoiceSound[Random.Range(0, _atkVoiceSound.Length)]);
                     } 
                 }
             }
@@ -173,6 +195,7 @@ public class goblinBoss : MonoBehaviour
                 if (_canMove)
                 {
                     _agent.transform.position = _posToStay.position;
+                    _audioSource[2].PlayOneShot(_dashSound[Random.Range(0, _dashSound.Length)]);
                     _isHome = true;
                     _canMove = false;
                 }
@@ -241,10 +264,10 @@ public class goblinBoss : MonoBehaviour
         _canDoFirstStateActions = false;
     }
 
-    private IEnumerator throwSmoke()
+    private IEnumerator throwSmoke(float dist)
     {
         _isThrowSmoke = true;
-        SpawnBomb();
+        SpawnBomb(dist);
         yield return new WaitForSeconds(7f);
         _playerControl._inSmoke = false;
 
@@ -283,15 +306,16 @@ public class goblinBoss : MonoBehaviour
 
     }
 
-    internal void SpawnBomb()
+    internal void SpawnBomb(float dist)
     {
         var forward = transform.forward;
-        var bomb = Instantiate(bombPref,
-            transform.position + Vector3.up * 3.3F + forward * 10F,
+        var bomb = Instantiate(_bombPref,
+            transform.position + Vector3.up * 8F + forward * 10F,
             Quaternion.identity);
         // bomb.GetComponent<Rigidbody>().velocity = _playerRigidbody.velocity;
         bomb.direction = (forward + transform.up / 2).normalized;
-        bomb.force = 70;
+        if (dist < _atkDistance) bomb.force = 0;
+        else bomb.force = 90;
     }
 
     void DoHit()
@@ -349,8 +373,8 @@ public class goblinBoss : MonoBehaviour
         int soundNumber = Random.Range(0, 20);
         if (soundNumber <= 10) soundNumber = 0;
         if (soundNumber > 10) soundNumber = 1;
-        _audioSource.pitch = Random.Range(0.7f, 1.2f);
-        _audioSource.PlayOneShot(_audioClips[soundNumber]);
+        _audioSource[0].pitch = Random.Range(0.7f, 1.2f);
+        _audioSource[0].PlayOneShot(_audioClips[soundNumber]);
 
         dmg ??= 0;
         _health -= (float)dmg;

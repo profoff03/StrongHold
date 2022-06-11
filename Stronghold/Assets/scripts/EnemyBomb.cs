@@ -43,6 +43,6 @@ public class EnemyBomb : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        _rigidbody.AddForce(Physics.gravity * 3F, ForceMode.Acceleration); // custom gravity
+        _rigidbody.AddForce(Physics.gravity * 10f , ForceMode.Acceleration); // custom gravity
     }
 }
