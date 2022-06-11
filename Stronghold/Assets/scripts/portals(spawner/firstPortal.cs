@@ -10,6 +10,11 @@ public class firstPortal : MonoBehaviour
     [SerializeField]
     AudioClip explosionSound;
     [SerializeField]
+    AudioClip rockStartSound;
+    [SerializeField]
+    AudioClip rockEndSound;
+
+    [SerializeField]
     Transform startEnemy;
 
     [SerializeField]
@@ -64,6 +69,7 @@ public class firstPortal : MonoBehaviour
     }
     private IEnumerator enableWall()
     {
+        playerAudioSource.PlayOneShot(rockStartSound);
         wallEnable = true;
         stoneParticles.SetActive(true);
         foreach (ParticleSystem particle in stoneWallParticles)
@@ -192,6 +198,7 @@ public class firstPortal : MonoBehaviour
     {
         Instantiate(explosionFX, transform.position, Quaternion.identity,transform);
         playerAudioSource.PlayOneShot(explosionSound);
+        playerAudioSource.PlayOneShot(rockEndSound);
         detroyPortal = true;
         foreach (ParticleSystem particle in stoneWallParticles)
         {
