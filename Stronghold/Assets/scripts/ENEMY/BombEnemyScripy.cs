@@ -53,7 +53,7 @@ public class BombEnemyScripy : MonoBehaviour
         _agent = GetComponent<NavMeshAgent>();
         _isSees = false;
         _target = GameObject.Find("Player");
-        RotationSpeed = _agent.angularSpeed / 2;
+        RotationSpeed = _agent.angularSpeed / 1.3f;
         StartCoroutine(startDoing());
         playerAudioSource = _target.GetComponent<AudioSource>();
         audioSource = GetComponent<AudioSource>();

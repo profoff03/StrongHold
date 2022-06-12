@@ -314,8 +314,7 @@ public class goblinBoss : MonoBehaviour
             Quaternion.identity);
         // bomb.GetComponent<Rigidbody>().velocity = _playerRigidbody.velocity;
         bomb.direction = (forward + transform.up / 2).normalized;
-        if (dist < _atkDistance) bomb.force = 0;
-        else bomb.force = 90;
+        bomb.force = dist;
     }
 
     void DoHit()

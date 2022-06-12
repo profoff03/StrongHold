@@ -1,10 +1,9 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 public class PlayerControll : MonoBehaviour
 {
@@ -13,6 +12,18 @@ public class PlayerControll : MonoBehaviour
     internal Rigidbody _playerRigidbody;
 
     internal bool isStan;
+
+    [SerializeField]
+    internal AudioClip[] _atkVoiceSound;
+    [SerializeField]
+    private AudioClip _atkStrongVoiceSound;
+    [SerializeField]
+    internal AudioClip[] _hitVoiceSound;
+    [SerializeField]
+    internal AudioClip[] _hitSound;
+    [SerializeField]
+    internal AudioClip[] _dashSound;
+    internal AudioSource[] _audioSource;
 
     [SerializeField]
     private HUDBarScript hud;
@@ -131,6 +142,7 @@ public class PlayerControll : MonoBehaviour
         _playerAnimator = GetComponent<Animator>();
         _playerRigidbody = GetComponent<Rigidbody>();
         _camera = Camera.main;
+        _audioSource = GetComponents<AudioSource>();
     }
     private void SetDmg()
     {
@@ -209,7 +221,6 @@ public class PlayerControll : MonoBehaviour
                 if (Time.time - main_time > bool_time && !mouseDown)//long press
                 {
                     //strong attack
-                   
                     _playerAnimator.SetTrigger("isStrongAtack");
                     isAtack = true;
                     mouseDown = true;
@@ -222,6 +233,7 @@ public class PlayerControll : MonoBehaviour
                 mouseDown = false;
                 if (Time.time - main_time < bool_time)//fast click
                 {
+                    
                     _playerAnimator.SetTrigger("isAtack");
                     main_time = 0.0f;
                     //DoHit(_simpleAttackDamage);
@@ -298,6 +310,7 @@ public class PlayerControll : MonoBehaviour
     #region SlashPlayMethod
     void PlayFirstSlash()
     {
+        _audioSource[1].PlayOneShot(_atkVoiceSound[Random.Range(0, _atkVoiceSound.Length)]);
         _FirstSlash.SetActive(true);
         AudioSource audioSource = _FirstSlash.GetComponentInParent<AudioSource>();
         audioSource.pitch = UnityEngine.Random.Range(0.8f, 1.2f);
@@ -308,6 +321,7 @@ public class PlayerControll : MonoBehaviour
     }
     void PlaySecondSlash()
     {
+        _audioSource[1].PlayOneShot(_atkVoiceSound[Random.Range(0, _atkVoiceSound.Length)]);
         _SecondSlash.SetActive(true);
         AudioSource audioSource = _SecondSlash.GetComponentInParent<AudioSource>();
         audioSource.pitch = UnityEngine.Random.Range(0.9f, 1.1f);
@@ -316,6 +330,7 @@ public class PlayerControll : MonoBehaviour
     }
     void PlayThirdSlash()
     {
+        _audioSource[1].PlayOneShot(_atkVoiceSound[Random.Range(0, _atkVoiceSound.Length)]);
         _ThirdSlash.SetActive(true);
         AudioSource audioSource = _ThirdSlash.GetComponentInParent<AudioSource>();
         audioSource.pitch = UnityEngine.Random.Range(0.9f, 1.1f);
@@ -325,12 +340,11 @@ public class PlayerControll : MonoBehaviour
     }
     void Play4Slash()
     {
+        _audioSource[1].PlayOneShot(_atkVoiceSound[Random.Range(0, _atkVoiceSound.Length)]);
         _4Slash.SetActive(true);
         AudioSource audioSource = _4Slash.GetComponentInParent<AudioSource>();
         audioSource.pitch = UnityEngine.Random.Range(0.9f, 1.1f);
         audioSource.Play();
-        
-
     }
     void PlayStrongSlash()
     {
@@ -341,6 +355,8 @@ public class PlayerControll : MonoBehaviour
         
     }
     #endregion
+
+    void playStrongVoice()=> _audioSource[1].PlayOneShot(_atkStrongVoiceSound);
 
     private void OnTriggerEnter(Collider other)
     {

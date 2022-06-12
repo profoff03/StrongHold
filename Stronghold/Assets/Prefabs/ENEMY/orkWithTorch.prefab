@@ -272,8 +272,9 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 9e5dc418553310d4bba974f3afc0593e, type: 3}
   - {fileID: 8300000, guid: ba47f2fcfe78db44b95f25e8451c091e, type: 3}
   strongHurtlClips:
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 8300000, guid: 075615c0af3ab7746958c84e3335d990, type: 3}
+  - {fileID: 8300000, guid: fa75b59b30963904d8849fb70dd9a52e, type: 3}
+  - {fileID: 8300000, guid: 53f290b8518beb14fa61efcb12387665, type: 3}
   FirstAttackParticle: {fileID: 8246572070877910784}
   SecondAttackParticle: {fileID: 7433228246384358945}
   maxHealth: 170

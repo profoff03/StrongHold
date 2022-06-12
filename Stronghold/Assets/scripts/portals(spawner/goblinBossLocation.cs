@@ -46,7 +46,11 @@ public class goblinBossLocation : MonoBehaviour
     
     void Update()
     {
-        if (playerEnter && enemyEnter && !wallEnable) StartCoroutine(enableWall());
+        if (playerEnter && enemyEnter && !wallEnable) 
+        {
+            StartCoroutine(enableWall());
+            StartCoroutine(changeMusicToBattle());
+        } 
     }
 
     internal void disableBrigeWall() 
@@ -57,6 +61,7 @@ public class goblinBossLocation : MonoBehaviour
             particle.Play();
         }
         Destroy(brigeWall, 1.5f);
+        StartCoroutine(changeMusicToMain());
     }
     internal void disableSpawnWall()
     {

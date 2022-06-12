@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class HUDBarScript : MonoBehaviour
 {
-    
+    bool canPlayHitSound = true;
 
     [SerializeField]
     PlayerControll playerControll;
@@ -95,6 +95,8 @@ public class HUDBarScript : MonoBehaviour
 
             if (CanDash && Input.GetKeyDown(KeyCode.Space) && !playerControll.isStan)
             {
+                playerControll._audioSource[1].PlayOneShot(playerControll._atkVoiceSound[Random.Range(0, playerControll._atkVoiceSound.Length)]);
+                playerControll._audioSource[0].PlayOneShot(playerControll._dashSound[Random.Range(0, playerControll._dashSound.Length)]);
                 playerControll._playerAnimator.SetBool("isDash", true);
                 UseDash();
             }
@@ -191,8 +193,13 @@ public class HUDBarScript : MonoBehaviour
 
         
         HP -= (float)dmg/300;
-        
-
+        if (canPlayHitSound)
+        {
+            playerControll._audioSource[1].PlayOneShot(playerControll._hitVoiceSound[Random.Range(0, playerControll._hitVoiceSound.Length)]);
+            canPlayHitSound = false;
+            StartCoroutine(hitSoundDelay());
+        }
+        playerControll._audioSource[0].PlayOneShot(playerControll._hitSound[Random.Range(0, playerControll._hitSound.Length)]);
         if (HP <= 0.001) HP = 0f;
         
         if (HP == 0)
@@ -232,5 +239,11 @@ public class HUDBarScript : MonoBehaviour
             DefaultSmokeCoolDown = 0;
         }
 
+    }
+
+    private IEnumerator hitSoundDelay()
+    {
+        yield return new WaitForSeconds(5);
+        canPlayHitSound = true;
     }
 }
