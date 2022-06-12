@@ -41,6 +41,8 @@ public class HUDBarScript : MonoBehaviour
     float maxHP;
     internal float HP;
 
+    internal bool canUseSmoke = false;
+
 
     
 
@@ -49,7 +51,7 @@ public class HUDBarScript : MonoBehaviour
     {
         DefaultDashCoolDown = MaxDashCoolDown;
         DefaultShieldCoolDown = MaxShieldCoolDown;
-        DefaultSmokeCoolDown = MaxSmokeCoolDown;
+        DefaultSmokeCoolDown = 0;
         HP = maxHP/100;
     }
 
@@ -60,7 +62,8 @@ public class HUDBarScript : MonoBehaviour
 
         CheckShieldCoolDown();
 
-        CheckSmokeCoolDown();
+        if (canUseSmoke)
+            CheckSmokeCoolDown();
         
         
 
@@ -199,7 +202,6 @@ public class HUDBarScript : MonoBehaviour
             canPlayHitSound = false;
             StartCoroutine(hitSoundDelay());
         }
-        playerControll._audioSource[0].PlayOneShot(playerControll._hitSound[Random.Range(0, playerControll._hitSound.Length)]);
         if (HP <= 0.001) HP = 0f;
         
         if (HP == 0)
@@ -232,7 +234,7 @@ public class HUDBarScript : MonoBehaviour
     }
     void UseSmoke()
     {
-        if (DefaultShieldCoolDown < MaxShieldCoolDown) return;
+        if (DefaultSmokeCoolDown < MaxSmokeCoolDown) return;
 
         if (playerControll._playerAnimator.GetBool("isSmoke") == true)
         {

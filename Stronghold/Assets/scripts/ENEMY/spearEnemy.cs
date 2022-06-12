@@ -11,11 +11,21 @@ public class spearEnemy : MonoBehaviour
     Animator _playerAnimator;
     Animator _animator;
     
-    AudioSource _audioSource;
+    AudioSource[] _audioSource;
     [SerializeField]
     AudioClip[] audioClips;
-    
-    
+    [SerializeField]
+    AudioClip[] seeGrowlClips;
+    [SerializeField]
+    AudioClip[] attackGrowlClips;
+    [SerializeField]
+    AudioClip[] hurtlClips;
+    [SerializeField]
+    AudioClip[] strongHurtlClips;
+
+    bool seeSoundPlay = false;
+
+
     CapsuleCollider _myColider;
     Camera _camera;
     Rigidbody _myRigidbody;
@@ -27,16 +37,16 @@ public class spearEnemy : MonoBehaviour
     [SerializeField]
     GameObject spearHit;
 
-    bool isStartDoing = true;
+    public bool isStartDoing = true;
 
-    bool isAtack = false;
-    bool isStab = false;
-    bool isSlash = false;
-    bool isStunAtk = false;
-    
-    bool inSmoke = false;
-    bool isHome = false;
-    bool findPos = false;
+    public bool isAtack = false;
+    public bool isStab = false;
+    public bool isSlash = false;
+    public bool isStunAtk = false;
+
+    public bool inSmoke = false;
+    public bool isHome = false;
+    public bool findPos = false;
 
     bool isChangeDistanation = false;
 
@@ -93,7 +103,7 @@ public class spearEnemy : MonoBehaviour
         RotationSpeed = _agent.angularSpeed / 2;
 
         _animator = GetComponent<Animator>();
-        _audioSource = GetComponent<AudioSource>();
+        _audioSource = GetComponents<AudioSource>();
         
         #region health
         health = maxHealth;
@@ -120,7 +130,12 @@ public class spearEnemy : MonoBehaviour
                 if (!IsAnimationPlayerPlaying("Death", 0))
                 {
                     float distance = Vector3.Distance(_agent.transform.position, _target.transform.position);
-                    
+                    if (!seeSoundPlay)
+                    {
+                        _audioSource[1].PlayOneShot(seeGrowlClips[Random.Range(0, seeGrowlClips.Length)]);
+                        StartCoroutine(seeSoundDelay());
+                        seeSoundPlay = true;
+                    }
                     if (!isAtack)
                     {
                         RotateToTarget(_target.transform);
@@ -140,6 +155,7 @@ public class spearEnemy : MonoBehaviour
                                 {
                                     isStab = true;
                                     _animator.SetTrigger("isStab");
+                                    _audioSource[1].PlayOneShot(attackGrowlClips[Random.Range(0, attackGrowlClips.Length)]);
                                 }
                                 _animator.SetBool("isRunForward", false);
 
@@ -169,6 +185,7 @@ public class spearEnemy : MonoBehaviour
                                 if (!isStunAtk)
                                 {
                                     isStunAtk = true;
+                                    _audioSource[1].PlayOneShot(attackGrowlClips[Random.Range(0, attackGrowlClips.Length)]);
                                     StartCoroutine(StunAtackDelay());
                                 }
                                 
@@ -198,6 +215,7 @@ public class spearEnemy : MonoBehaviour
                             if (!isSlash)
                             {
                                 _animator.SetTrigger("isSlash");
+                                _audioSource[1].PlayOneShot(attackGrowlClips[Random.Range(0, attackGrowlClips.Length)]);
                                 StartCoroutine(slashDelayCor());
                                 isSlash = true;
                             }
@@ -226,7 +244,11 @@ public class spearEnemy : MonoBehaviour
 
         canvas.transform.LookAt(canvas.worldCamera.transform);
     }
-
+    private IEnumerator seeSoundDelay()
+    {
+        yield return new WaitForSeconds(Random.Range(8, 15));
+        seeSoundPlay = false;
+    }
     private IEnumerator startDoing()
     {
         _animator.SetBool("isRunForward", true);
@@ -238,11 +260,8 @@ public class spearEnemy : MonoBehaviour
 
     private IEnumerator changeDistanation()
     {
-        
-        
         yield return new WaitForSeconds(0.5f);
         isChangeDistanation = false;
-
     }
 
     private IEnumerator reactDelay()
@@ -272,7 +291,6 @@ public class spearEnemy : MonoBehaviour
 
     private IEnumerator atackDelay()
     {
-
         yield return new WaitForSeconds(stayTime);
         BoolStateFalse();
         canRun = true;
@@ -376,11 +394,13 @@ public class spearEnemy : MonoBehaviour
             StartCoroutine(reactDelay());
             if (IsAnimationPlayerPlaying("Strong", 0))
             {
+                _audioSource[1].PlayOneShot(strongHurtlClips[Random.Range(0, strongHurtlClips.Length)]);
                 _animator.SetTrigger("strongReact");
 
             }
             else
             {
+                _audioSource[1].PlayOneShot(hurtlClips[Random.Range(0, hurtlClips.Length)]);
                 _animator.SetTrigger("react");
             }
         }
@@ -389,8 +409,8 @@ public class spearEnemy : MonoBehaviour
         int soundNumber = Random.Range(0, 20);
         if (soundNumber <= 10) soundNumber = 0;
         if (soundNumber > 10) soundNumber = 1;
-        _audioSource.pitch = Random.Range(0.7f, 1.2f);
-        _audioSource.PlayOneShot(audioClips[soundNumber]);
+        _audioSource[0].pitch = Random.Range(0.7f, 1.2f);
+        _audioSource[0].PlayOneShot(audioClips[soundNumber]);
 
         dmg ??= 0;
         health -= (float)dmg;
@@ -451,7 +471,7 @@ public class spearEnemy : MonoBehaviour
 
             }
         }
-        if (other.gameObject.CompareTag("Untagged") && isAtack) isHome = true;
+        //if (other.gameObject.CompareTag("Untagged") && isAtack) isHome = true;
     }
 
     private IEnumerator Push(Vector3 force)

@@ -265,13 +265,12 @@ public class Torchbrain : MonoBehaviour
 
     void DoHit()
     {
-        
-
         var sphereCollider = gameObject.AddComponent<SphereCollider>();
         sphereCollider.isTrigger = true;
         sphereCollider.radius = 9f;
         sphereCollider.center = new Vector3(0, 5f, 4f);
-        sphereCollider.tag = "EnemyHit";
+        if (gameObject.layer == 8) sphereCollider.tag = "punchHit";
+        else sphereCollider.tag = "EnemyHit";
         sphereCollider.gameObject.AddComponent<DamageProperty>();
         sphereCollider.GetComponent<DamageProperty>().Damage = dmg;
         Destroy(sphereCollider, 0.1f);
@@ -379,9 +378,6 @@ public class Torchbrain : MonoBehaviour
         if (other.gameObject.CompareTag("Hit"))
         {
             TakeDamage(other.GetComponent<DamageProperty>()?.Damage);
-            //_playerControl._weponColider.tag = "Untagged";
-
-
         }
         
         

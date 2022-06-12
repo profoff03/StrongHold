@@ -9891,8 +9891,11 @@ MonoBehaviour:
   - {fileID: 8300000, guid: dc67cf5597d41fc48883336552ca7fcc, type: 3}
   - {fileID: 8300000, guid: bf9a0e88d71ebce41ba1ad0202d87a6d, type: 3}
   - {fileID: 8300000, guid: baf971c64bc1df54da1209e3ef1d1810, type: 3}
-  - {fileID: 8300000, guid: 3cbb2b1541ef0c14eaea22c365542b14, type: 3}
-  - {fileID: 8300000, guid: daf5f9f61cbef15449e7b414275bcd68, type: 3}
+  _slashHitSound:
+  - {fileID: 8300000, guid: 8aa74c82aa1127143bf18d9222a59618, type: 3}
+  - {fileID: 8300000, guid: 7987b115d3216e94eb6ab7fc30a866e3, type: 3}
+  - {fileID: 8300000, guid: 575a2eeab6244354dbdc493d3078ade9, type: 3}
+  - {fileID: 8300000, guid: b06517c526a3b044f95ce4a22b65d9c3, type: 3}
   _dashSound:
   - {fileID: 8300000, guid: cf82b9edcac9fee4cae0e3bc784f1cb6, type: 3}
   - {fileID: 8300000, guid: 4f1062a49c2fc6b4c8312b61eb6f9a97, type: 3}

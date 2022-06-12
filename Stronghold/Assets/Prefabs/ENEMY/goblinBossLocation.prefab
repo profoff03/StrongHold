@@ -10033,7 +10033,7 @@ MonoBehaviour:
   _vewDistance: 80
   _atkDistance: 15
   _speed: 300
-  _dmg: 9
+  _dmg: 10
 --- !u!195 &4192207790268557164
 NavMeshAgent:
   m_ObjectHideFlags: 0

@@ -188,7 +188,7 @@ public class BigOrkBoss : MonoBehaviour
                                 }
                                 isJump = true;
                                 _animator.SetTrigger("isJump");
-                            }
+                            }//jumoLogic
                             
 
                             if (canRush && !canJump) 
@@ -482,7 +482,7 @@ public class BigOrkBoss : MonoBehaviour
         sphereCollider.radius = 3f;
         sphereCollider.isTrigger = true;     
         sphereCollider.center = center;
-        sphereCollider.tag = "EnemyHit";
+        sphereCollider.tag = "punchHit";
         sphereCollider.gameObject.AddComponent<DamageProperty>();
         sphereCollider.GetComponent<DamageProperty>().Damage = dmg/2;
         Destroy(sphereCollider, 0.2f);

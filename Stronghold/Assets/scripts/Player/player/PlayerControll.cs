@@ -22,6 +22,8 @@ public class PlayerControll : MonoBehaviour
     [SerializeField]
     internal AudioClip[] _hitSound;
     [SerializeField]
+    internal AudioClip[] _slashHitSound;
+    [SerializeField]
     internal AudioClip[] _dashSound;
     internal AudioSource[] _audioSource;
 
@@ -352,9 +354,9 @@ public class PlayerControll : MonoBehaviour
         AudioSource audioSource = _StrongSlash.GetComponentInParent<AudioSource>();
         audioSource.pitch = UnityEngine.Random.Range(0.9f, 1.1f);
         audioSource.Play();
-        
     }
     #endregion
+    
 
     void playStrongVoice()=> _audioSource[1].PlayOneShot(_atkStrongVoiceSound);
 
@@ -362,6 +364,13 @@ public class PlayerControll : MonoBehaviour
     {
         if (other.gameObject.CompareTag("EnemyHit"))
         {
+            _audioSource[1].PlayOneShot(_slashHitSound[Random.Range(0, _slashHitSound.Length)]);
+            hud.TakeDamage(other.GetComponent<DamageProperty>()?.Damage);
+            Instantiate(blood, transform.position, Quaternion.Euler(-90f, 0f, 0f));
+        }
+        if (other.gameObject.CompareTag("punchHit"))
+        {
+            _audioSource[0].PlayOneShot(_hitSound[Random.Range(0, _hitSound.Length)]);
             hud.TakeDamage(other.GetComponent<DamageProperty>()?.Damage);
             Instantiate(blood, transform.position, Quaternion.Euler(-90f, 0f, 0f));
         }
@@ -375,8 +384,9 @@ public class PlayerControll : MonoBehaviour
             _playerAnimator.SetFloat("Vertical", 0);
 
         }
-            if (other.gameObject.CompareTag("StunHit"))
+        if (other.gameObject.CompareTag("StunHit"))
         {
+            _audioSource[0].PlayOneShot(_hitSound[Random.Range(0, _hitSound.Length)]);
             _playerAnimator.SetBool("isDash", false);
             _playerAnimator.SetTrigger("isStun");
             hud.TakeDamage(other.GetComponent<DamageProperty>()?.Damage);

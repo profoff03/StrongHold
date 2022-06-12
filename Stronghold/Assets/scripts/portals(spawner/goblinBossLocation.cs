@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class goblinBossLocation : MonoBehaviour
 {
+    HUDBarScript HUDscript;
     AudioSource[] mainAudioSourse;
     AudioSource playerAudioSource;
     [SerializeField]
@@ -34,6 +35,8 @@ public class goblinBossLocation : MonoBehaviour
     
     void Start()
     {
+        HUDscript = GameObject.Find("HUD").GetComponent<HUDBarScript>();
+
         playerAudioSource = playerTransform.GetComponent<AudioSource>();
         mainAudioSourse = Camera.main.GetComponents<AudioSource>();
 
@@ -61,6 +64,7 @@ public class goblinBossLocation : MonoBehaviour
             particle.Play();
         }
         Destroy(brigeWall, 1.5f);
+        HUDscript.canUseSmoke = true;
         StartCoroutine(changeMusicToMain());
     }
     internal void disableSpawnWall()
