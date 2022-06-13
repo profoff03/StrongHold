@@ -39,8 +39,16 @@ public class BigOrkBoss : MonoBehaviour
     AudioClip[] hitSounds;
 
     [SerializeField]
-    AudioClip roaringSounds;
+    AudioClip[] atkSounds;
 
+    [SerializeField]
+    AudioClip[] rockSounds;
+
+    [SerializeField]
+    AudioClip[] seeGrowlClips;
+
+    [SerializeField]
+    AudioClip roaringSounds;
 
     [Header("Particle")]
     [SerializeField]
@@ -73,7 +81,6 @@ public class BigOrkBoss : MonoBehaviour
     bool canRun = true;
     bool canKick = true;
 
-    bool nearOther = false;
     bool inSmoke = false;
 
     internal bool isFirstState = false;
@@ -157,108 +164,102 @@ public class BigOrkBoss : MonoBehaviour
         {
             if (!inSmoke)
             {
-                if (!nearOther)
+                if (startDoing) _rb.AddForce(transform.forward * 70000 * Time.deltaTime, ForceMode.Acceleration);
+
+                if (!startDoing)
                 {
-                    if(startDoing) _rb.AddForce(transform.forward * 70000 * Time.deltaTime, ForceMode.Acceleration);
-                    
-                    if (!startDoing)
+                    if (!isRush && !isJump)
+                        RotateToTarget();
+
+
+                    float distance = Vector3.Distance(_agent.transform.position, _target.transform.position);
+
+                    if ((distance < vewDist &&
+                        distance > kickDist
+                        && distance > groundAtackDist
+                        && canRun || isRush || isJump)
+                        && !IsAnimationPlaying("kick", 0)
+                        && !IsAnimationPlaying("groundAtack", 0))
                     {
-                        if (!isRush && !isJump)
-                            RotateToTarget();
-                        
-                        
-                        float distance = Vector3.Distance(_agent.transform.position, _target.transform.position);
-                        
-                        if ((distance < vewDist && 
-                            distance > kickDist 
-                            && distance > groundAtackDist
-                            && canRun|| isRush || isJump)
-                            && !IsAnimationPlaying("kick", 0) 
-                            && !IsAnimationPlaying("groundAtack", 0) )
+                        if (canAddForce)
+                            _rb.AddForce(transform.forward * 90000 * Time.deltaTime, ForceMode.Acceleration);
+                        if (canJump)
                         {
-                            if (canAddForce)
-                                _rb.AddForce(transform.forward * 90000 * Time.deltaTime, ForceMode.Acceleration);
-                            if (canJump)
+
+                            if (!isJump)
                             {
-                                
-                                if (!isJump)
-                                {
-                                    _animator.SetBool("isRun", false);
-                                    StartCoroutine(jumpFalse());
-                                }
-                                isJump = true;
-                                _animator.SetTrigger("isJump");
-                            }//jumoLogic
-                            
-
-                            if (canRush && !canJump) 
-                            {
-                                _rb.AddForce(transform.forward * 90000 * Time.deltaTime, ForceMode.Acceleration);
-                                if (!isRush)
-                                {
-                                    _animator.SetBool("isRun", false);
-                                    StartCoroutine(rushFalse());
-                                }
-                                isRush = true;
-                                _animator.SetBool("isRush", true);
-                            } //rushLogic
-
-
-
-                            if (!canRush && !canJump && !isJump)
-                            {
-                                _rb.AddForce(transform.forward * 40000 * Time.deltaTime, ForceMode.Acceleration);
-                                _animator.SetBool("isRun", true);
-                            }//simpleRunLogic
-                            
-                            
-                        
-                        
-                        }
-                        if (distance < kickDist && !isRush && !isJump)
-                        {
-                            _animator.SetBool("isRun", false);
-                            RotateToTarget();
-                            if (!isDoKick && !isRush)
-                            {
-                                isDoKick = true;
-                                canRun = false;
-                                canKick = true;
-
-                                _animator.SetTrigger("isKick");
-
-                                StartCoroutine(canRunning());
-                                StartCoroutine(kickDelay());
-
+                                _animator.SetBool("isRun", false);
+                                StartCoroutine(jumpFalse());
                             }
+                            isJump = true;
+                            _animator.SetTrigger("isJump");
+                        }//jumoLogic
 
-                            if (canKick) StartCoroutine(kikcAtack());
 
-
-                        }
-                        else if (distance < groundAtackDist && distance > kickDist && !isRush && !isJump)
+                        if (canRush && !canJump)
                         {
-                            _animator.SetBool("isRun", false);
-                            if (!isDoGroundAtk && !isRush)
+                            _rb.AddForce(transform.forward * 90000 * Time.deltaTime, ForceMode.Acceleration);
+                            if (!isRush)
                             {
-                                canRun = false;
-                                isDoGroundAtk = true;
-
-                                _animator.SetTrigger("isGroundAtack");
-
-                                StartCoroutine(canRunning());
-
-                                StartCoroutine(groundAtkDelay());
-
+                                _animator.SetBool("isRun", false);
+                                StartCoroutine(rushFalse());
                             }
-                            else RotateToTarget();
+                            isRush = true;
+                            _animator.SetBool("isRush", true);
+                        } //rushLogic
 
-                        }
+
+
+                        if (!canRush && !canJump && !isJump)
+                        {
+                            _rb.AddForce(transform.forward * 40000 * Time.deltaTime, ForceMode.Acceleration);
+                            _animator.SetBool("isRun", true);
+                        }//simpleRunLogic
+
+
+
+
                     }
-                }
-                else
-                {
-                    StartCoroutine(changeDistanation());
+                    if (distance < kickDist && !isRush && !isJump)
+                    {
+                        _animator.SetBool("isRun", false);
+                        RotateToTarget();
+                        if (!isDoKick && !isRush)
+                        {
+                            isDoKick = true;
+                            canRun = false;
+                            canKick = true;
+
+                            _animator.SetTrigger("isKick");
+
+                            StartCoroutine(canRunning());
+                            StartCoroutine(kickDelay());
+
+                        }
+
+                        if (canKick) StartCoroutine(kikcAtack());
+
+
+                    }
+                    else if (distance < groundAtackDist && distance > kickDist && !isRush && !isJump)
+                    {
+                        _animator.SetBool("isRun", false);
+                        if (!isDoGroundAtk && !isRush)
+                        {
+                            canRun = false;
+                            isDoGroundAtk = true;
+
+
+                            _animator.SetTrigger("isGroundAtack");
+
+                            StartCoroutine(canRunning());
+
+                            StartCoroutine(groundAtkDelay());
+
+                        }
+                        else RotateToTarget();
+
+                    }
                 }
             }
             else
@@ -290,9 +291,7 @@ public class BigOrkBoss : MonoBehaviour
                     isDoKick = true;
                     canRun = false;
                     canKick = true;
-
                     _animator.SetTrigger("isKick");
-
                     StartCoroutine(kickDelay());
 
                 }
@@ -410,6 +409,8 @@ public class BigOrkBoss : MonoBehaviour
 
         groundAtkP = Instantiate(groundAtackParticle, transform.position, transform.rotation);
         DoGroundHit(new Vector3(0, 0f, 0f));
+        audioSource.PlayOneShot(atkSounds[Random.Range(0, atkSounds.Length)]);
+        audioSource.PlayOneShot(rockSounds[Random.Range(0, rockSounds.Length)]);
         yield return new WaitForSeconds(0.1f);
         DoGroundHit(new Vector3(0, 0f, 3f));
         yield return new WaitForSeconds(0.1f);
@@ -423,7 +424,9 @@ public class BigOrkBoss : MonoBehaviour
     {
         yield return new WaitForSeconds(0.6f);
         if (can)
-        {        
+        {
+            audioSource.PlayOneShot(rockSounds[Random.Range(0, rockSounds.Length)]);
+            audioSource.PlayOneShot(atkSounds[Random.Range(0, atkSounds.Length)]);
             Instantiate(kickParticle, transform.position,transform.rotation);
             shake.Shake();
             DoStunHit(new Vector3(0, 5f, 6f), 20);
@@ -432,7 +435,7 @@ public class BigOrkBoss : MonoBehaviour
         _playerControl._playerRigidbody.AddForce(transform.forward * Time.deltaTime * 20000, ForceMode.Impulse);
         canKick = false;
         yield return new WaitForSeconds(1);
-        _agent.tag = "Untagged";
+        _agent.tag = "Enemy";
 
 
     }
@@ -447,7 +450,7 @@ public class BigOrkBoss : MonoBehaviour
     
     private IEnumerator jumpAtack()
     {
-
+        audioSource.PlayOneShot(rockSounds[Random.Range(0, rockSounds.Length)]);
         for (float i = 0; i < 10; i++)
             Instantiate(kickParticle, transform.position, Quaternion.Euler(new Vector3(0, i * 500)));
         
@@ -456,19 +459,10 @@ public class BigOrkBoss : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
         DoStunHit(Vector3.zero, 25);
         yield return new WaitForSeconds(0.5f);
-        _agent.tag = "Untagged";
+        _agent.tag = "Enemy";
 
 
     } 
-    
-    private IEnumerator changeDistanation()
-    {
-        _animator.SetBool("isRun", true);
-        _agent.SetDestination(_target.transform.position + new Vector3(100, 0, 0));
-        yield return new WaitForSeconds(2);
-        _animator.SetBool("isRun", false);
-        nearOther = false;
-    }
 
     private IEnumerator outSmoke(float delay)
     {
@@ -482,7 +476,7 @@ public class BigOrkBoss : MonoBehaviour
         sphereCollider.radius = 3f;
         sphereCollider.isTrigger = true;     
         sphereCollider.center = center;
-        sphereCollider.tag = "punchHit";
+        sphereCollider.tag = "EnemyHit";
         sphereCollider.gameObject.AddComponent<DamageProperty>();
         sphereCollider.GetComponent<DamageProperty>().Damage = dmg/2;
         Destroy(sphereCollider, 0.2f);
@@ -549,7 +543,7 @@ public class BigOrkBoss : MonoBehaviour
         if (health == 0) Kill();
         healthSlider.value = health;
 
-        _agent.tag = "Untagged";
+        _agent.tag = "Enemy";
     }
     private void Kill()
     {
@@ -574,11 +568,6 @@ public class BigOrkBoss : MonoBehaviour
             if (15f - t > 0)
                 StartCoroutine(outSmoke(15f - t));
             else inSmoke = false;
-        }
-
-        if (other.gameObject.CompareTag("Enemy"))
-        {
-            nearOther = true;
         }
 
     }

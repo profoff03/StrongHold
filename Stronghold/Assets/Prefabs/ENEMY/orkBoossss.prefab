@@ -5471,11 +5471,30 @@ MonoBehaviour:
   - {fileID: 8300000, guid: f2bb59d9a4cccc74bb689a53aba53373, type: 3}
   - {fileID: 8300000, guid: 9c92a9835e42bc446bac8f5f8b704a0b, type: 3}
   hitSounds:
-  - {fileID: 8300000, guid: 0a985677d21096b4985ccd30ce978b37, type: 3}
-  - {fileID: 8300000, guid: 86ef696a7f635cc4db06d0e2fa407b49, type: 3}
-  - {fileID: 8300000, guid: 28e6ad5fd4792f24db7af6d3bf453db5, type: 3}
-  - {fileID: 8300000, guid: 0963c3fc0d497484cb7c592b242294dc, type: 3}
-  roaringSounds: {fileID: 8300000, guid: a8ae3ec1ea29f1a41889bf545a362f67, type: 3}
+  - {fileID: 8300000, guid: 53f290b8518beb14fa61efcb12387665, type: 3}
+  - {fileID: 8300000, guid: fa75b59b30963904d8849fb70dd9a52e, type: 3}
+  - {fileID: 8300000, guid: 547d0777b6f1ee44fb48e2304f13f226, type: 3}
+  - {fileID: 8300000, guid: 3fe6c5bba8437e44287b387b56be5b45, type: 3}
+  atkSounds:
+  - {fileID: 8300000, guid: fc66ca3dde3d696468b962f4d6064ab8, type: 3}
+  - {fileID: 8300000, guid: 9537bba3b7d6aeb489ba4fba9bf7a166, type: 3}
+  - {fileID: 8300000, guid: 2dac21b44976341448382058a3aeff5b, type: 3}
+  - {fileID: 8300000, guid: da2e7921f9248ac4b885065e49cd75dd, type: 3}
+  - {fileID: 8300000, guid: bce6f679f2aa0c8488012349a5e293c3, type: 3}
+  - {fileID: 8300000, guid: 066fd4d3761315048afd66feb684744d, type: 3}
+  rockSounds:
+  - {fileID: 8300000, guid: c4cd6386358d55c4cb1e32adff2333f5, type: 3}
+  - {fileID: 8300000, guid: 0cbf9e8409a83c5448b31ae63ccc7fe8, type: 3}
+  - {fileID: 8300000, guid: 1f038caba05e47148af1cb60736a5e2f, type: 3}
+  seeGrowlClips:
+  - {fileID: 8300000, guid: bb6ad8651149c924e9329b7e8b242fd6, type: 3}
+  - {fileID: 8300000, guid: 3ed510ef1edb92741a67f0f307e0d0ae, type: 3}
+  - {fileID: 8300000, guid: 9afb8706bebf9bf49bfeb05286db8a49, type: 3}
+  - {fileID: 8300000, guid: 425921b317202494ca4c8ebdae4ff6c2, type: 3}
+  - {fileID: 8300000, guid: 0523cd566ae8780419897224a7ca32b0, type: 3}
+  - {fileID: 8300000, guid: ed956d225a3fe4f438801a8f56af8c74, type: 3}
+  - {fileID: 8300000, guid: 29d6d73a363165642ad616a572b1723d, type: 3}
+  roaringSounds: {fileID: 8300000, guid: 1703681cbac3a3f46b1eadcba7f97b57, type: 3}
   kickParticle: {fileID: 1728184095918548, guid: a977b50d367fe4d4d8f6c288bad7df24, type: 3}
   dashParticle: {fileID: 290493900005447811}
   groundAtackParticle: {fileID: 1812710422880096, guid: 3880daeda09abd04daa08703e695f73e, type: 3}
@@ -5520,7 +5539,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 5057764460878180113, guid: b94ca0a2c38db5048850feaf332c4bcd, type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.6
   m_Pitch: 1
   Loop: 0
   Mute: 0
