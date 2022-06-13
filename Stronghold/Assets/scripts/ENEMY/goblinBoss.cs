@@ -28,6 +28,11 @@ public class goblinBoss : MonoBehaviour
     private AudioClip[] _atkVoiceSound;
     [SerializeField]
     private AudioClip[] _dashSound;
+    [SerializeField]
+    AudioClip[] whoosh;
+
+    [SerializeField]
+    private GameObject _simpleAtkParticle;
 
     private float _rotationSpeed;
 
@@ -171,6 +176,7 @@ public class goblinBoss : MonoBehaviour
                     else if (distance < _atkDistance && !_isSimpleAtack)
                     {
                         _dashCount++;
+                        _simpleAtkParticle.SetActive(false);
                         _soundIsPlay = false;
                         _waitRotateCorStart = false;
                         _canMove = false;
@@ -232,7 +238,11 @@ public class goblinBoss : MonoBehaviour
 
             _canvas.transform.LookAt(_canvas.worldCamera.transform);
     }
-
+    private void simpleAtkEffect()
+    {
+        _audioSource[0].PlayOneShot(whoosh[Random.Range(0, whoosh.Length)]);
+        _simpleAtkParticle.SetActive(true);
+    } 
     private void startSmokeDelayCor() => StartCoroutine(smokeDelay());
     private IEnumerator checkPlayerInSmoke()
     {

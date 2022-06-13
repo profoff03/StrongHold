@@ -22,6 +22,15 @@ public class spearEnemy : MonoBehaviour
     AudioClip[] hurtlClips;
     [SerializeField]
     AudioClip[] strongHurtlClips;
+    [SerializeField]
+    AudioClip[] whoosh;
+
+    [SerializeField]
+    GameObject stunAtkParticle;
+    [SerializeField]
+    GameObject slashParticle;
+    [SerializeField]
+    GameObject sparkParticle;
 
     bool seeSoundPlay = false;
 
@@ -309,9 +318,30 @@ public class spearEnemy : MonoBehaviour
         inSmoke = false;
     }
 
+    void stunAtkEffect()
+    {
+        _audioSource[1].PlayOneShot(attackGrowlClips[Random.Range(0, attackGrowlClips.Length)]);
+        _audioSource[0].PlayOneShot(whoosh[Random.Range(0, whoosh.Length)]);
+        stunAtkParticle.SetActive(true);
+    }
+    void slashEffect()
+    {
+        _audioSource[0].PlayOneShot(whoosh[Random.Range(0, whoosh.Length)]);
+        _audioSource[1].PlayOneShot(attackGrowlClips[Random.Range(0, attackGrowlClips.Length)]);
+        slashParticle.SetActive(true);
+    }
+    void sparkEffect()
+    {
+        _audioSource[0].PlayOneShot(whoosh[Random.Range(0, whoosh.Length)]);
+        _audioSource[1].PlayOneShot(attackGrowlClips[Random.Range(0, attackGrowlClips.Length)]);
+        sparkParticle.SetActive(true);
+    }
 
     void CkeckAtack()
     {
+        stunAtkParticle.SetActive(false);
+        sparkParticle.SetActive(false);
+        slashParticle.SetActive(false);
         isAtack = true;
         _myColider.tag = "Enemy";
     }
@@ -471,7 +501,7 @@ public class spearEnemy : MonoBehaviour
 
             }
         }
-        //if (other.gameObject.CompareTag("Untagged") && isAtack) isHome = true;
+        if (other.gameObject.CompareTag("Untagged") && isAtack) isHome = true;
     }
 
     private IEnumerator Push(Vector3 force)

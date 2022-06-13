@@ -234,6 +234,13 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
+      - time: 0.23254049
+        functionName: simpleAtkEffect
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: d8a4d570458325149a3c73e4de50eed9, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}

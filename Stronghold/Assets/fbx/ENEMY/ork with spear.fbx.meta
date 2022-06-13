@@ -277,6 +277,13 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
+      - time: 0.3649056
+        functionName: stunAtkEffect
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 15c4700034de3f8408ec03c0dbeb88bd, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
@@ -315,6 +322,13 @@ ModelImporter:
         messageOptions: 0
       - time: 0.83859646
         functionName: CkeckAtack
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 15c4700034de3f8408ec03c0dbeb88bd, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.46419618
+        functionName: sparkEffect
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 15c4700034de3f8408ec03c0dbeb88bd, type: 3}
         floatParameter: 0
@@ -387,6 +401,13 @@ ModelImporter:
         messageOptions: 0
       - time: 0.4208417
         functionName: CkeckAtack
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 15c4700034de3f8408ec03c0dbeb88bd, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.2877673
+        functionName: slashEffect
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 15c4700034de3f8408ec03c0dbeb88bd, type: 3}
         floatParameter: 0

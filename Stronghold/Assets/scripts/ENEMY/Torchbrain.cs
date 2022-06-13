@@ -23,6 +23,8 @@ public class Torchbrain : MonoBehaviour
     AudioClip[] hurtlClips;
     [SerializeField]
     AudioClip[] strongHurtlClips;
+    [SerializeField]
+    AudioClip[] whoosh;
 
     [SerializeField]
     GameObject FirstAttackParticle;
@@ -246,10 +248,12 @@ public class Torchbrain : MonoBehaviour
     void FirstAtkEffect()
     {
         _audioSource[1].PlayOneShot(attackGrowlClips[Random.Range(0, attackGrowlClips.Length)]);
+        _audioSource[0].PlayOneShot(whoosh[Random.Range(0, whoosh.Length)]);
         FirstAttackParticle.SetActive(true);
     }
     void SecondAtkEffect()
     {
+        _audioSource[0].PlayOneShot(whoosh[Random.Range(0, whoosh.Length)]);
         _audioSource[1].PlayOneShot(attackGrowlClips[Random.Range(0, attackGrowlClips.Length)]);
         SecondAttackParticle.SetActive(true);
     }

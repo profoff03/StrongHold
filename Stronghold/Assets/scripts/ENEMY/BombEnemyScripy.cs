@@ -107,7 +107,7 @@ public class BombEnemyScripy : MonoBehaviour
             sphereCollider.isTrigger = true;
             sphereCollider.radius = 10f;
             sphereCollider.center = new Vector3(0, 5f, 4f);
-            sphereCollider.tag = "EnemyHit";
+            sphereCollider.tag = "punchHit";
             sphereCollider.gameObject.AddComponent<DamageProperty>();
             sphereCollider.GetComponent<DamageProperty>().Damage = bombDamage;
 

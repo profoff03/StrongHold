@@ -345,7 +345,7 @@ public class BigOrkBoss : MonoBehaviour
     void playRoaringSound()
     {
         audioSource.volume = 0.5f;
-        audioSource.pitch = 1.5f;
+        audioSource.pitch = 0.9f;
         audioSource.PlayOneShot(roaringSounds);
     }
     void StartGroundAtk() => StartCoroutine(groundAtack());
