@@ -544,10 +544,10 @@ MonoBehaviour:
   secondPos: {fileID: 0}
   maxHealth: 100
   dmg: 5
-  vewDistance: 55
+  vewDistance: 70
   atackDistance: 15
   goBackDistance: 15
-  stayTime: 10
+  stayTime: 6
 --- !u!1 &1829553499230120272
 GameObject:
   m_ObjectHideFlags: 0

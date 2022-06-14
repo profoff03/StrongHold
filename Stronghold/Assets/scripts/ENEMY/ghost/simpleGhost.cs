@@ -43,6 +43,7 @@ public class simpleGhost : MonoBehaviour
 
     bool canAtack = true;
     bool canReact = true;
+    bool _isSee = false;
 
     float health;
 
@@ -71,11 +72,11 @@ public class simpleGhost : MonoBehaviour
 
     private Vector3 _force;
 
-    float rotationSide;
-
     float RotationSpeed;
 
     bool seeSoundPlay = false;
+
+    private PlayerControll playerControll;
 
     void Start()
     {
@@ -84,6 +85,7 @@ public class simpleGhost : MonoBehaviour
         _myColider = GetComponent<CapsuleCollider>();
         _agent = GetComponent<NavMeshAgent>();
         _target = GameObject.Find("Player");
+        playerControll = _target.GetComponent<PlayerControll>();
         _playerAnimator = _target.GetComponent<Animator>();
 
         RotationSpeed = _agent.angularSpeed / 2;
@@ -109,12 +111,15 @@ public class simpleGhost : MonoBehaviour
     void Update()
     {
         transform.position += _force;
+
         if (!isStartDoing)
         {
+
             if (!IsAnimationPlayerPlaying("Death", 0))
             {
                 float distance = Vector3.Distance(_agent.transform.position, _target.transform.position);
-                if (distance < vewDistance)
+                if (distance < vewDistance && !_isSee) _isSee = true;
+                if (_isSee)
                 {
                     if (!seeSoundPlay)
                     {
@@ -313,7 +318,8 @@ public class simpleGhost : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Hit"))
         {
-            TakeDamage(other.GetComponent<DamageProperty>()?.Damage);
+            if (playerControll.canKillGhost)
+                TakeDamage(other.GetComponent<DamageProperty>()?.Damage);
         }
 
         if (other.gameObject.CompareTag("Push"))

@@ -17,6 +17,7 @@ TagManager:
   - EnemySmoke
   - wood
   - punchHit
+  - Let
   layers:
   - Default
   - TransparentFX

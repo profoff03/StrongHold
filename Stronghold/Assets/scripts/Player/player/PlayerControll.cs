@@ -30,14 +30,15 @@ public class PlayerControll : MonoBehaviour
     [SerializeField]
     private HUDBarScript hud;
 
-    //[SerializeField]
-    //internal Collider _weponColider;
     [SerializeField]
     Bomb bombPref;
 
     internal bool canThrowBomb = true;
 
     internal bool _inSmoke = false;
+
+    internal bool canTakeThing = true;
+    internal bool canKillGhost = false;
 
     #region ForMovement
 
@@ -71,12 +72,9 @@ public class PlayerControll : MonoBehaviour
 
     private float bool_time = 0.3f;
 
-    
+    [SerializeField]
+    private float _ghostEffectTime;
 
-    //private void SetTriggerHit()
-    //{
-    //    //gameObject.tag = "Hit";
-    //}
     private void SetTriggerUntagged()
     {
         
@@ -94,22 +92,25 @@ public class PlayerControll : MonoBehaviour
     [Header("Effects")]
     
     [SerializeField]
-    GameObject blood;
-    
-    [SerializeField]
-    GameObject _FirstSlash;
-    
-    [SerializeField]
-    GameObject _SecondSlash;
-    
-    [SerializeField]
-    GameObject _ThirdSlash;
-    
-    [SerializeField]
-    GameObject _4Slash;
+    private GameObject blood;
 
     [SerializeField]
-    GameObject _StrongSlash;
+    private GameObject SwordEffectForGhost;
+
+    [SerializeField]
+    private GameObject _FirstSlash;
+    
+    [SerializeField]
+    private GameObject _SecondSlash;
+    
+    [SerializeField]
+    private GameObject _ThirdSlash;
+    
+    [SerializeField]
+    private GameObject _4Slash;
+
+    [SerializeField]
+    private GameObject _StrongSlash;
     
     [Header("Ultimate")]
     [SerializeField] internal float _ultTime = 20f;
@@ -117,24 +118,33 @@ public class PlayerControll : MonoBehaviour
     [SerializeField] internal float _ultRegenerateTime = 30f;
     
     [Header("Moving")]
-    [SerializeField] private Camera _camera;
+    [SerializeField] 
+    private Camera _camera;
     
-    [SerializeField] private float _movementSpeed = 2f;
+    [SerializeField] 
+    private float _movementSpeed = 2f;
 
-    [SerializeField] private float _runningSpeed = 2f;
+    [SerializeField] 
+    private float _runningSpeed = 2f;
 
-    [SerializeField] private float rotationSpeed = 10f;
+    [SerializeField] 
+    private float rotationSpeed = 10f;
 
-    [SerializeField] private float _movingSens = 15f;
+    [SerializeField] 
+    private float _movingSens = 15f;
 
     [Header("AtackDamage")]
-    [SerializeField] private float _simpleAttackDamage = 10;
+    [SerializeField] 
+    private float _simpleAttackDamage = 10;
 
-    [SerializeField] private float _strongAttackDamage = 15;
-    [SerializeField] public float _puchForce = 5f;
+    [SerializeField] 
+    private float _strongAttackDamage = 15;
+    
+    [SerializeField] 
+    public float _puchForce = 5f;
 
     [SerializeField] GameObject sphere;
-    
+
 
     #endregion
 
@@ -145,6 +155,7 @@ public class PlayerControll : MonoBehaviour
         _playerRigidbody = GetComponent<Rigidbody>();
         _camera = Camera.main;
         _audioSource = GetComponents<AudioSource>();
+ 
     }
     private void SetDmg()
     {
@@ -185,7 +196,6 @@ public class PlayerControll : MonoBehaviour
 
     void Update()
     {
-
         if (!IsAnimationPlaying("Death", 0) && !IsAnimationPlaying("ULTIMATE", 0) && !isStan && !_inSmoke  && canWalk)
         {
             if (!IsAnimationPlaying("dash", 0))
@@ -251,6 +261,23 @@ public class PlayerControll : MonoBehaviour
         }
         
     }
+
+    internal void killGhostEffectTrue()
+    {
+        SwordEffectForGhost.SetActive(true);
+        canKillGhost = true;
+        canTakeThing = false;
+        StartCoroutine(killGhostEffectFalse());
+    }
+    internal IEnumerator killGhostEffectFalse()
+    {
+        yield return new WaitForSeconds(_ghostEffectTime);
+        SwordEffectForGhost.SetActive(false);
+        canKillGhost = false;
+        yield return new WaitForSeconds(1);
+        canTakeThing = true;
+    }
+
     void isNotStun()=> isStan = false;
 
     private void FixedUpdate()
