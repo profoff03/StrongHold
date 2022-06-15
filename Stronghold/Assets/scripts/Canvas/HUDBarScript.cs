@@ -212,6 +212,16 @@ public class HUDBarScript : MonoBehaviour
         HPBar.fillAmount = HP;
     }
 
+    internal IEnumerator Heal()
+    {
+        while (HP != maxHP)
+        {
+            HP += 0.05f;
+            HPBar.fillAmount = HP;
+            yield return new WaitForSeconds(0.1f);
+        }
+    }
+
     void UseDash()
     {
         if (DefaultDashCoolDown < MaxDashCoolDown) return;

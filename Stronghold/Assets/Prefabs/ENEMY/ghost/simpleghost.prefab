@@ -543,7 +543,7 @@ MonoBehaviour:
   firstPos: {fileID: 0}
   secondPos: {fileID: 0}
   maxHealth: 100
-  dmg: 5
+  dmg: 6
   vewDistance: 70
   atackDistance: 15
   goBackDistance: 15

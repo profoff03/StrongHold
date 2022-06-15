@@ -5,6 +5,7 @@ using UnityEngine.AI;
 
 public class firstPortal : MonoBehaviour
 {
+   
     AudioSource[] mainAudioSourse;
     AudioSource playerAudioSource;
     [SerializeField]
@@ -16,6 +17,9 @@ public class firstPortal : MonoBehaviour
 
     [SerializeField]
     Transform startEnemy;
+
+    [SerializeField]
+    HUDBarScript hud;
 
     [SerializeField]
     Transform playerTransform;
@@ -106,14 +110,8 @@ public class firstPortal : MonoBehaviour
         {
             for(int i = 0; i < 2; i++)
             {
-                GameObject thisEnemy = Instantiate(enemy, transform.position, transform.rotation, transform);
-                //Animator anim = thisEnemy.GetComponent<Animator>();
-                
-
-
-                //anim.SetBool("isRunForward", true);
+                Instantiate(enemy, transform.position, transform.rotation, transform);
                 yield return new WaitForSeconds(spawnDelay);
-                //anim.SetBool("isRunForward", false);
                 
             }
         }
@@ -135,14 +133,15 @@ public class firstPortal : MonoBehaviour
     [System.Obsolete]
     private IEnumerator SpawnEnemySecondWave()
     {
+        int k = 1;
         foreach (GameObject enemy in enemyPrefabs)
         {
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < k; i++)
             {
                 Instantiate(enemy, transform.position, transform.rotation, transform);
-                
                 yield return new WaitForSeconds(spawnDelay);
             }
+            k++;
         }
         yield return new WaitForSeconds(4);
         bool allEnemyDie = false;
@@ -204,9 +203,9 @@ public class firstPortal : MonoBehaviour
         {
             particle.Play();
         }
-        Destroy(portal, 1.3f);
+        //Destroy(portal, 1.3f);
         Destroy(firstPortalLoc, 2f);
-
+        StartCoroutine(hud.Heal());
         StartCoroutine(changeMusicToMain());
     }
 }

@@ -80,10 +80,8 @@ public class StaminaScript : MonoBehaviour
     void MinusStamina() //working
     {
 
-
-        if (playerControl._playerAnimator.GetBool("isRunning") && !IsRunning)
+        if (playerControl._playerAnimator.GetBool("isRunning"))
         {
-            //animator.SetBool("isRunning", true);
             UpdateStamina -= StaminaIncreasedPerSecond * Time.deltaTime;
             CheckStamina();
             CanRegenerate = false;
@@ -93,7 +91,6 @@ public class StaminaScript : MonoBehaviour
         }
         else
         {
-            //animator.SetBool("isRunning", false);
             IsRunning = false;
             CanRunning = false;
             CanRegenerate = true;

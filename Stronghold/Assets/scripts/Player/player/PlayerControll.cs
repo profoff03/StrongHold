@@ -482,7 +482,12 @@ public class PlayerControll : MonoBehaviour
         Vector3 movementVector = playerF.normalized * v + playerR.normalized * h;//cameraF.normalized* v +cameraR.normalized * h;
         movementVector = Vector3.ClampMagnitude(movementVector, 1);
 
-        if (Input.GetKey(KeyCode.LeftShift) && StaminaScript.singleton.CanRunning )
+        if (Input.GetKey(KeyCode.LeftShift) && StaminaScript.singleton.CanRunning 
+            && !IsAnimationPlaying("FirstSlash",0)
+            && !IsAnimationPlaying("SecondSlash", 0)
+            && !IsAnimationPlaying("ThirdSlash", 0)
+            && !IsAnimationPlaying("4Slash", 0)
+            && !IsAnimationPlaying("Strong", 0))
         {
 
             _playerAnimator.SetBool("isRunning", true);
@@ -517,7 +522,6 @@ public class PlayerControll : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    
 
     #region MouseRotate
 
