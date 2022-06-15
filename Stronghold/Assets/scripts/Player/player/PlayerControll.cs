@@ -40,6 +40,8 @@ public class PlayerControll : MonoBehaviour
     internal bool canTakeThing = true;
     internal bool canKillGhost = false;
 
+    bool isFire = false;
+
     #region ForMovement
 
     private Vector3 _movementVector;
@@ -57,7 +59,6 @@ public class PlayerControll : MonoBehaviour
     #region ForAttack
 
     [SerializeField]
-
     private bool ultRegenerate;
 
     internal bool isUlting;
@@ -74,6 +75,8 @@ public class PlayerControll : MonoBehaviour
 
     [SerializeField]
     private float _ghostEffectTime;
+    [SerializeField]
+    private float fireDelay;
 
     private void SetTriggerUntagged()
     {
@@ -93,6 +96,9 @@ public class PlayerControll : MonoBehaviour
     
     [SerializeField]
     private GameObject blood;
+
+    [SerializeField]
+    private GameObject fireEffect;
 
     [SerializeField]
     private GameObject SwordEffectForGhost;
@@ -387,6 +393,21 @@ public class PlayerControll : MonoBehaviour
 
     void playStrongVoice()=> _audioSource[1].PlayOneShot(_atkStrongVoiceSound);
 
+    private IEnumerator fireDelayCor()
+    {
+        StartCoroutine(fireDmg());
+        yield return new WaitForSeconds(fireDelay);
+        fireEffect.SetActive(false);
+        isFire = false;
+    }
+    private IEnumerator fireDmg()
+    {
+        while (isFire)
+        {
+            hud.TakeDamage(2);
+            yield return new WaitForSeconds(0.5f);
+        }
+    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("EnemyHit"))
@@ -400,6 +421,20 @@ public class PlayerControll : MonoBehaviour
             _audioSource[0].PlayOneShot(_hitSound[Random.Range(0, _hitSound.Length)]);
             hud.TakeDamage(other.GetComponent<DamageProperty>()?.Damage);
             Instantiate(blood, transform.position, Quaternion.Euler(-90f, 0f, 0f));
+        }
+        if (other.gameObject.CompareTag("fireHit"))
+        {
+            _audioSource[0].PlayOneShot(_hitSound[Random.Range(0, _hitSound.Length)]);
+            hud.TakeDamage(other.GetComponent<DamageProperty>()?.Damage);
+            Instantiate(blood, transform.position, Quaternion.Euler(-90f, 0f, 0f));
+            if (!isFire)
+            {
+                fireEffect.SetActive(true);
+                isFire = true;
+                StartCoroutine(fireDelayCor());
+            }
+            
+            
         }
 
         if (other.gameObject.CompareTag("EnemySmoke"))

@@ -13,6 +13,11 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: PolyartDefault
+    second: {fileID: 2100000, guid: 578f31566f6d8cd45a1f5e550397b2b1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: black
     second: {fileID: 2100000, guid: 578f31566f6d8cd45a1f5e550397b2b1, type: 2}
   - first:

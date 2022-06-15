@@ -273,8 +273,10 @@ public class Torchbrain : MonoBehaviour
         sphereCollider.isTrigger = true;
         sphereCollider.radius = 9f;
         sphereCollider.center = new Vector3(0, 5f, 4f);
-        if (gameObject.layer == 8) sphereCollider.tag = "punchHit";
+        
+        if (gameObject.layer == 8) sphereCollider.tag = "fireHit";
         else sphereCollider.tag = "EnemyHit";
+        
         sphereCollider.gameObject.AddComponent<DamageProperty>();
         sphereCollider.GetComponent<DamageProperty>().Damage = dmg;
         Destroy(sphereCollider, 0.1f);

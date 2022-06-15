@@ -18,6 +18,7 @@ TagManager:
   - wood
   - punchHit
   - Let
+  - fireHit
   layers:
   - Default
   - TransparentFX
