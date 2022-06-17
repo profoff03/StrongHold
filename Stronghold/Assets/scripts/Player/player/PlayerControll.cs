@@ -404,7 +404,7 @@ public class PlayerControll : MonoBehaviour
     {
         while (isFire)
         {
-            hud.TakeDamage(2);
+            hud.TakeDamage(1);
             yield return new WaitForSeconds(0.5f);
         }
     }

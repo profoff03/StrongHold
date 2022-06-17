@@ -326,7 +326,7 @@ MonoBehaviour:
   FirstAttackParticle: {fileID: 4049407192715710696}
   SecondAttackParticle: {fileID: 2701328680606879186}
   maxHealth: 250
-  dmg: 5
+  dmg: 3
   vewDistance: 70
   atackDistance: 11
   goBackDistance: 16

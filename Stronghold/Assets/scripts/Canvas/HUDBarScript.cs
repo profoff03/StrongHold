@@ -31,6 +31,14 @@ public class HUDBarScript : MonoBehaviour
     public float MaxDashCoolDown;
     public Image DashBar;
 
+    [Header("Heal")]
+    private bool isHeal = false;
+    internal bool CanHeal = false;
+    internal float DefaultHealCoolDown;
+    public float MaxHealCoolDown;
+    public float HealStrength;
+    public Image HealBar;
+
 
     [Header("Ultimate")]
     public Image Ultimate;
@@ -39,16 +47,19 @@ public class HUDBarScript : MonoBehaviour
     public Image HPBar;
     [SerializeField]
     float maxHP;
-    internal float HP;
+    public float HP;
 
     internal bool canUseSmoke = false;
 
-
-    
-
+    [Header("Effects")]
+    [SerializeField]
+    GameObject healEffect;
+    ParticleSystem.MainModule healParticleSystem;
 
     void Start()
     {
+        healParticleSystem = healEffect.GetComponentsInChildren<ParticleSystem>()[2].main;
+
         DefaultDashCoolDown = MaxDashCoolDown;
         DefaultShieldCoolDown = MaxShieldCoolDown;
         DefaultSmokeCoolDown = 0;
@@ -62,12 +73,11 @@ public class HUDBarScript : MonoBehaviour
 
         CheckShieldCoolDown();
 
+        if (!isHeal)
+            CheckHealCoolDown();
+
         if (canUseSmoke)
             CheckSmokeCoolDown();
-        
-        
-
-       
 
         if (playerControll.isUlting) // ulta
             Ultimate.fillAmount -= Time.deltaTime / playerControll._ultTime;
@@ -112,7 +122,39 @@ public class HUDBarScript : MonoBehaviour
 
 
     }
+    void CheckHealCoolDown()
+    {
 
+        if (DefaultHealCoolDown < MaxHealCoolDown)
+        {
+            DefaultHealCoolDown += Time.deltaTime / 2;
+            CanHeal = false;
+        }
+        else
+        {
+            if (playerControll.IsAnimationPlaying("ULTIMATE", 0))
+            {
+                CanHeal = false;
+            }
+            else
+            {
+                CanHeal = true;
+            }
+
+            if (CanHeal && Input.GetKeyDown(KeyCode.F) && !playerControll.isStan && HP != maxHP)
+            {
+                StartCoroutine(HealAbbillity());
+                DefaultHealCoolDown = 0;
+            }
+
+
+        }
+
+        float newScale = DefaultHealCoolDown / MaxHealCoolDown;
+        HealBar.fillAmount = newScale;
+
+
+    }
     void CheckShieldCoolDown()
     {
         
@@ -148,7 +190,6 @@ public class HUDBarScript : MonoBehaviour
 
 
     }
-
     void CheckSmokeCoolDown()
     {
 
@@ -195,7 +236,7 @@ public class HUDBarScript : MonoBehaviour
         dmg ??= 0;
 
         
-        HP -= (float)dmg/300;
+        HP -=(float)dmg/100;
         if (canPlayHitSound)
         {
             playerControll._audioSource[1].PlayOneShot(playerControll._hitVoiceSound[Random.Range(0, playerControll._hitVoiceSound.Length)]);
@@ -214,13 +255,49 @@ public class HUDBarScript : MonoBehaviour
 
     internal IEnumerator Heal()
     {
-        while (HP != maxHP)
+        healEffect.SetActive(true);
+        healParticleSystem.loop = true;
+        while (HP <= maxHP / 100)
         {
-            HP += 0.05f;
+            HP += 0.01f;
             HPBar.fillAmount = HP;
+            isHeal = true;
             yield return new WaitForSeconds(0.1f);
         }
+        if (HP > 1) HP = 1;
+        isHeal =false;
+        healParticleSystem.loop = false;
+        isHeal = false;
+        yield return new WaitForSeconds(2f);
+        healEffect.SetActive(false);
     }
+    internal IEnumerator HealAbbillity()
+    {
+        float h = HP;
+        if(h + HealStrength / 100 >= maxHP/ 100) StartCoroutine(Heal());
+        else
+        {
+            healEffect.SetActive(true);
+            healParticleSystem.loop = true;
+            while (HP <= h + HealStrength / 100)
+            {
+                
+                HP += 0.01f;
+                HPBar.fillAmount = HP;
+                isHeal = true;
+                yield return new WaitForSeconds(0.2f);
+                
+            }
+            healParticleSystem.loop = false;
+            isHeal = false;
+            yield return new WaitForSeconds(2f);
+            healEffect.SetActive(false);
+        }
+
+        if (HP > 1) HP = 1;
+        
+    }
+
 
     void UseDash()
     {
