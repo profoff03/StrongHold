@@ -8,6 +8,7 @@ public class goblinBoss : MonoBehaviour
 {
 
     private GameObject _target;
+    private HUDBarScript _hudScript;
     private PlayerControll _playerControl;
     private NavMeshAgent _agent;
     private Animator _animator;
@@ -89,6 +90,7 @@ public class goblinBoss : MonoBehaviour
     {
         _agent = GetComponent<NavMeshAgent>();
         _target = GameObject.Find("Player");
+        _hudScript = GameObject.Find("Canvas").GetComponentInChildren<HUDBarScript>();
         _playerControl = _target.GetComponent<PlayerControll>();
         _animator = GetComponent<Animator>();
         _playerAnimator = _target.GetComponent<Animator>();
@@ -224,7 +226,7 @@ public class goblinBoss : MonoBehaviour
             }
         }
         
-        if (_health <= 500 && !_secondWaveStart)
+        if (_health <= 350 && !_secondWaveStart)
         {
             _secondWaveStart = true;
             _secondWave = true;
@@ -356,6 +358,7 @@ public class goblinBoss : MonoBehaviour
 
     private void Kill()
     {
+        _hudScript.StartHeal();
         _location.disableBrigeWall();
         _location.disableSpawnWall();
         Destroy(gameObject, 0.4f);

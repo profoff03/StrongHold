@@ -205,7 +205,7 @@ public class firstPortal : MonoBehaviour
         }
         //Destroy(portal, 1.3f);
         Destroy(firstPortalLoc, 2f);
-        StartCoroutine(hud.Heal());
+        hud.StartHeal();
         StartCoroutine(changeMusicToMain());
     }
 }

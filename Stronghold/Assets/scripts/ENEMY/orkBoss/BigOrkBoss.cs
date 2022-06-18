@@ -16,6 +16,7 @@ public class BigOrkBoss : MonoBehaviour
     internal Animator _animator;
     private NavMeshAgent _agent;
     private PlayerControll _playerControl;
+    private HUDBarScript _hudScript;
 
     private Collider _collider;
 
@@ -132,6 +133,7 @@ public class BigOrkBoss : MonoBehaviour
 
         _agent = (NavMeshAgent)this.GetComponent("NavMeshAgent");
         _target = GameObject.Find("Player");
+        _hudScript = _hudScript = GameObject.Find("Canvas").GetComponentInChildren<HUDBarScript>();
         _rb = GetComponent<Rigidbody>();
         _playerControl = _target.GetComponent<PlayerControll>();
         _animator = GetComponent<Animator>();
@@ -547,6 +549,7 @@ public class BigOrkBoss : MonoBehaviour
     }
     private void Kill()
     {
+        _hudScript.StartHeal();
         _goblinBossLocation.disablevillageWall();
         Destroy(gameObject,0.4f);
     }

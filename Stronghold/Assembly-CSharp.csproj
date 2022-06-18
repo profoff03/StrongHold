@@ -77,6 +77,7 @@
     <Compile Include="Assets\AssetStorePref\Suntail Village\Scripts\AudioZoneControl.cs" />
     <Compile Include="Assets\scripts\ENEMY\Torchbrain.cs" />
     <Compile Include="Assets\scripts\Player\player\PlayerControllThief.cs" />
+    <Compile Include="Assets\movePlayerToMe.cs" />
     <Compile Include="Assets\AssetStorePref\Trails FX\Demo\Scripts\Shooter.cs" />
     <Compile Include="Assets\scripts\ENEMY\goblinBoss.cs" />
     <Compile Include="Assets\scripts\TakeThingsForFighting\buffSpawner.cs" />
@@ -100,6 +101,9 @@
     <Compile Include="Assets\scripts\portals(spawner\goblinBossLocation.cs" />
     <Compile Include="Assets\scripts\ENEMY\BombEnemyScripy.cs" />
     <Compile Include="Assets\scripts\ShowFps.cs" />
+    <Compile Include="Assets\scripts\DIalog System\ManagerDialogue.cs" />
+    <Compile Include="Assets\scripts\DIalog System\DialogueTriiger.cs" />
+    <Compile Include="Assets\scripts\DIalog System\Dialogue.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

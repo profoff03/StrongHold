@@ -69,23 +69,23 @@ public class HUDBarScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        CheckDashCoolDown();
+        if (playerControll.canDoSmth)
+        {
+            CheckDashCoolDown();
 
-        CheckShieldCoolDown();
+            CheckShieldCoolDown();
 
-        if (!isHeal)
-            CheckHealCoolDown();
+            if (!isHeal)
+                CheckHealCoolDown();
 
-        if (canUseSmoke)
-            CheckSmokeCoolDown();
+            if (canUseSmoke)
+                CheckSmokeCoolDown();
 
-        if (playerControll.isUlting) // ulta
-            Ultimate.fillAmount -= Time.deltaTime / playerControll._ultTime;
-        else
-            Ultimate.fillAmount += Time.deltaTime / playerControll._ultRegenerateTime;
-
-
-
+            if (playerControll.isUlting) // ulta
+                Ultimate.fillAmount -= Time.deltaTime / playerControll._ultTime;
+            else
+                Ultimate.fillAmount += Time.deltaTime / playerControll._ultRegenerateTime;
+        }
     }
     void CheckDashCoolDown()
     {
@@ -253,7 +253,8 @@ public class HUDBarScript : MonoBehaviour
         HPBar.fillAmount = HP;
     }
 
-    internal IEnumerator Heal()
+    internal void StartHeal() => StartCoroutine(Heal());
+    private IEnumerator Heal()
     {
         healEffect.SetActive(true);
         healParticleSystem.loop = true;
@@ -271,7 +272,7 @@ public class HUDBarScript : MonoBehaviour
         yield return new WaitForSeconds(2f);
         healEffect.SetActive(false);
     }
-    internal IEnumerator HealAbbillity()
+    private IEnumerator HealAbbillity()
     {
         float h = HP;
         if(h + HealStrength / 100 >= maxHP/ 100) StartCoroutine(Heal());

@@ -7,6 +7,8 @@ using Random = UnityEngine.Random;
 
 public class PlayerControll : MonoBehaviour
 {
+    internal bool canDoSmth = true;
+
     internal Animator _playerAnimator;
 
     internal Rigidbody _playerRigidbody;
@@ -202,7 +204,7 @@ public class PlayerControll : MonoBehaviour
 
     void Update()
     {
-        if (!IsAnimationPlaying("Death", 0) && !IsAnimationPlaying("ULTIMATE", 0) && !isStan && !_inSmoke  && canWalk)
+        if (!IsAnimationPlaying("Death", 0) && !IsAnimationPlaying("ULTIMATE", 0) && !isStan && !_inSmoke  && canWalk && canDoSmth)
         {
             if (!IsAnimationPlaying("dash", 0))
                 _movementVector = CalculateMovementVector();
@@ -288,14 +290,13 @@ public class PlayerControll : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!IsAnimationPlaying("Death", 0) && !IsAnimationPlaying("ULTIMATE", 0) && !isStan)
+        if (!IsAnimationPlaying("Death", 0) && !IsAnimationPlaying("ULTIMATE", 0) && !isStan && canDoSmth)
         {
             if (!IsAnimationPlaying("dash", 0))
                 RotateFromMouseVector(); //mouse rotate
 
             if (IsAnimationPlaying("movement", 0))
             {
-                
                 _playerRigidbody.AddForce(_movementVector * _movementSpeed * 1000);
             } 
             else if (IsAnimationPlaying("dash", 0))
@@ -307,7 +308,7 @@ public class PlayerControll : MonoBehaviour
                
             }
         }
-        else
+        else if(canDoSmth)
         {
             _playerAnimator.SetFloat("Horizontal", 0);
             _playerAnimator.SetFloat("Vertical", 0);
