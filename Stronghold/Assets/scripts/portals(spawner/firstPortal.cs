@@ -5,7 +5,15 @@ using UnityEngine.AI;
 
 public class firstPortal : MonoBehaviour
 {
-   
+    [Header("wizzard")]
+    [SerializeField]
+    Transform wizzard;
+    [SerializeField]
+    Transform wizzardPos;
+    [SerializeField]
+    GameObject wizzardSpawnEffect;
+
+    [Header("audio")]
     AudioSource[] mainAudioSourse;
     AudioSource playerAudioSource;
     [SerializeField]
@@ -15,29 +23,22 @@ public class firstPortal : MonoBehaviour
     [SerializeField]
     AudioClip rockEndSound;
 
+    [Header("other")]
     [SerializeField]
     Transform startEnemy;
-
     [SerializeField]
     HUDBarScript hud;
-
     [SerializeField]
     Transform playerTransform;
-
     [SerializeField]
     GameObject[] enemyPrefabs;
-
     [SerializeField]
     GameObject stoneParticles;
-
     ParticleSystem[] stoneWallParticles;
-
     [SerializeField]
     GameObject firstPortalLoc;
-
     [SerializeField]
     GameObject portal;
-    
     [SerializeField]
     GameObject explosionFX;
 
@@ -193,6 +194,13 @@ public class firstPortal : MonoBehaviour
         }
     }
 
+    private IEnumerator spawnWizzard()
+    {
+        Instantiate(wizzardSpawnEffect, wizzardPos.position, wizzardPos.rotation, wizzard);
+        yield return new WaitForSeconds(0.1f);
+        wizzard.position = wizzardPos.position;
+    }
+
     void destroyPortal()
     {
         Instantiate(explosionFX, transform.position, Quaternion.identity,transform);
@@ -203,7 +211,7 @@ public class firstPortal : MonoBehaviour
         {
             particle.Play();
         }
-        //Destroy(portal, 1.3f);
+        StartCoroutine(spawnWizzard());
         Destroy(firstPortalLoc, 2f);
         hud.StartHeal();
         StartCoroutine(changeMusicToMain());

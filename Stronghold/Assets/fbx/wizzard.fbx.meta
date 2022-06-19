@@ -12,6 +12,12 @@ ModelImporter:
   - first:
       74: -9103743510978015862
     second: wizzard|SitIDLE
+  - first:
+      74: -2001751016669369863
+    second: wizzard|SimpleIDLE (1)
+  - first:
+      74: -8565007279320244490
+    second: wizzard|IDLE
   externalObjects:
   - first:
       type: UnityEngine:Material
@@ -105,11 +111,11 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: wizzard|SimpleIDLE
-      takeName: wizzard|SimpleIDLE
+      name: wizzard|IDLE
+      takeName: wizzard|IDLE
       internalID: 0
       firstFrame: 0
-      lastFrame: 1
+      lastFrame: 596
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

@@ -14,13 +14,12 @@ public class movePlayerToMe : MonoBehaviour
     [SerializeField]
     private float tellDistance;
     [SerializeField]
-    private float moveDistance;
-    [SerializeField]
     private GameObject explosion;
 
     internal bool _isTell = false;
-    private bool _isMoving = false;
     internal bool _isDestroy = false;
+    private bool _isMoving = false;
+    private bool _isTouchMe = false;
 
     void Start()
     {
@@ -36,16 +35,18 @@ public class movePlayerToMe : MonoBehaviour
         if (!_isTell)
         {
             float distance = Vector3.Distance(_target.transform.position, transform.position);
-            if (distance < moveDistance && distance > tellDistance)
+            if (_isTouchMe)
             {
                 _playerControl.canDoSmth = false;
                 RotateToTarget();
                 _playerAnimator.SetFloat("Vertical", 1f, 1/ 15, Time.deltaTime);
                 _isMoving = true;
             }
-            else if (distance < tellDistance)
+            if (distance < tellDistance)
             {
                 _playerAnimator.SetFloat("Vertical", 0, 1 / 15, Time.deltaTime);
+                _playerAnimator.SetFloat("Horizontal", 0, 1 / 15, Time.deltaTime);
+                _isTouchMe = false;
                 _isMoving = false; 
                 _isTell = true;
                 _dialogueTriiger.TriggerDialogue();     
@@ -63,7 +64,7 @@ public class movePlayerToMe : MonoBehaviour
     private void FixedUpdate()
     {
         if(_isMoving)
-         _playerControl._playerRigidbody.AddForce(_agent.transform.forward * 10000);
+         _playerControl._playerRigidbody.AddForce(_agent.transform.forward * 13000);
     }
     private void RotateToTarget()
     {
@@ -77,5 +78,10 @@ public class movePlayerToMe : MonoBehaviour
             Quaternion.LookRotation(lookVector, Vector3.up),
             _agent.angularSpeed * Time.deltaTime
             );
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.CompareTag("Player")) _isTouchMe = true;
     }
 }

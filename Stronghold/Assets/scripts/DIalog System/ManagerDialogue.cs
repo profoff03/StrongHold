@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class ManagerDialogue : MonoBehaviour
 {
+    private int sentenceCount = 0;
+
     private movePlayerToMe playerToMe;
     private GameObject hud;
 
@@ -12,6 +14,8 @@ public class ManagerDialogue : MonoBehaviour
     public Text DialogueText;
 
     public Animator animator;
+
+    Dialogue thisDialouge;
 
     private Queue<string> sentences;
     // Start is called before the first frame update
@@ -24,27 +28,28 @@ public class ManagerDialogue : MonoBehaviour
 
     public void StartDialogue(Dialogue dialogue)
     {
+        thisDialouge = dialogue;
         hud.SetActive(false);
         animator.SetBool("IsOpen", true);
-        NameText.text = dialogue.NPCName;
         sentences.Clear();
-        foreach(string sentence in dialogue.sentences)
+        foreach (string sentence in dialogue.sentences)
         {
             sentences.Enqueue(sentence);
         }
 
         DisplayNextSentence();
     }
-
     public void DisplayNextSentence()
     {
-        if(sentences.Count == 0)
+        if (sentenceCount % 2 == 0) NameText.text = thisDialouge.NPCName[0];
+        else NameText.text = thisDialouge.NPCName[1];
+        if (sentences.Count == 0)
         {
             EndDialogue();
             return;
         }
-
-         string sentence = sentences.Dequeue();
+        sentenceCount++;
+        string sentence = sentences.Dequeue();
         StopAllCoroutines();
         StartCoroutine(TypeSentence(sentence));
     }
@@ -55,15 +60,16 @@ public class ManagerDialogue : MonoBehaviour
         foreach(char letter in sentence.ToCharArray())
         {
             DialogueText.text += letter;
-            yield return new WaitForSeconds(0.05f);
+            yield return new WaitForSeconds(0.01f);
         }
     }
 
     public void EndDialogue()
     {
+        thisDialouge = null;
+        sentenceCount = 0;
         hud.SetActive(true);
         playerToMe._isDestroy = true;
         animator.SetBool("IsOpen", false);
-        Debug.Log("End of conversation");
     }
 }
