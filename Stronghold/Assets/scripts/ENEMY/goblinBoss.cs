@@ -359,7 +359,7 @@ public class goblinBoss : MonoBehaviour
     private void Kill()
     {
         _hudScript.StartHeal();
-        _location.disableBrigeWall();
+        _location.disablecastleWall();
         _location.disableSpawnWall();
         Destroy(gameObject, 0.4f);
     }
