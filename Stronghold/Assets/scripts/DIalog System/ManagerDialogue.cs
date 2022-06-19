@@ -7,7 +7,8 @@ public class ManagerDialogue : MonoBehaviour
 {
     private int sentenceCount = 0;
 
-    private movePlayerToMe playerToMe;
+    private movePlayerToMe playerToMeFirst;
+    private movePlayerToMe playerToMeSecond;
     private GameObject hud;
 
     public Text NameText;
@@ -22,7 +23,8 @@ public class ManagerDialogue : MonoBehaviour
     void Start()
     {
         sentences = new Queue<string>();
-        playerToMe = GameObject.Find("wizzard(first)").GetComponent<movePlayerToMe>();
+        playerToMeFirst = GameObject.Find("wizzard(first)").GetComponent<movePlayerToMe>();
+        playerToMeSecond = GameObject.Find("wizzard(second)").GetComponent<movePlayerToMe>();
         hud = GameObject.Find("HUD");
     }
 
@@ -66,10 +68,13 @@ public class ManagerDialogue : MonoBehaviour
 
     public void EndDialogue()
     {
-        thisDialouge = null;
         sentenceCount = 0;
         hud.SetActive(true);
-        playerToMe._isDestroy = true;
+        if (thisDialouge.layerNum == 9)
+            playerToMeFirst._isDestroy = true;
+        if (thisDialouge.layerNum == 10)
+            playerToMeSecond._isDestroy = true;
+        thisDialouge = null;
         animator.SetBool("IsOpen", false);
     }
 }

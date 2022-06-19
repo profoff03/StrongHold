@@ -8,6 +8,7 @@ public class DialogueTriiger : MonoBehaviour
 
     internal void TriggerDialogue()
     {
+        dialogue.layerNum = gameObject.layer;
         FindObjectOfType<ManagerDialogue>().StartDialogue(dialogue);
     }
 
