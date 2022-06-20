@@ -14,7 +14,11 @@ public class PlayerControll : MonoBehaviour
     internal Rigidbody _playerRigidbody;
 
     internal bool isStan;
-
+    [Header("Sounds")]
+    [SerializeField]
+    internal AudioClip[] _powerUpVoiceSound;
+    [SerializeField]
+    internal AudioClip _powerUpSound;
     [SerializeField]
     internal AudioClip[] _atkVoiceSound;
     [SerializeField]
@@ -44,6 +48,7 @@ public class PlayerControll : MonoBehaviour
 
     bool isFire = false;
 
+
     #region ForMovement
 
     private Vector3 _movementVector;
@@ -60,8 +65,7 @@ public class PlayerControll : MonoBehaviour
 
     #region ForAttack
 
-    [SerializeField]
-    private bool ultRegenerate;
+    internal bool ultRegenerate = false;
 
     internal bool isUlting;
 
@@ -119,11 +123,16 @@ public class PlayerControll : MonoBehaviour
 
     [SerializeField]
     private GameObject _StrongSlash;
-    
+
+    [SerializeField]
+    private GameObject poison;
+
+    [SerializeField]
+    private ParticleSystem ultimate;
+
+
     [Header("Ultimate")]
     [SerializeField] internal float _ultTime = 20f;
-
-    [SerializeField] internal float _ultRegenerateTime = 30f;
     
     [Header("Moving")]
     [SerializeField] 
@@ -156,9 +165,17 @@ public class PlayerControll : MonoBehaviour
 
     #endregion
 
+    float[] prevStats;
+
     void Awake()
     {
         SetDmg();
+        prevStats =new float[]{
+            _simpleAttackDamage,
+            _strongAttackDamage,
+            _movementSpeed,
+            _runningSpeed
+        };
         _playerAnimator = GetComponent<Animator>();
         _playerRigidbody = GetComponent<Rigidbody>();
         _camera = Camera.main;
@@ -176,30 +193,41 @@ public class PlayerControll : MonoBehaviour
 
     }
 
-    private IEnumerator UltCooldown(float duration1, float duration2)
+    private IEnumerator UltCooldown(float duration1)
     {
+        yield return new WaitForSeconds(0.2f);
+        _audioSource[1].PlayOneShot(_powerUpVoiceSound[Random.Range(0, _powerUpVoiceSound.Length)]);
+        _audioSource[0].PlayOneShot(_powerUpSound);
+        ultimate.Play();
+        poison.SetActive(false);
         const float buff = 1.3f;
-        var i = 0;
-        float[] prevStats = {
-            _simpleAttackDamage,
-            _strongAttackDamage,
-            _movementSpeed,
-            _runningSpeed
-        };
+        setDeffaultStats();
         _simpleAttackDamage *= buff;
         _strongAttackDamage *= buff;
         _movementSpeed *= buff;
         _runningSpeed *= buff;
         isUlting = true;
         yield return new WaitForSeconds(duration1); // ulting
+        setDeffaultStats();
+        isUlting = false;
+      
+    }
+
+    internal void deBuff(float amount)
+    {
+        setDeffaultStats();
+        poison.SetActive(true);
+        _simpleAttackDamage = Mathf.Round(_simpleAttackDamage * amount);
+        _strongAttackDamage = Mathf.Round(_strongAttackDamage * amount);
+        _movementSpeed = Mathf.Round(_movementSpeed * amount);
+    }
+    private void setDeffaultStats()
+    {
+        int i = 0;
         _simpleAttackDamage = prevStats[i++];
         _strongAttackDamage = prevStats[i++];
         _movementSpeed = prevStats[i++];
         _runningSpeed = prevStats[i++];
-        isUlting = false;
-        ultRegenerate = true;
-        yield return new WaitForSeconds(duration2); // regenerate
-        ultRegenerate = false;
     }
 
     void Update()
@@ -222,7 +250,8 @@ public class PlayerControll : MonoBehaviour
             //ultimate
             if (Input.GetKeyDown(KeyCode.Q) && !isUlting && !ultRegenerate)
             {
-                StartCoroutine(UltCooldown(_ultTime, _ultRegenerateTime));
+                ultRegenerate = true;
+                StartCoroutine(UltCooldown(_ultTime));
                 _playerAnimator.SetTrigger("isUlt");
             }
 

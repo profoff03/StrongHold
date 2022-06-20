@@ -450,7 +450,7 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 2449
+      x: 2518
       y: 705
       width: 61
       height: 61
@@ -464,7 +464,7 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     parentGroupIndex: -1
-    uvTransform: {x: 2203, y: 633}
+    uvTransform: {x: 2272, y: 633}
   - name: hitBorder
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -796,6 +796,28 @@ ScriptedImporter:
     tessellationDetail: 0
     parentGroupIndex: -1
     uvTransform: {x: -93, y: -78}
+  - name: KeyQ
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 2449
+      y: 705
+      width: 61
+      height: 61
+    spriteID: 9ab02ecb1ceb0fd45a4f285bf4212063
+    internalID: 0
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    parentGroupIndex: -1
+    uvTransform: {x: 1975, y: 572}
   platformSettings: []
   mosaicLayers: 1
   documentPivot: {x: 0, y: 0}
@@ -955,6 +977,13 @@ ScriptedImporter:
     spriteID: 3515a9bdf72bba64282daf2cbc0d9ac3
     layerID: 104
     mosaicPosition: {x: 2037, y: 618}
+  - name: KeyQ
+    spriteName: KeyQ
+    isGroup: 0
+    parentIndex: -1
+    spriteID: 9ab02ecb1ceb0fd45a4f285bf4212063
+    layerID: 248
+    mosaicPosition: {x: 2449, y: 705}
   - name: shieldHit
     spriteName: 
     isGroup: 1
@@ -965,28 +994,28 @@ ScriptedImporter:
   - name: KeyE
     spriteName: KeyE
     isGroup: 0
-    parentIndex: 20
+    parentIndex: 21
     spriteID: 4bb922f090534444a8b988104861a22f
     layerID: 125
-    mosaicPosition: {x: 2449, y: 705}
+    mosaicPosition: {x: 2518, y: 705}
   - name: hitBorder
     spriteName: hitBorder
     isGroup: 0
-    parentIndex: 20
+    parentIndex: 21
     spriteID: de2f11f85c15ede4894813d7cf99bf00
     layerID: 71
     mosaicPosition: {x: 916, y: 618}
   - name: ShieldHit
     spriteName: ShieldHit
     isGroup: 0
-    parentIndex: 20
+    parentIndex: 21
     spriteID: 21d42e1e1776fae4f8995b6f1e07d95e
     layerID: 130
     mosaicPosition: {x: 1618, y: 618}
   - name: 2191174
     spriteName: 2191174
     isGroup: 0
-    parentIndex: 20
+    parentIndex: 21
     spriteID: 257e22d0ddfe26b4e993ac0d464576b3
     layerID: 127
     mosaicPosition: {x: 1914, y: 618}
@@ -1000,7 +1029,7 @@ ScriptedImporter:
   - name: shieldBorder
     spriteName: shieldBorder
     isGroup: 0
-    parentIndex: 25
+    parentIndex: 26
     spriteID: 00d0ddace4b21864ca62fcd17bae64cf
     layerID: 74
     mosaicPosition: {x: 1788, y: 618}
@@ -1009,21 +1038,21 @@ ScriptedImporter:
     spriteName: "\u0426\u0432\u0435\u0442\u043E\u0432\u043E\u0439 \u0442\u043E\u043D/\u041D\u0430\u0441\u044B\u0449\u0435\u043D\u043D\u043E\u0441\u0442\u044C
       1"
     isGroup: 0
-    parentIndex: 25
+    parentIndex: 26
     spriteID: 8bf63be1fc7a64a4f8f6fa99472b2013
     layerID: 200
     mosaicPosition: {x: 2311, y: 774}
   - name: shield
     spriteName: shield
     isGroup: 0
-    parentIndex: 25
+    parentIndex: 26
     spriteID: c5ba1755da1768741bb2d988f128a429
     layerID: 87
     mosaicPosition: {x: 3680, y: 250}
   - name: shield
     spriteName: shield_1
     isGroup: 0
-    parentIndex: 25
+    parentIndex: 26
     spriteID: b5aa9ba1b362ebf46a5e5e02266fad1c
     layerID: 79
     mosaicPosition: {x: 2229, y: 705}
@@ -1037,21 +1066,21 @@ ScriptedImporter:
   - name: UltBorder
     spriteName: UltBorder
     isGroup: 0
-    parentIndex: 30
+    parentIndex: 31
     spriteID: ebe0dae904a940441b9ef89def52b234
     layerID: 60
     mosaicPosition: {x: 3680, y: 4}
   - name: ult
     spriteName: ult
     isGroup: 0
-    parentIndex: 30
+    parentIndex: 31
     spriteID: 1de9e1440e5029d4ba96c0e8e492365d
     layerID: 56
     mosaicPosition: {x: 4, y: 618}
   - name: ultBakIcon
     spriteName: ultBakIcon
     isGroup: 0
-    parentIndex: 30
+    parentIndex: 31
     spriteID: 59ba68d9227ab0b47b460cdd7303417a
     layerID: 41
     mosaicPosition: {x: 1094, y: 618}
@@ -1065,14 +1094,14 @@ ScriptedImporter:
   - name: staminaBorder
     spriteName: staminaBorder
     isGroup: 0
-    parentIndex: 34
+    parentIndex: 35
     spriteID: 8e7a505698b490e4f8a5677069f8191c
     layerID: 6
     mosaicPosition: {x: 2407, y: 398}
   - name: stamina
     spriteName: stamina
     isGroup: 0
-    parentIndex: 34
+    parentIndex: 35
     spriteID: f1d9070a49936214789260a57026df5d
     layerID: 61
     mosaicPosition: {x: 3008, y: 398}
@@ -1086,14 +1115,14 @@ ScriptedImporter:
   - name: hpborder
     spriteName: hpborder
     isGroup: 0
-    parentIndex: 37
+    parentIndex: 38
     spriteID: 03b9d0f8ece11d84da977911204b9fe0
     layerID: 7
     mosaicPosition: {x: 654, y: 398}
   - name: Hp
     spriteName: Hp
     isGroup: 0
-    parentIndex: 37
+    parentIndex: 38
     spriteID: 98b8f87215fd9b143894fe770dbbb68f
     layerID: 62
     mosaicPosition: {x: 1529, y: 398}

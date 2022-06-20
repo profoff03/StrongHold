@@ -71,7 +71,10 @@ public class ManagerDialogue : MonoBehaviour
         sentenceCount = 0;
         hud.SetActive(true);
         if (thisDialouge.layerNum == 9)
+        {
             playerToMeFirst._isDestroy = true;
+            hud.GetComponent<HUDBarScript>().isHeal = false;
+        }   
         if (thisDialouge.layerNum == 10)
             playerToMeSecond._isDestroy = true;
         thisDialouge = null;

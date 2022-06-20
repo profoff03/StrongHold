@@ -6,7 +6,8 @@ using UnityEngine.UI;
 
 public class HUDBarScript : MonoBehaviour
 {
-    bool canPlayHitSound = true;
+    private bool canPlayHitSound = true;
+    
 
     [SerializeField]
     PlayerControll playerControll;
@@ -32,8 +33,9 @@ public class HUDBarScript : MonoBehaviour
     public Image DashBar;
 
     [Header("Heal")]
-    private bool isHeal = false;
-    internal bool CanHeal = false;
+    private bool canHeal = true;
+    internal bool isHeal = true;
+    internal bool CanUseHeal = false;
     internal float DefaultHealCoolDown;
     public float MaxHealCoolDown;
     public float HealStrength;
@@ -83,10 +85,11 @@ public class HUDBarScript : MonoBehaviour
 
             if (playerControll.isUlting) // ulta
                 Ultimate.fillAmount -= Time.deltaTime / playerControll._ultTime;
-            else
-                Ultimate.fillAmount += Time.deltaTime / playerControll._ultRegenerateTime;
         }
     }
+
+
+
     void CheckDashCoolDown()
     {
 
@@ -128,21 +131,22 @@ public class HUDBarScript : MonoBehaviour
         if (DefaultHealCoolDown < MaxHealCoolDown)
         {
             DefaultHealCoolDown += Time.deltaTime / 2;
-            CanHeal = false;
+            CanUseHeal = false;
         }
         else
         {
             if (playerControll.IsAnimationPlaying("ULTIMATE", 0))
             {
-                CanHeal = false;
+                CanUseHeal = false;
             }
             else
             {
-                CanHeal = true;
+                CanUseHeal = true;
             }
 
-            if (CanHeal && Input.GetKeyDown(KeyCode.F) && !playerControll.isStan && HP != maxHP)
+            if (CanUseHeal && Input.GetKeyDown(KeyCode.F) && !playerControll.isStan && HP != maxHP)
             {
+                canHeal = true;
                 StartCoroutine(HealAbbillity());
                 DefaultHealCoolDown = 0;
             }
@@ -234,9 +238,19 @@ public class HUDBarScript : MonoBehaviour
         //Debug.Log($"Получен удар на {dmg}");
 
         dmg ??= 0;
-
+        canHeal = false;
         
         HP -=(float)dmg/100;
+        if (!playerControll.isUlting)
+        {
+            Ultimate.fillAmount += (float)dmg / 100;
+            if (Ultimate.fillAmount >= 0.7)
+            {
+                playerControll.deBuff(1 - Ultimate.fillAmount/3);
+            }
+            if (Ultimate.fillAmount >= 1) playerControll.ultRegenerate = false;
+        }
+
         if (canPlayHitSound)
         {
             playerControll._audioSource[1].PlayOneShot(playerControll._hitVoiceSound[Random.Range(0, playerControll._hitVoiceSound.Length)]);
@@ -252,7 +266,6 @@ public class HUDBarScript : MonoBehaviour
 
         HPBar.fillAmount = HP;
     }
-
     internal void StartHeal() => StartCoroutine(Heal());
     private IEnumerator Heal()
     {
@@ -275,31 +288,25 @@ public class HUDBarScript : MonoBehaviour
     private IEnumerator HealAbbillity()
     {
         float h = HP;
-        if(h + HealStrength / 100 >= maxHP/ 100) StartCoroutine(Heal());
-        else
+        healEffect.SetActive(true);
+        healParticleSystem.loop = true;
+        while (HP <= h + HealStrength / 100 && canHeal && HP < 1)
         {
-            healEffect.SetActive(true);
-            healParticleSystem.loop = true;
-            while (HP <= h + HealStrength / 100)
-            {
-                
-                HP += 0.01f;
-                HPBar.fillAmount = HP;
-                isHeal = true;
-                yield return new WaitForSeconds(0.2f);
-                
-            }
-            healParticleSystem.loop = false;
-            isHeal = false;
-            yield return new WaitForSeconds(2f);
-            healEffect.SetActive(false);
+            HP += 0.01f;
+            HPBar.fillAmount = HP;
+            isHeal = true;
+            yield return new WaitForSeconds(0.2f);
+
         }
-
+        healParticleSystem.loop = false;
         if (HP > 1) HP = 1;
-        
+        isHeal = false;
+        healParticleSystem.loop = false;
+        isHeal = false;
+        yield return new WaitForSeconds(2f);
+        healEffect.SetActive(false);
+
     }
-
-
     void UseDash()
     {
         if (DefaultDashCoolDown < MaxDashCoolDown) return;
@@ -330,7 +337,6 @@ public class HUDBarScript : MonoBehaviour
         }
 
     }
-
     private IEnumerator hitSoundDelay()
     {
         yield return new WaitForSeconds(5);
