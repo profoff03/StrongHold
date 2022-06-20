@@ -56,7 +56,7 @@ public class movePlayerToMe : MonoBehaviour
             _playerControl.canDoSmth = true;
             GameObject exp = Instantiate(explosion, transform.position, Quaternion.identity);
             Destroy(gameObject, 0.1f);
-            Destroy(exp, 0.5f);
+            Destroy(exp, 1f);
             _isDestroy = false;
         }
     }

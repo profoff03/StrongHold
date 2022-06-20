@@ -10,6 +10,7 @@ public class simpleGhost : MonoBehaviour
     NavMeshAgent _agent;
     Animator _playerAnimator;
     Animator _animator;
+    Rigidbody _rb;
 
     AudioSource[] _audioSource;
     [SerializeField]
@@ -44,6 +45,7 @@ public class simpleGhost : MonoBehaviour
     bool canAtack = true;
     bool canReact = true;
     bool _isSee = false;
+    bool _isDie = false;
 
     float health;
 
@@ -81,7 +83,7 @@ public class simpleGhost : MonoBehaviour
     void Start()
     {
         home = secondPos;
-
+        _rb = GetComponent<Rigidbody>();
         _myColider = GetComponent<CapsuleCollider>();
         _agent = GetComponent<NavMeshAgent>();
         _target = GameObject.Find("Player");
@@ -110,68 +112,71 @@ public class simpleGhost : MonoBehaviour
     }
     void Update()
     {
-        transform.position += _force;
-
-        if (!isStartDoing)
+        if (!_isDie)
         {
+            transform.position += _force;
 
-            if (!IsAnimationPlayerPlaying("Death", 0))
+            if (!isStartDoing)
             {
-                float distance = Vector3.Distance(_agent.transform.position, _target.transform.position);
-                if (distance < vewDistance && !_isSee) _isSee = true;
-                if (_isSee)
+
+                if (!IsAnimationPlayerPlaying("Death", 0))
                 {
-                    if (!seeSoundPlay)
+                    float distance = Vector3.Distance(_agent.transform.position, _target.transform.position);
+                    if (distance < vewDistance && !_isSee) _isSee = true;
+                    if (_isSee)
                     {
-                        _audioSource[0].PlayOneShot(seeGrowlClips[Random.Range(0, seeGrowlClips.Length)]);
-                        StartCoroutine(seeSoundDelay());
-                        seeSoundPlay = true;
-                    }
-                    RotateToTarget();
-                    if (!isAtack)
-                    {
-
-                        if (distance > atackDistance)
+                        if (!seeSoundPlay)
                         {
-                            _animator.SetBool("isMove", true);
+                            _audioSource[0].PlayOneShot(seeGrowlClips[Random.Range(0, seeGrowlClips.Length)]);
+                            StartCoroutine(seeSoundDelay());
+                            seeSoundPlay = true;
+                        }
+                        RotateToTarget();
+                        if (!isAtack)
+                        {
+
+                            if (distance > atackDistance)
+                            {
+                                _animator.SetBool("isMove", true);
+                            }
+
+                            if (distance <= atackDistance)
+                            {
+                                _animator.SetBool("isMove", false);
+                                _animator.SetTrigger("isAttack");
+                                isAtack = true;
+                            }
+                        }
+                        else
+                        {
+                            if (canAtack)
+                            {
+                                canAtack = false;
+                                StartCoroutine(atackDelay());
+                            }
+
                         }
 
-                        if (distance <= atackDistance)
-                        {
-                            _animator.SetBool("isMove", false);
-                            _animator.SetTrigger("isAttack");
-                            isAtack = true;
-                        }
                     }
                     else
                     {
-                        if (canAtack)
+                        float distanceToHome = Vector3.Distance(_agent.transform.position, home.transform.position);
+                        RotateToHome();
+                        _animator.SetBool("isMove", true);
+                        if (distanceToHome < atackDistance)
                         {
-                            canAtack = false;
-                            StartCoroutine(atackDelay());
+                            if (home.position == firstPos.position) home = secondPos;
+                            else if (home.position == secondPos.position) home = firstPos;
                         }
-
-                    }
-
-                }
-                else
-                {
-                    float distanceToHome = Vector3.Distance(_agent.transform.position, home.transform.position);
-                    RotateToHome();
-                    _animator.SetBool("isMove", true);
-                    if (distanceToHome < atackDistance)
-                    {
-                        if (home.position == firstPos.position) home = secondPos;
-                        else if (home.position == secondPos.position) home = firstPos;
                     }
                 }
+
+
             }
 
 
+            canvas.transform.LookAt(canvas.worldCamera.transform);
         }
-
-
-        canvas.transform.LookAt(canvas.worldCamera.transform);
     }
 
 
@@ -274,8 +279,15 @@ public class simpleGhost : MonoBehaviour
         return false;
     }
 
-    private void Kill()
+    private IEnumerator Kill()
     {
+        _isDie = true;
+        _agent.enabled = false;
+        while (transform.position.y < 100)
+        {         
+            transform.position += new Vector3(0,0.5f,0);
+            yield return new WaitForEndOfFrame();
+        }
         Destroy(gameObject);
     }
 
@@ -309,7 +321,7 @@ public class simpleGhost : MonoBehaviour
         health -= (float)dmg;
         if (health <= 0.001) health = 0f;
 
-        if (health == 0) Kill();
+        if (health == 0) StartCoroutine(Kill());
         healthSlider.value = health;
 
         _myColider.tag = "Enemy";
@@ -317,7 +329,7 @@ public class simpleGhost : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Hit"))
+        if (other.gameObject.CompareTag("Hit") && !_isDie)
         {
             if (playerControll.canKillGhost)
                 TakeDamage(other.GetComponent<DamageProperty>()?.Damage);
@@ -331,8 +343,6 @@ public class simpleGhost : MonoBehaviour
             Debug.Log(direction);
             StartCoroutine(Push(direction.normalized * control._puchForce));
         }
-
-
     }
 
     private IEnumerator Push(Vector3 force)

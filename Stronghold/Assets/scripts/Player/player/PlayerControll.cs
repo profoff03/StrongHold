@@ -65,7 +65,7 @@ public class PlayerControll : MonoBehaviour
 
     #region ForAttack
 
-    internal bool ultRegenerate = false;
+    public bool ultRegenerate = true;
 
     internal bool isUlting;
 
@@ -250,7 +250,6 @@ public class PlayerControll : MonoBehaviour
             //ultimate
             if (Input.GetKeyDown(KeyCode.Q) && !isUlting && !ultRegenerate)
             {
-                ultRegenerate = true;
                 StartCoroutine(UltCooldown(_ultTime));
                 _playerAnimator.SetTrigger("isUlt");
             }

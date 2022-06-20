@@ -85,6 +85,11 @@ public class HUDBarScript : MonoBehaviour
 
             if (playerControll.isUlting) // ulta
                 Ultimate.fillAmount -= Time.deltaTime / playerControll._ultTime;
+            if (Ultimate.fillAmount >= 1 && !playerControll.isUlting)
+            {
+                playerControll.ultRegenerate = false;
+                Ultimate.fillAmount = 1;
+            }else playerControll.ultRegenerate = true;
         }
     }
 
@@ -247,11 +252,6 @@ public class HUDBarScript : MonoBehaviour
             if (Ultimate.fillAmount >= 0.7)
             {
                 playerControll.deBuff(1 - Ultimate.fillAmount/3);
-            }
-            if (Ultimate.fillAmount >= 1)
-            {
-                playerControll.ultRegenerate = false;
-                Ultimate.fillAmount = 1;
             }
         }
 
