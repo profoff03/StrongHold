@@ -212,11 +212,11 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: TorchOrk|IDLE
-      takeName: Armature|IDLE
+      name: Armature|IDLE(turnHead)
+      takeName: Armature|IDLE(turnHead)
       internalID: 0
       firstFrame: 2
-      lastFrame: 53
+      lastFrame: 332
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -241,11 +241,11 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: TorchOrk|IDLE(turnHead)
-      takeName: Armature|IDLE(turnHead)
+      name: Armature|IDLE
+      takeName: Armature|IDLE
       internalID: 0
       firstFrame: 0
-      lastFrame: 332
+      lastFrame: 53
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

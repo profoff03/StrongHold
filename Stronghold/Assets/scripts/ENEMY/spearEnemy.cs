@@ -23,6 +23,8 @@ public class spearEnemy : MonoBehaviour
     [SerializeField]
     AudioClip[] strongHurtlClips;
     [SerializeField]
+    AudioClip[] dieClips;
+    [SerializeField]
     AudioClip[] whoosh;
 
     [SerializeField]
@@ -62,6 +64,8 @@ public class spearEnemy : MonoBehaviour
     bool canAtack = true;
     bool canReact = true;
     bool canRun = true;
+
+    bool _isDie = false;
 
     float health;
 
@@ -131,127 +135,131 @@ public class spearEnemy : MonoBehaviour
     }
     void Update()
     {
-        transform.position += _force;
-        if (!isStartDoing)
+        if (!_isDie)
         {
-            if (!inSmoke)
+            transform.position += _force;
+            if (!isStartDoing)
             {
-                if (!IsAnimationPlayerPlaying("Death", 0))
+                if (!inSmoke)
                 {
-                    float distance = Vector3.Distance(_agent.transform.position, _target.transform.position);
-                    if (!seeSoundPlay)
+                    if (!IsAnimationPlayerPlaying("Death", 0))
                     {
-                        _audioSource[1].PlayOneShot(seeGrowlClips[Random.Range(0, seeGrowlClips.Length)]);
-                        StartCoroutine(seeSoundDelay());
-                        seeSoundPlay = true;
-                    }
-                    if (!isAtack)
-                    {
-                        RotateToTarget(_target.transform);
-                        if (distance < vewDistance)
+                        float distance = Vector3.Distance(_agent.transform.position, _target.transform.position);
+                        if (!seeSoundPlay)
                         {
-                            if (distance > atackDistance)
+                            _audioSource[1].PlayOneShot(seeGrowlClips[Random.Range(0, seeGrowlClips.Length)]);
+                            StartCoroutine(seeSoundDelay());
+                            seeSoundPlay = true;
+                        }
+                        if (!isAtack)
+                        {
+                            RotateToTarget(_target.transform);
+                            if (distance < vewDistance)
                             {
-                                _animator.SetBool("isRunForward", true);
-                                spearHit.SetActive(true);
-                                _myRigidbody.AddForce(transform.forward * dashSpeed * 1000);
+                                if (distance > atackDistance)
+                                {
+                                    _animator.SetBool("isRunForward", true);
+                                    spearHit.SetActive(true);
+                                    _myRigidbody.AddForce(transform.forward * dashSpeed * 1000);
+                                }
+
+                                if (distance <= atackDistance)
+                                {
+                                    spearHit.SetActive(false);
+                                    if (!isStab)
+                                    {
+                                        isStab = true;
+                                        _animator.SetTrigger("isStab");
+                                        _audioSource[1].PlayOneShot(attackGrowlClips[Random.Range(0, attackGrowlClips.Length)]);
+                                    }
+                                    _animator.SetBool("isRunForward", false);
+
+                                }
+                            }
+                        }
+                        else if (!isHome)
+                        {
+                            if (!findPos)
+                            {
+                                home = homePos[Random.Range(0, homePos.Length)];
+                                isStab = false;
+                                findPos = true;
+
+                                StartCoroutine(waitRunForAtk());
+                            }
+                            else
+                            {
+
+                                var distanceToHome = Vector3.Distance(_agent.transform.position, home.transform.position);
+
+                                if (distance < atackDistance && !canRun)
+                                {
+                                    spearHit.SetActive(false);
+                                    _animator.SetBool("isRunForward", false);
+                                    RotateToTarget(_target.transform);
+                                    if (!isStunAtk)
+                                    {
+                                        isStunAtk = true;
+                                        _audioSource[1].PlayOneShot(attackGrowlClips[Random.Range(0, attackGrowlClips.Length)]);
+                                        StartCoroutine(StunAtackDelay());
+                                    }
+
+
+                                }
+                                else if (canRun)
+                                {
+
+                                    RotateToTarget(home);
+                                    _animator.SetBool("isRunForward", true);
+                                }
+
+                                if (distanceToHome < atackDistance)
+                                {
+                                    isHome = true;
+                                    _animator.SetBool("isRunForward", false);
+                                }
+
                             }
 
+                        }
+                        else if (isHome)
+                        {
+                            spearHit.SetActive(false);
+                            RotateToTarget(_target.transform);
                             if (distance <= atackDistance)
                             {
-                                spearHit.SetActive(false);
-                                if (!isStab)
+                                if (!isSlash)
                                 {
-                                    isStab = true;
-                                    _animator.SetTrigger("isStab");
+                                    _animator.SetTrigger("isSlash");
                                     _audioSource[1].PlayOneShot(attackGrowlClips[Random.Range(0, attackGrowlClips.Length)]);
+                                    StartCoroutine(slashDelayCor());
+                                    isSlash = true;
                                 }
-                                _animator.SetBool("isRunForward", false);
 
                             }
+
+                            if (canAtack)
+                            {
+                                StartCoroutine(atackDelay());
+                                canAtack = false;
+                            }
                         }
+
+
                     }
-                    else if (!isHome)
-                    {
-                        if (!findPos)
-                        {
-                            home = homePos[Random.Range(0, homePos.Length)];
-                            isStab = false;
-                            findPos = true;
-
-                            StartCoroutine(waitRunForAtk());
-                        }
-                        else
-                        {
-                            
-                            var distanceToHome = Vector3.Distance(_agent.transform.position, home.transform.position);
-                            
-                            if (distance < atackDistance && !canRun)
-                            {
-                                spearHit.SetActive(false);
-                                _animator.SetBool("isRunForward", false);
-                                RotateToTarget(_target.transform);
-                                if (!isStunAtk)
-                                {
-                                    isStunAtk = true;
-                                    _audioSource[1].PlayOneShot(attackGrowlClips[Random.Range(0, attackGrowlClips.Length)]);
-                                    StartCoroutine(StunAtackDelay());
-                                }
-                                
-                                
-                            }
-                            else if (canRun)
-                            {
-                                
-                                RotateToTarget(home);
-                                _animator.SetBool("isRunForward", true);
-                            } 
-
-                            if (distanceToHome < atackDistance) 
-                            {
-                                isHome = true;
-                                _animator.SetBool("isRunForward",false);
-                            }
-                                
-                        }
-
-                    }else if (isHome)
-                    {
-                        spearHit.SetActive(false);
-                        RotateToTarget(_target.transform);
-                        if (distance <= atackDistance)
-                        {
-                            if (!isSlash)
-                            {
-                                _animator.SetTrigger("isSlash");
-                                _audioSource[1].PlayOneShot(attackGrowlClips[Random.Range(0, attackGrowlClips.Length)]);
-                                StartCoroutine(slashDelayCor());
-                                isSlash = true;
-                            }
-
-                        }
-
-                        if (canAtack)
-                        {
-                            StartCoroutine(atackDelay());
-                            canAtack = false;
-                        }
-                    }
-
-
+                }
+                else
+                {
+                    BoolStateFalse();
+                    canAtack = true;
+                    canRun = true;
+                    _animator.SetBool("isRunForward", false);
                 }
             }
-            else
-            {
-                BoolStateFalse();
-                canAtack = true;
-                canRun = true;
-                _animator.SetBool("isRunForward", false);
-            }
+
+
+            canvas.transform.LookAt(canvas.worldCamera.transform);
         }
-
-
-        canvas.transform.LookAt(canvas.worldCamera.transform);
     }
     private IEnumerator seeSoundDelay()
     {
@@ -411,8 +419,16 @@ public class spearEnemy : MonoBehaviour
         return false;
     }
 
-    private void Kill()
-    {
+    private IEnumerator Kill()
+    {     
+        _isDie = true;
+        _animator.SetTrigger("isDie");
+        yield return new WaitForSeconds(0.5f);
+        _audioSource[1].PlayOneShot(dieClips[Random.Range(0, dieClips.Length)]);
+        yield return new WaitForSeconds(3f);
+        _agent.enabled = false;
+        _myColider.enabled = false;
+        yield return new WaitForSeconds(3f);
         Destroy(gameObject);
     }
 
@@ -446,7 +462,7 @@ public class spearEnemy : MonoBehaviour
         health -= (float)dmg;
         if (health <= 0.001) health = 0f;
 
-        if (health == 0) Kill();
+        if (health == 0) StartCoroutine(Kill());
         healthSlider.value = health;
 
         _myColider.tag = "Enemy";
@@ -454,7 +470,7 @@ public class spearEnemy : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Hit"))
+        if (other.gameObject.CompareTag("Hit") && !_isDie)
         {
             TakeDamage(other.GetComponent<DamageProperty>()?.Damage);
         }

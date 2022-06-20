@@ -240,15 +240,19 @@ public class HUDBarScript : MonoBehaviour
         dmg ??= 0;
         canHeal = false;
         
-        HP -=(float)dmg/100;
+        HP -=(float)(dmg / 100);
         if (!playerControll.isUlting)
         {
-            Ultimate.fillAmount += (float)dmg / 100;
+            Ultimate.fillAmount += (float)(dmg / 50);
             if (Ultimate.fillAmount >= 0.7)
             {
                 playerControll.deBuff(1 - Ultimate.fillAmount/3);
             }
-            if (Ultimate.fillAmount >= 1) playerControll.ultRegenerate = false;
+            if (Ultimate.fillAmount >= 1)
+            {
+                playerControll.ultRegenerate = false;
+                Ultimate.fillAmount = 1;
+            }
         }
 
         if (canPlayHitSound)

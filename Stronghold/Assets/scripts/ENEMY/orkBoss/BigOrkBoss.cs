@@ -51,6 +51,9 @@ public class BigOrkBoss : MonoBehaviour
     [SerializeField]
     AudioClip roaringSounds;
 
+    [SerializeField]
+    AudioClip[] dieClips;
+
     [Header("Particle")]
     [SerializeField]
     GameObject kickParticle;
@@ -92,6 +95,8 @@ public class BigOrkBoss : MonoBehaviour
     bool isHome = false;
 
     internal bool allDie = false;
+
+    bool _isDie = false;
     #endregion
 
 
@@ -162,181 +167,184 @@ public class BigOrkBoss : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!isFirstState)
+        if (!_isDie)
         {
-            if (!inSmoke)
+            if (!isFirstState)
             {
-                if (startDoing) _rb.AddForce(transform.forward * 70000 * Time.deltaTime, ForceMode.Acceleration);
-
-                if (!startDoing)
+                if (!inSmoke)
                 {
-                    if (!isRush && !isJump)
-                        RotateToTarget();
+                    if (startDoing) _rb.AddForce(transform.forward * 70000 * Time.deltaTime, ForceMode.Acceleration);
 
-
-                    float distance = Vector3.Distance(_agent.transform.position, _target.transform.position);
-
-                    if ((distance < vewDist &&
-                        distance > kickDist
-                        && distance > groundAtackDist
-                        && canRun || isRush || isJump)
-                        && !IsAnimationPlaying("kick", 0)
-                        && !IsAnimationPlaying("groundAtack", 0))
+                    if (!startDoing)
                     {
-                        if (canAddForce)
-                            _rb.AddForce(transform.forward * 90000 * Time.deltaTime, ForceMode.Acceleration);
-                        if (canJump)
-                        {
+                        if (!isRush && !isJump)
+                            RotateToTarget();
 
-                            if (!isJump)
+
+                        float distance = Vector3.Distance(_agent.transform.position, _target.transform.position);
+
+                        if ((distance < vewDist &&
+                            distance > kickDist
+                            && distance > groundAtackDist
+                            && canRun || isRush || isJump)
+                            && !IsAnimationPlaying("kick", 0)
+                            && !IsAnimationPlaying("groundAtack", 0))
+                        {
+                            if (canAddForce)
+                                _rb.AddForce(transform.forward * 90000 * Time.deltaTime, ForceMode.Acceleration);
+                            if (canJump)
                             {
-                                _animator.SetBool("isRun", false);
-                                StartCoroutine(jumpFalse());
-                            }
-                            isJump = true;
-                            _animator.SetTrigger("isJump");
-                        }//jumoLogic
+
+                                if (!isJump)
+                                {
+                                    _animator.SetBool("isRun", false);
+                                    StartCoroutine(jumpFalse());
+                                }
+                                isJump = true;
+                                _animator.SetTrigger("isJump");
+                            }//jumoLogic
 
 
-                        if (canRush && !canJump)
-                        {
-                            _rb.AddForce(transform.forward * 90000 * Time.deltaTime, ForceMode.Acceleration);
-                            if (!isRush)
+                            if (canRush && !canJump)
                             {
-                                _animator.SetBool("isRun", false);
-                                StartCoroutine(rushFalse());
-                            }
-                            isRush = true;
-                            _animator.SetBool("isRush", true);
-                        } //rushLogic
+                                _rb.AddForce(transform.forward * 90000 * Time.deltaTime, ForceMode.Acceleration);
+                                if (!isRush)
+                                {
+                                    _animator.SetBool("isRun", false);
+                                    StartCoroutine(rushFalse());
+                                }
+                                isRush = true;
+                                _animator.SetBool("isRush", true);
+                            } //rushLogic
 
 
 
-                        if (!canRush && !canJump && !isJump)
-                        {
-                            _rb.AddForce(transform.forward * 40000 * Time.deltaTime, ForceMode.Acceleration);
-                            _animator.SetBool("isRun", true);
-                        }//simpleRunLogic
+                            if (!canRush && !canJump && !isJump)
+                            {
+                                _rb.AddForce(transform.forward * 40000 * Time.deltaTime, ForceMode.Acceleration);
+                                _animator.SetBool("isRun", true);
+                            }//simpleRunLogic
 
 
 
-
-                    }
-                    if (distance < kickDist && !isRush && !isJump)
-                    {
-                        _animator.SetBool("isRun", false);
-                        RotateToTarget();
-                        if (!isDoKick && !isRush)
-                        {
-                            isDoKick = true;
-                            canRun = false;
-                            canKick = true;
-
-                            _animator.SetTrigger("isKick");
-
-                            StartCoroutine(canRunning());
-                            StartCoroutine(kickDelay());
 
                         }
-
-                        if (canKick) StartCoroutine(kikcAtack());
-
-
-                    }
-                    else if (distance < groundAtackDist && distance > kickDist && !isRush && !isJump)
-                    {
-                        _animator.SetBool("isRun", false);
-                        if (!isDoGroundAtk && !isRush)
+                        if (distance < kickDist && !isRush && !isJump)
                         {
-                            canRun = false;
-                            isDoGroundAtk = true;
+                            _animator.SetBool("isRun", false);
+                            RotateToTarget();
+                            if (!isDoKick && !isRush)
+                            {
+                                isDoKick = true;
+                                canRun = false;
+                                canKick = true;
 
+                                _animator.SetTrigger("isKick");
 
-                            _animator.SetTrigger("isGroundAtack");
+                                StartCoroutine(canRunning());
+                                StartCoroutine(kickDelay());
 
-                            StartCoroutine(canRunning());
+                            }
 
-                            StartCoroutine(groundAtkDelay());
+                            if (canKick) StartCoroutine(kikcAtack());
+
 
                         }
-                        else RotateToTarget();
+                        else if (distance < groundAtackDist && distance > kickDist && !isRush && !isJump)
+                        {
+                            _animator.SetBool("isRun", false);
+                            if (!isDoGroundAtk && !isRush)
+                            {
+                                canRun = false;
+                                isDoGroundAtk = true;
 
+
+                                _animator.SetTrigger("isGroundAtack");
+
+                                StartCoroutine(canRunning());
+
+                                StartCoroutine(groundAtkDelay());
+
+                            }
+                            else RotateToTarget();
+
+                        }
                     }
                 }
-            }
-            else
-            {
-                _animator.SetBool("isRush", false);
-                _animator.SetBool("isRun", false);
-                isRush = false;
-                isJump = false;
-                isDoKick = false;
-                isDoGroundAtk=false;
-            }
-
-        }
-        else if (isHome)
-        {
-            #region MainHomeLogic
-            float distance = Vector3.Distance(_agent.transform.position, _target.transform.position);
-            _rb.AddForce(Vector3.zero);
-            RotateToTarget();
-
-            atkDelay = 2f;
-
-            
-            if (distance < kickDist)
-            {
-
-                if (!isDoKick)
+                else
                 {
-                    isDoKick = true;
-                    canRun = false;
-                    canKick = true;
-                    _animator.SetTrigger("isKick");
-                    StartCoroutine(kickDelay());
-
+                    _animator.SetBool("isRush", false);
+                    _animator.SetBool("isRun", false);
+                    isRush = false;
+                    isJump = false;
+                    isDoKick = false;
+                    isDoGroundAtk = false;
                 }
 
-                if (canKick) StartCoroutine(kikcAtack());
+            }
+            else if (isHome)
+            {
+                #region MainHomeLogic
+                float distance = Vector3.Distance(_agent.transform.position, _target.transform.position);
+                _rb.AddForce(Vector3.zero);
+                RotateToTarget();
 
+                atkDelay = 2f;
+
+
+                if (distance < kickDist)
+                {
+
+                    if (!isDoKick)
+                    {
+                        isDoKick = true;
+                        canRun = false;
+                        canKick = true;
+                        _animator.SetTrigger("isKick");
+                        StartCoroutine(kickDelay());
+
+                    }
+
+                    if (canKick) StartCoroutine(kikcAtack());
+
+
+                }
+                #endregion
 
             }
-            #endregion
-
-        }
-        else if (!isHome)
-        {
-            
-            RotateToHome();
-            _rb.AddForce(transform.forward * 70000 * Time.deltaTime, ForceMode.Acceleration);
-            _animator.SetBool("isRun", true);
-            if (Vector3.Distance(transform.position, home.position) <= 10f) 
+            else if (!isHome)
             {
-                _animator.SetBool("isRun", false);
-                _animator.SetTrigger("isRoaring");
-                
-                isHome = true;
-            } 
-        }
 
-        if (health <= 500 && !secondStateStart)
-        {
-            firstStateStart = false;
-            secondStateStart = true;
-        }
+                RotateToHome();
+                _rb.AddForce(transform.forward * 70000 * Time.deltaTime, ForceMode.Acceleration);
+                _animator.SetBool("isRun", true);
+                if (Vector3.Distance(transform.position, home.position) <= 10f)
+                {
+                    _animator.SetBool("isRun", false);
+                    _animator.SetTrigger("isRoaring");
+
+                    isHome = true;
+                }
+            }
+
+            if (health <= 500 && !secondStateStart)
+            {
+                firstStateStart = false;
+                secondStateStart = true;
+            }
 
 
-        if (!firstStateStart && !isFirstState && health <= 1000)
-        {
-            isHome = false;
-            Debug.Log("firstState");
-            isFirstState = true;
-            firstStateStart = true;
-            atkDelay = Mathf.Round(atkDelay/1.2f);
-            curAtkDelay = atkDelay;
+            if (!firstStateStart && !isFirstState && health <= 1000)
+            {
+                isHome = false;
+                Debug.Log("firstState");
+                isFirstState = true;
+                firstStateStart = true;
+                atkDelay = Mathf.Round(atkDelay / 1.2f);
+                curAtkDelay = atkDelay;
+            }
+            canvas.transform.LookAt(canvas.worldCamera.transform);
         }
-        canvas.transform.LookAt(canvas.worldCamera.transform);
     }
 
     void roaringTrue() => spawner.roaring = true;
@@ -547,17 +555,26 @@ public class BigOrkBoss : MonoBehaviour
 
         _agent.tag = "Enemy";
     }
-    private void Kill()
+
+    private IEnumerator Kill()
     {
         _hudScript.StartHeal();
         _goblinBossLocation.disablevillageWall();
-        Destroy(gameObject,0.4f);
+        _isDie = true;
+        _animator.SetTrigger("isDie");
+        yield return new WaitForSeconds(0.5f);
+        audioSource.PlayOneShot(dieClips[Random.Range(0, dieClips.Length)]);
+        yield return new WaitForSeconds(3f);
+        _agent.enabled = false;
+        _collider.enabled = false;
+        yield return new WaitForSeconds(3f);
+        Destroy(gameObject);
     }
-    
+
     
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Hit"))
+        if (other.gameObject.CompareTag("Hit") && !_isDie)
         {
             TakeDamage(other.GetComponent<DamageProperty>()?.Damage);
            

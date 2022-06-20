@@ -13,6 +13,7 @@ public class goblinBoss : MonoBehaviour
     private NavMeshAgent _agent;
     private Animator _animator;
     private Animator _playerAnimator;
+    private Collider _collider;
 
     public float _health;
 
@@ -30,7 +31,9 @@ public class goblinBoss : MonoBehaviour
     [SerializeField]
     private AudioClip[] _dashSound;
     [SerializeField]
-    AudioClip[] whoosh;
+    private AudioClip[] _dieClips;
+    [SerializeField]
+    private AudioClip[] whoosh;
 
     [SerializeField]
     private GameObject _simpleAtkParticle;
@@ -56,7 +59,7 @@ public class goblinBoss : MonoBehaviour
 
     private bool _soundIsPlay = false;
 
-
+    private bool _isDie = false;
 
     [SerializeField]
     private float _maxHealth;
@@ -88,6 +91,7 @@ public class goblinBoss : MonoBehaviour
 
     void Start()
     {
+        _collider = GetComponent<Collider>();
         _agent = GetComponent<NavMeshAgent>();
         _target = GameObject.Find("Player");
         _hudScript = GameObject.Find("Canvas").GetComponentInChildren<HUDBarScript>();
@@ -116,129 +120,133 @@ public class goblinBoss : MonoBehaviour
 
     void Update()
     {
-        float distance = Vector3.Distance(_agent.transform.position, _target.transform.position);
-        RotateToTarget(_target.transform);
-        if (!_isTired)
+        if (!_isDie)
         {
-            if (_secondWave && _isHome)
+            float distance = Vector3.Distance(_agent.transform.position, _target.transform.position);
+            RotateToTarget(_target.transform);
+            if (!_isTired)
             {
-                if (!_isThrowSmoke) 
+                if (_secondWave && _isHome)
                 {
-                    StartCoroutine(throwSmoke(distance));
-                    StartCoroutine(checkPlayerInSmoke());
-                    _soundIsPlay = false;
-                } 
-
-                if (_playerControl._inSmoke)
-                {
-                    _dmg = 4;
-                    if (_canMove && _waitRotateCorStart) StartCoroutine(waitRotateToTarget(0.5f));
-                    RotateToTarget(_target.transform);
-                    if (distance < _vewDistance && distance > _atkDistance && _canMove)
+                    if (!_isThrowSmoke)
                     {
-                        transform.position += transform.forward * _speed * Time.deltaTime;
-                        _animator.SetBool("isRun", true);
-                        if (!_soundIsPlay)
-                        {
-                            _soundIsPlay=true;
-                            _audioSource[2].PlayOneShot(_dashSound[Random.Range(0, _dashSound.Length)]);
-                        }
-                        
-                    }
-                    else if (distance < _atkDistance && !_isFastAtack)
-                    {
+                        StartCoroutine(throwSmoke(distance));
+                        StartCoroutine(checkPlayerInSmoke());
                         _soundIsPlay = false;
-                        _isFastAtack = true;
-                        _animator.SetBool("isRun", false);
-                        _animator.SetTrigger("isAttack");
-                        _audioSource[1].PlayOneShot(_atkVoiceSound[Random.Range(0, _atkVoiceSound.Length)]);
+                    }
 
+                    if (_playerControl._inSmoke)
+                    {
+                        _dmg = 4;
+                        if (_canMove && _waitRotateCorStart) StartCoroutine(waitRotateToTarget(0.5f));
+                        RotateToTarget(_target.transform);
+                        if (distance < _vewDistance && distance > _atkDistance && _canMove)
+                        {
+                            transform.position += transform.forward * _speed * Time.deltaTime;
+                            _animator.SetBool("isRun", true);
+                            if (!_soundIsPlay)
+                            {
+                                _soundIsPlay = true;
+                                _audioSource[2].PlayOneShot(_dashSound[Random.Range(0, _dashSound.Length)]);
+                            }
+
+                        }
+                        else if (distance < _atkDistance && !_isFastAtack)
+                        {
+                            _soundIsPlay = false;
+                            _isFastAtack = true;
+                            _animator.SetBool("isRun", false);
+                            _animator.SetTrigger("isAttack");
+                            _audioSource[1].PlayOneShot(_atkVoiceSound[Random.Range(0, _atkVoiceSound.Length)]);
+
+                        }
+                    }
+
+                }
+                if (!_isAtack && _isHome)
+                {
+
+                    if (_canDoFirstStateActions)
+                    {
+                        if (_canMove && _waitRotateCorStart) StartCoroutine(waitRotateToTarget(1));
+                        RotateToTarget(_target.transform);
+                        if (distance < _vewDistance && distance > _atkDistance && _canMove)
+                        {
+                            transform.position += transform.forward * _speed * Time.deltaTime;
+                            _animator.SetBool("isRun", true);
+                            if (!_soundIsPlay)
+                            {
+                                _soundIsPlay = true;
+                                _audioSource[2].PlayOneShot(_dashSound[Random.Range(0, _dashSound.Length)]);
+                            }
+
+                        }
+                        else if (distance < _atkDistance && !_isSimpleAtack)
+                        {
+                            _dashCount++;
+                            _simpleAtkParticle.SetActive(false);
+                            _soundIsPlay = false;
+                            _waitRotateCorStart = false;
+                            _canMove = false;
+                            _isSimpleAtack = true;
+                            _isFindPos = false;
+                            StartCoroutine(dashDelayCor());
+                            StartCoroutine(waitRotateToHomeCor(0.6f));
+                            _animator.SetBool("isRun", false);
+                            _animator.SetTrigger("isSimpleAttack");
+                            _audioSource[1].PlayOneShot(_atkVoiceSound[Random.Range(0, _atkVoiceSound.Length)]);
+                        }
                     }
                 }
-               
-            }
-            if (!_isAtack && _isHome)
-            {
-
-                if (_canDoFirstStateActions)
+                else if (!_isHome)
                 {
-                    if (_canMove && _waitRotateCorStart) StartCoroutine(waitRotateToTarget(1));
-                    RotateToTarget(_target.transform);
-                    if (distance < _vewDistance && distance > _atkDistance && _canMove)
+                    if (!_isFindPos)
                     {
-                        transform.position += transform.forward * _speed * Time.deltaTime;
-                        _animator.SetBool("isRun", true);
-                        if (!_soundIsPlay)
-                        {
-                            _soundIsPlay = true;
-                            _audioSource[2].PlayOneShot(_dashSound[Random.Range(0, _dashSound.Length)]);
-                        }
-
+                        _posToStay = _home[Random.Range(0, _home.Length)];
+                        _isFindPos = true;
                     }
-                    else if (distance < _atkDistance && !_isSimpleAtack)
+
+                    if (_canMove)
                     {
-                        _dashCount++;
-                        _simpleAtkParticle.SetActive(false);
-                        _soundIsPlay = false;
-                        _waitRotateCorStart = false;
+                        _agent.transform.position = _posToStay.position;
+                        _audioSource[2].PlayOneShot(_dashSound[Random.Range(0, _dashSound.Length)]);
+                        _isHome = true;
                         _canMove = false;
-                        _isSimpleAtack = true;
+                    }
+
+                }
+                else if (_isHome)
+                {
+                    if (_dashCount == _dashCountToTired)
+                    {
+                        _isTired = true;
+                        _animator.SetBool("isTired", _isTired);
+                        StartCoroutine(tiredDelayCor());
+                        _dashCount = 0;
+                    }
+                    else if (distance < _atkDistance)
+                    {
                         _isFindPos = false;
-                        StartCoroutine(dashDelayCor());
-                        StartCoroutine(waitRotateToHomeCor(0.6f));
-                        _animator.SetBool("isRun", false);
-                        _animator.SetTrigger("isSimpleAttack");
-                        _audioSource[1].PlayOneShot(_atkVoiceSound[Random.Range(0, _atkVoiceSound.Length)]);
-                    } 
+                        _isHome = false;
+                        _canMove = true;
+                    }
                 }
             }
-            else if (!_isHome)
+
+            if (_health <= 300 && !_secondWaveStart)
             {
-                if (!_isFindPos)
-                {
-                    _posToStay = _home[Random.Range(0, _home.Length)];
-                    _isFindPos = true;
-                }
+                _secondWaveStart = true;
+                _secondWave = true;
+                _canDoFirstStateActions = false;
 
-                if (_canMove)
-                {
-                    _agent.transform.position = _posToStay.position;
-                    _audioSource[2].PlayOneShot(_dashSound[Random.Range(0, _dashSound.Length)]);
-                    _isHome = true;
-                    _canMove = false;
-                }
-
+                _dashCountToTired++;
+                _tiredDelay++;
+                _dashDelay--;
             }
-            else if (_isHome)
-            {
-                if (_dashCount == _dashCountToTired)
-                {
-                    _isTired = true;
-                    _animator.SetBool("isTired", _isTired);
-                    StartCoroutine(tiredDelayCor());
-                    _dashCount = 0;
-                }else if (distance < _atkDistance)
-                {
-                    _isFindPos = false;
-                    _isHome = false;
-                    _canMove = true;
-                }
-            }
-        }
-        
-        if (_health <= 350 && !_secondWaveStart)
-        {
-            _secondWaveStart = true;
-            _secondWave = true;
-            _canDoFirstStateActions = false;
 
-            _dashCountToTired++;
-            _tiredDelay++;
-            _dashDelay--;
-        }
-        
 
             _canvas.transform.LookAt(_canvas.worldCamera.transform);
+        }
     }
     private void simpleAtkEffect()
     {
@@ -333,7 +341,7 @@ public class goblinBoss : MonoBehaviour
     {
         var sphereCollider = gameObject.AddComponent<SphereCollider>();
         sphereCollider.isTrigger = true;
-        sphereCollider.radius = 2f;
+        sphereCollider.radius = 1.5f;
         sphereCollider.center = new Vector3(0, 2f, 2f);
         sphereCollider.tag = "EnemyHit";
         sphereCollider.gameObject.AddComponent<DamageProperty>();
@@ -355,13 +363,21 @@ public class goblinBoss : MonoBehaviour
             _rotationSpeed * Time.deltaTime
             );
     }
-
-    private void Kill()
+    private IEnumerator Kill()
     {
         _hudScript.StartHeal();
         _location.disablecastleWall();
+        _location.disableBrigeWall();
         _location.disableSpawnWall();
-        Destroy(gameObject, 0.4f);
+        _isDie = true;
+        _animator.SetTrigger("isDie");
+        yield return new WaitForSeconds(0.5f);
+        _audioSource[1].PlayOneShot(_dieClips[Random.Range(0, _dieClips.Length)]);
+        yield return new WaitForSeconds(3f);
+        _agent.enabled = false;
+        _collider.enabled = false;
+        yield return new WaitForSeconds(3f);
+        Destroy(gameObject);
     }
 
     private void TakeDamage(float? dmg)
@@ -417,7 +433,7 @@ public class goblinBoss : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Hit"))
+        if (other.gameObject.CompareTag("Hit") && !_isDie)
         {
             TakeDamage(other.GetComponent<DamageProperty>()?.Damage);
 

@@ -275,6 +275,11 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 075615c0af3ab7746958c84e3335d990, type: 3}
   - {fileID: 8300000, guid: fa75b59b30963904d8849fb70dd9a52e, type: 3}
   - {fileID: 8300000, guid: 53f290b8518beb14fa61efcb12387665, type: 3}
+  dieClips:
+  - {fileID: 8300000, guid: 0de569c37bc4fba4ebbdc025e825457e, type: 3}
+  - {fileID: 8300000, guid: d5c763c2efdc7e547bc8fe10c0f29364, type: 3}
+  - {fileID: 8300000, guid: 1b2695cbfdcc6ea42afd3549962daf3a, type: 3}
+  - {fileID: 8300000, guid: bf311ada42bf29c4ab45b139890606cf, type: 3}
   whoosh:
   - {fileID: 8300000, guid: 335f95c0d065bc5448eaba01342886d7, type: 3}
   - {fileID: 8300000, guid: 4a8043cefcedf00409b391d2de8459b1, type: 3}

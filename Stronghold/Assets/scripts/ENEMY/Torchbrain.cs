@@ -24,6 +24,8 @@ public class Torchbrain : MonoBehaviour
     [SerializeField]
     AudioClip[] strongHurtlClips;
     [SerializeField]
+    AudioClip[] dieClips;
+    [SerializeField]
     AudioClip[] whoosh;
 
     [SerializeField]
@@ -33,6 +35,8 @@ public class Torchbrain : MonoBehaviour
 
 
     CapsuleCollider _myColider;
+
+    bool _isDie = false;
 
     bool isStartDoing = true;
 
@@ -108,86 +112,89 @@ public class Torchbrain : MonoBehaviour
     }
     void Update()
     {
-        transform.position += _force;
-        if (!isStartDoing)
+        if (!_isDie)
         {
-            if (!inSmoke)
+            transform.position += _force;
+            if (!isStartDoing)
             {
-                if (!IsAnimationPlayerPlaying("Death", 0))
+                if (!inSmoke)
                 {
-                    float distance = Vector3.Distance(_agent.transform.position, _target.transform.position);
-                    if (distance < vewDistance)
+                    if (!IsAnimationPlayerPlaying("Death", 0))
                     {
-                        if (!seeSoundPlay)
+                        float distance = Vector3.Distance(_agent.transform.position, _target.transform.position);
+                        if (distance < vewDistance)
                         {
-                            _audioSource[1].PlayOneShot(seeGrowlClips[Random.Range(0, seeGrowlClips.Length)]);
-                            StartCoroutine(seeSoundDelay()); 
-                            seeSoundPlay = true;
-                        }
-                        
-                        if (!isAtack)
-                        {
-                            RotateToTarget();
-                            _animator.SetBool("isRunBack", false);
-                            _animator.SetBool("isRunLeft", false);
-
-                            if (distance > atackDistance)
+                            if (!seeSoundPlay)
                             {
-                                _animator.SetBool("isRunForward", true);
-                                _animator.SetInteger("AtackPhase", 0);
+                                _audioSource[1].PlayOneShot(seeGrowlClips[Random.Range(0, seeGrowlClips.Length)]);
+                                StartCoroutine(seeSoundDelay());
+                                seeSoundPlay = true;
                             }
 
-                            if (distance <= atackDistance)
+                            if (!isAtack)
                             {
-                                _animator.SetBool("isRunForward", false);
-                                int r = Random.Range(1, 10);
-                                
-                                _animator.SetInteger("AtackPhase", r);
-                            }
-                        }
-                        else
-                        {
-                            RotateToTargetOnly();
-                            _animator.SetInteger("AtackPhase", 0);
-                            if (canAtack)
-                            {
-                                canAtack = false;
-                                StartCoroutine(atackDelay());
-                            }
-
-
-                            if (distance <= goBackDistance && !IsAnimationPlaying("RunLeft", 0) && !isForwardMove)
-                            {
-                                _animator.SetBool("isRunForward", false);
-                                _animator.SetInteger("AtackPhase", 0);
-                                _animator.SetBool("isRunBack", true);
-                            }
-                            else if (!isForwardMove)
-                            {
-                                _animator.SetBool("isRunForward", false);
-                                _animator.SetInteger("AtackPhase", 0);
+                                RotateToTarget();
                                 _animator.SetBool("isRunBack", false);
-                                _animator.SetBool("isRunLeft", true);
+                                _animator.SetBool("isRunLeft", false);
+
+                                if (distance > atackDistance)
+                                {
+                                    _animator.SetBool("isRunForward", true);
+                                    _animator.SetInteger("AtackPhase", 0);
+                                }
+
+                                if (distance <= atackDistance)
+                                {
+                                    _animator.SetBool("isRunForward", false);
+                                    int r = Random.Range(1, 10);
+
+                                    _animator.SetInteger("AtackPhase", r);
+                                }
+                            }
+                            else
+                            {
+                                RotateToTargetOnly();
+                                _animator.SetInteger("AtackPhase", 0);
+                                if (canAtack)
+                                {
+                                    canAtack = false;
+                                    StartCoroutine(atackDelay());
+                                }
+
+
+                                if (distance <= goBackDistance && !IsAnimationPlaying("RunLeft", 0) && !isForwardMove)
+                                {
+                                    _animator.SetBool("isRunForward", false);
+                                    _animator.SetInteger("AtackPhase", 0);
+                                    _animator.SetBool("isRunBack", true);
+                                }
+                                else if (!isForwardMove)
+                                {
+                                    _animator.SetBool("isRunForward", false);
+                                    _animator.SetInteger("AtackPhase", 0);
+                                    _animator.SetBool("isRunBack", false);
+                                    _animator.SetBool("isRunLeft", true);
+                                }
+
                             }
 
                         }
-
                     }
                 }
+                else
+                {
+                    isAtack = false;
+                    canAtack = true;
+                    _animator.SetInteger("AtackPhase", 0);
+                    _animator.SetBool("isRunForward", false);
+                    _animator.SetBool("isRunBack", false);
+                    _animator.SetBool("isRunLeft", false);
+                }
             }
-            else
-            {
-                isAtack = false;
-                canAtack = true;
-                _animator.SetInteger("AtackPhase", 0);
-                _animator.SetBool("isRunForward", false);
-                _animator.SetBool("isRunBack", false);
-                _animator.SetBool("isRunLeft", false);
-            }
+
+
+            canvas.transform.LookAt(canvas.worldCamera.transform);
         }
-
-
-        canvas.transform.LookAt(canvas.worldCamera.transform);
     }
 
 
@@ -239,7 +246,7 @@ public class Torchbrain : MonoBehaviour
         canReact = true;
     }
 
-        private IEnumerator outSmoke(float delay)
+    private IEnumerator outSmoke(float delay)
     {
         yield return new WaitForSeconds(delay);
         inSmoke = false;
@@ -257,7 +264,6 @@ public class Torchbrain : MonoBehaviour
         _audioSource[1].PlayOneShot(attackGrowlClips[Random.Range(0, attackGrowlClips.Length)]);
         SecondAttackParticle.SetActive(true);
     }
-
 
     void CkeckAtack()
     {
@@ -282,7 +288,6 @@ public class Torchbrain : MonoBehaviour
         Destroy(sphereCollider, 0.1f);
         Destroy(sphereCollider.GetComponent<DamageProperty>(), 0.1f);
     }
-
 
     private void RotateToTarget()
     {
@@ -338,8 +343,16 @@ public class Torchbrain : MonoBehaviour
         return false;
     }
 
-    private void Kill()
+    private IEnumerator Kill()
     {
+        _isDie = true;
+        _animator.SetTrigger("isDie");
+        yield return new WaitForSeconds(0.5f);
+        _audioSource[1].PlayOneShot(dieClips[Random.Range(0, dieClips.Length)]);
+        yield return new WaitForSeconds(3f);
+        _agent.enabled = false; 
+        _myColider.enabled = false;
+        yield return new WaitForSeconds(3f);
         Destroy(gameObject);
     }
 
@@ -373,7 +386,7 @@ public class Torchbrain : MonoBehaviour
         health -= (float)dmg;
         if (health <= 0.001) health = 0f;
 
-        if (health == 0) Kill();
+        if (health == 0) StartCoroutine(Kill());
         healthSlider.value = health;
 
         _myColider.tag = "Enemy";
@@ -381,12 +394,10 @@ public class Torchbrain : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Hit"))
+        if (other.gameObject.CompareTag("Hit") && !_isDie)
         {
             TakeDamage(other.GetComponent<DamageProperty>()?.Damage);
         }
-        
-        
 
         if (other.gameObject.CompareTag("Smoke"))
         {
