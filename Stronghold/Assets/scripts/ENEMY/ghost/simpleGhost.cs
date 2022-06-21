@@ -226,7 +226,7 @@ public class simpleGhost : MonoBehaviour
         sphereCollider.radius = 2f;
         sphereCollider.center = new Vector3(0, 5f, 2f);
         if (gameObject.layer == 8) sphereCollider.tag = "fireHit";
-        else sphereCollider.tag = "EnemyHit";
+        else sphereCollider.tag = "punchHit";
         sphereCollider.gameObject.AddComponent<DamageProperty>();
         sphereCollider.GetComponent<DamageProperty>().Damage = dmg;
         Destroy(sphereCollider, 0.1f);
