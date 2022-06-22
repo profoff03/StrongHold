@@ -14,11 +14,6 @@ TagManager:
   - StunHit
   - float
   - EnemyForward
-  - EnemySmoke
-  - wood
-  - punchHit
-  - Let
-  - fireHit
   layers:
   - Default
   - TransparentFX
@@ -28,10 +23,10 @@ TagManager:
   - UI
   - postProc
   - float
-  - enemyWithTorch
-  - FirstWiz
-  - SecondWiz
-  - sceleton
+  - 
+  - 
+  - 
+  - 
   - 
   - 
   - 

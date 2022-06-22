@@ -6,15 +6,9 @@ using UnityEngine.AI;
 public class secondPortal : MonoBehaviour
 {
     AudioSource[] mainAudioSourse;
-    AudioSource playerAudioSource;
-    [SerializeField]
-    AudioClip explosionSound;
-    [SerializeField]
-    AudioClip rockStartSound;
-    [SerializeField]
-    AudioClip rockEndSound;
-    
+
     Transform[] spawnerTransforms;
+
 
     [SerializeField]
     Transform startEnemy;
@@ -59,7 +53,6 @@ public class secondPortal : MonoBehaviour
     [System.Obsolete]
     void Start()
     {
-        playerAudioSource = playerTransform.GetComponent<AudioSource>();
         mainAudioSourse = Camera.main.GetComponents<AudioSource>();
 
         spawnerTransforms = transform.GetComponentsInChildren<Transform>();
@@ -124,7 +117,6 @@ public class secondPortal : MonoBehaviour
 
     private IEnumerator enableWall()
     {
-        playerAudioSource.PlayOneShot(rockStartSound);
         wallEnable = true;
         stoneParticles.SetActive(true);
         foreach (ParticleSystem particle in stoneWallParticles)
@@ -262,8 +254,6 @@ public class secondPortal : MonoBehaviour
     
     void destroyPortal()
     {
-        playerAudioSource.PlayOneShot(explosionSound);
-        playerAudioSource.PlayOneShot(rockEndSound);
         Instantiate(explosionFX, transform.position, Quaternion.identity, transform);
         detroyPortal = true;
         foreach (ParticleSystem particle in stoneWallParticles)

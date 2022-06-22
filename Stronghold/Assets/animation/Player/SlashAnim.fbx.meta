@@ -97,13 +97,6 @@ ModelImporter:
         floatParameter: 18
         intParameter: 0
         messageOptions: 0
-      - time: 0.32736912
-        functionName: playStrongVoice
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 91b501fb8d1c41e4dbc7c64d45b835e0, type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
@@ -140,7 +133,7 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.750733
+      - time: 0.80406636
         functionName: SetTriggerUntagged
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 91b501fb8d1c41e4dbc7c64d45b835e0, type: 3}
@@ -183,7 +176,7 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.67376053
+      - time: 0.7448716
         functionName: SetTriggerUntagged
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 91b501fb8d1c41e4dbc7c64d45b835e0, type: 3}

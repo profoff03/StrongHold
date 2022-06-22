@@ -6,37 +6,17 @@ using static UnityEngine.Mathf;
 
 public class Torchbrain : MonoBehaviour
 {
-    //true script for ork with axe and with torch
     GameObject _target;
     NavMeshAgent _agent;
     Animator _playerAnimator;
     Animator _animator;
-
-    AudioSource[] _audioSource;
+    
+    AudioSource _audioSource;
     [SerializeField]
-    AudioClip[] slashClips;
-    [SerializeField]
-    AudioClip[] seeGrowlClips;
-    [SerializeField]
-    AudioClip[] attackGrowlClips;
-    [SerializeField]
-    AudioClip[] hurtlClips;
-    [SerializeField]
-    AudioClip[] strongHurtlClips;
-    [SerializeField]
-    AudioClip[] dieClips;
-    [SerializeField]
-    AudioClip[] whoosh;
-
-    [SerializeField]
-    GameObject FirstAttackParticle;
-    [SerializeField]
-    GameObject SecondAttackParticle;
-
-
+    AudioClip[] audioClips;
+    
+    
     CapsuleCollider _myColider;
-
-    bool _isDie = false;
 
     bool isStartDoing = true;
 
@@ -80,8 +60,6 @@ public class Torchbrain : MonoBehaviour
 
     float RotationSpeed;
 
-    bool seeSoundPlay = false;
-
     void Start()
     {
 
@@ -93,8 +71,7 @@ public class Torchbrain : MonoBehaviour
         RotationSpeed = _agent.angularSpeed / 2;
 
         _animator = GetComponent<Animator>();
-        _audioSource = GetComponents<AudioSource>();
-        _audioSource[1].maxDistance = vewDistance;
+        _audioSource = GetComponent<AudioSource>();
         #region health
         health = maxHealth;
 
@@ -112,98 +89,86 @@ public class Torchbrain : MonoBehaviour
     }
     void Update()
     {
-        if (!_isDie)
+        transform.position += _force;
+        if (!isStartDoing)
         {
-            transform.position += _force;
-            if (!isStartDoing)
+            if (!inSmoke)
             {
-                if (!inSmoke)
+                if (!IsAnimationPlayerPlaying("Death", 0))
                 {
-                    if (!IsAnimationPlayerPlaying("Death", 0))
+                    float distance = Vector3.Distance(_agent.transform.position, _target.transform.position);
+                    if (distance < vewDistance)
                     {
-                        float distance = Vector3.Distance(_agent.transform.position, _target.transform.position);
-                        if (distance < vewDistance)
+                        
+                        if (!isAtack)
                         {
-                            if (!seeSoundPlay)
+                            RotateToTarget();
+                            _animator.SetBool("isRunBack", false);
+                            _animator.SetBool("isRunLeft", false);
+
+                            if (distance > atackDistance)
                             {
-                                _audioSource[1].PlayOneShot(seeGrowlClips[Random.Range(0, seeGrowlClips.Length)]);
-                                StartCoroutine(seeSoundDelay());
-                                seeSoundPlay = true;
-                            }
-
-                            if (!isAtack)
-                            {
-                                RotateToTarget();
-                                _animator.SetBool("isRunBack", false);
-                                _animator.SetBool("isRunLeft", false);
-
-                                if (distance > atackDistance)
-                                {
-                                    _animator.SetBool("isRunForward", true);
-                                    _animator.SetInteger("AtackPhase", 0);
-                                }
-
-                                if (distance <= atackDistance)
-                                {
-                                    _animator.SetBool("isRunForward", false);
-                                    int r = Random.Range(1, 10);
-
-                                    _animator.SetInteger("AtackPhase", r);
-                                }
-                            }
-                            else
-                            {
-                                RotateToTargetOnly();
+                                _animator.SetBool("isRunForward", true);
                                 _animator.SetInteger("AtackPhase", 0);
-                                if (canAtack)
-                                {
-                                    canAtack = false;
-                                    StartCoroutine(atackDelay());
-                                }
+                            }
+
+                            if (distance <= atackDistance)
+                            {
+                                _animator.SetBool("isRunForward", false);
+                                int r = Random.Range(1, 10);
+                                _animator.SetInteger("AtackPhase", r);
+                            }
+                        }
+                        else
+                        {
+                            RotateToTargetOnly();
+                            _animator.SetInteger("AtackPhase", 0);
+                            if (canAtack)
+                            {
+                                canAtack = false;
+                                StartCoroutine(atackDelay());
+                            }
 
 
-                                if (distance <= goBackDistance && !IsAnimationPlaying("RunLeft", 0) && !isForwardMove)
-                                {
-                                    _animator.SetBool("isRunForward", false);
-                                    _animator.SetInteger("AtackPhase", 0);
-                                    _animator.SetBool("isRunBack", true);
-                                }
-                                else if (!isForwardMove)
-                                {
-                                    _animator.SetBool("isRunForward", false);
-                                    _animator.SetInteger("AtackPhase", 0);
-                                    _animator.SetBool("isRunBack", false);
-                                    _animator.SetBool("isRunLeft", true);
-                                }
-
+                            if (distance <= goBackDistance && !IsAnimationPlaying("RunLeft", 0) && !isForwardMove)
+                            {
+                                _animator.SetBool("isRunForward", false);
+                                _animator.SetInteger("AtackPhase", 0);
+                                _animator.SetBool("isRunBack", true);
+                            }
+                            else if (!isForwardMove)
+                            {
+                                _animator.SetBool("isRunForward", false);
+                                _animator.SetInteger("AtackPhase", 0);
+                                _animator.SetBool("isRunBack", false);
+                                _animator.SetBool("isRunLeft", true);
                             }
 
                         }
+
                     }
                 }
-                else
-                {
-                    isAtack = false;
-                    canAtack = true;
-                    _animator.SetInteger("AtackPhase", 0);
-                    _animator.SetBool("isRunForward", false);
-                    _animator.SetBool("isRunBack", false);
-                    _animator.SetBool("isRunLeft", false);
-                }
             }
-
-
-            canvas.transform.LookAt(canvas.worldCamera.transform);
+            else
+            {
+                isAtack = false;
+                canAtack = true;
+                _animator.SetInteger("AtackPhase", 0);
+                _animator.SetBool("isRunForward", false);
+                _animator.SetBool("isRunBack", false);
+                _animator.SetBool("isRunLeft", false);
+            }
         }
-    }
-    private IEnumerator seeSoundDelay()
-    {
-        yield return new WaitForSeconds(Random.Range(8, 14));
-        seeSoundPlay = false;
+
+
+        canvas.transform.LookAt(canvas.worldCamera.transform);
     }
 
-
-
+    
+    
+    
+    
+    
     private IEnumerator startDoing()
     {
         _animator.SetBool("isRunForward", true);
@@ -211,8 +176,8 @@ public class Torchbrain : MonoBehaviour
         _animator.SetBool("isRunForward", false);
         isStartDoing = false;
     }
-
-
+    
+    
     private IEnumerator changeDistanation()
     {
         yield return new WaitForSeconds(0.5f);
@@ -244,81 +209,55 @@ public class Torchbrain : MonoBehaviour
         canReact = true;
     }
 
-    private IEnumerator outSmoke(float delay)
+        private IEnumerator outSmoke(float delay)
     {
         yield return new WaitForSeconds(delay);
         inSmoke = false;
     }
 
-    void FirstAtkEffect()
-    {
-        _audioSource[1].PlayOneShot(attackGrowlClips[Random.Range(0, attackGrowlClips.Length)]);
-        _audioSource[0].PlayOneShot(whoosh[Random.Range(0, whoosh.Length)]);
-        FirstAttackParticle.SetActive(true);
-    }
-    void SecondAtkEffect()
-    {
-        _audioSource[0].PlayOneShot(whoosh[Random.Range(0, whoosh.Length)]);
-        _audioSource[1].PlayOneShot(attackGrowlClips[Random.Range(0, attackGrowlClips.Length)]);
-        SecondAttackParticle.SetActive(true);
-    }
 
     void CkeckAtack()
     {
         isAtack = true;
-        if (gameObject.layer != 11)
-        {   
-            FirstAttackParticle.SetActive(false);
-            SecondAttackParticle.SetActive(false);
-        }
         _myColider.tag = "Enemy";
     }
 
     void DoHit()
     {
-
         var sphereCollider = gameObject.AddComponent<SphereCollider>();
         sphereCollider.isTrigger = true;
         sphereCollider.radius = 9f;
         sphereCollider.center = new Vector3(0, 5f, 4f);
-
-        if (gameObject.layer == 8) sphereCollider.tag = "fireHit";
-        else if (gameObject.layer == 11)
-        {
-            _audioSource[0].PlayOneShot(whoosh[Random.Range(0, whoosh.Length)]);
-            _audioSource[1].PlayOneShot(attackGrowlClips[Random.Range(0, attackGrowlClips.Length)]);
-            sphereCollider.tag = "EnemyHit";
-        }
-        else sphereCollider.tag = "EnemyHit";
-
+        sphereCollider.tag = "EnemyHit";
         sphereCollider.gameObject.AddComponent<DamageProperty>();
         sphereCollider.GetComponent<DamageProperty>().Damage = dmg;
         Destroy(sphereCollider, 0.1f);
         Destroy(sphereCollider.GetComponent<DamageProperty>(), 0.1f);
     }
 
+
     private void RotateToTarget()
     {
         Vector3 lookVector;
-
+       
         if (isChangeDistanation
-        && !IsAnimationPlaying("SecondAtack", 0)
-        && !IsAnimationPlaying("FirstAtack", 0))
-        {
+            && !IsAnimationPlaying("SecondAtack", 0) 
+            && !IsAnimationPlaying("FirstAtack", 0)) 
+        {  
             lookVector = rotationSide * transform.position;
         }
-        else
+        else 
             lookVector = _target.transform.position - _agent.transform.position;
 
 
         lookVector.y = 0;
         if (lookVector == Vector3.zero) return;
         _agent.transform.rotation = Quaternion.RotateTowards
-        (
-        _agent.transform.rotation,
-        Quaternion.LookRotation(lookVector, Vector3.up),
-        RotationSpeed * Time.deltaTime
-        );
+            (
+            _agent.transform.rotation,
+            Quaternion.LookRotation(lookVector, Vector3.up),
+            RotationSpeed * Time.deltaTime
+            );
     }
     private void RotateToTargetOnly()
     {
@@ -327,11 +266,11 @@ public class Torchbrain : MonoBehaviour
         lookVector.y = 0;
         if (lookVector == Vector3.zero) return;
         _agent.transform.rotation = Quaternion.RotateTowards
-        (
-        _agent.transform.rotation,
-        Quaternion.LookRotation(lookVector, Vector3.up),
-        RotationSpeed * Time.deltaTime
-        );
+            (
+            _agent.transform.rotation,
+            Quaternion.LookRotation(lookVector, Vector3.up),
+            RotationSpeed * Time.deltaTime
+            );
     }
 
     public bool IsAnimationPlayerPlaying(string animationName, int index)
@@ -351,16 +290,8 @@ public class Torchbrain : MonoBehaviour
         return false;
     }
 
-    private IEnumerator Kill()
+    private void Kill()
     {
-        _isDie = true;
-        _animator.SetTrigger("isDie");
-        yield return new WaitForSeconds(0.5f);
-        _audioSource[1].PlayOneShot(dieClips[Random.Range(0, dieClips.Length)]);
-        yield return new WaitForSeconds(3f);
-        _agent.enabled = false;
-        _myColider.enabled = false;
-        yield return new WaitForSeconds(3f);
         Destroy(gameObject);
     }
 
@@ -368,34 +299,31 @@ public class Torchbrain : MonoBehaviour
     {
         if (!IsAnimationPlaying("FirstAtack", 0) && !IsAnimationPlaying("SecondAtack", 0) && canReact)
         {
-            canReact
-            = false;
+            canReact = false;
             StartCoroutine(reactDelay());
             if (IsAnimationPlayerPlaying("Strong", 0))
             {
-                _audioSource[1].PlayOneShot(strongHurtlClips[Random.Range(0, strongHurtlClips.Length)]);
                 _animator.SetTrigger("strongReact");
 
             }
             else
             {
-                _audioSource[1].PlayOneShot(hurtlClips[Random.Range(0, hurtlClips.Length)]);
                 _animator.SetTrigger("react");
             }
         }
 
-
+        
         int soundNumber = Random.Range(0, 20);
         if (soundNumber <= 10) soundNumber = 0;
         if (soundNumber > 10) soundNumber = 1;
-        _audioSource[0].pitch = Random.Range(0.7f, 1.2f);
-        _audioSource[0].PlayOneShot(slashClips[soundNumber]);
+        _audioSource.pitch = Random.Range(0.7f, 1.2f);
+        _audioSource.PlayOneShot(audioClips[soundNumber]);
 
         dmg ??= 0;
         health -= (float)dmg;
         if (health <= 0.001) health = 0f;
 
-        if (health == 0) StartCoroutine(Kill());
+        if (health == 0) Kill();
         healthSlider.value = health;
 
         _myColider.tag = "Enemy";
@@ -403,10 +331,15 @@ public class Torchbrain : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Hit") && !_isDie)
+        if (other.gameObject.CompareTag("Hit"))
         {
             TakeDamage(other.GetComponent<DamageProperty>()?.Damage);
+            //_playerControl._weponColider.tag = "Untagged";
+
+
         }
+        
+        
 
         if (other.gameObject.CompareTag("Smoke"))
         {
@@ -418,7 +351,7 @@ public class Torchbrain : MonoBehaviour
             else inSmoke = false;
         }
 
-
+        
 
         if (other.gameObject.CompareTag("Push"))
         {
@@ -438,7 +371,7 @@ public class Torchbrain : MonoBehaviour
             if (other.gameObject.CompareTag("Enemy"))
             {
                 if (!isChangeDistanation)
-                {
+                {          
                     rotationSide = Random.Range(-10, 10);
                     if (rotationSide >= 0) rotationSide = 1;
                     else if (rotationSide < 0) rotationSide = -1;
@@ -450,7 +383,7 @@ public class Torchbrain : MonoBehaviour
         }
         if (other.gameObject.CompareTag("Untagged") && isAtack)
         {
-
+            
             if (IsAnimationPlaying("RunBack", 0))
             {
                 _animator.SetInteger("AtackPhase", 0);
@@ -467,7 +400,7 @@ public class Torchbrain : MonoBehaviour
 
         }
     }
-
+    
     private IEnumerator Push(Vector3 force)
     {
         _force = force.normalized;

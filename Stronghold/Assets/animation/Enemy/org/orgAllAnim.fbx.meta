@@ -129,7 +129,7 @@ ModelImporter:
       hasAdditiveReferencePose: 0
       loopTime: 0
       loopBlend: 0
-      loopBlendOrientation: 1
+      loopBlendOrientation: 0
       loopBlendPositionY: 0
       loopBlendPositionXZ: 0
       keepOriginalOrientation: 1
@@ -143,21 +143,14 @@ ModelImporter:
       - time: 0.39526364
         functionName: DoHit
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: d02318141b9a2f445b509407699a3c56, type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: 2c9aff866065b0b4bbb2669710af7831, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
       - time: 0.7025931
         functionName: CkeckAtack
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: d02318141b9a2f445b509407699a3c56, type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.32547018
-        functionName: FirstAtkEffect
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: d02318141b9a2f445b509407699a3c56, type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: 2c9aff866065b0b4bbb2669710af7831, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
@@ -177,7 +170,7 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 1
+      loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
@@ -378,24 +371,17 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.37663522
-        functionName: SecondAtkEffect
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: d02318141b9a2f445b509407699a3c56, type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
       - time: 0.38993204
         functionName: DoHit
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: d02318141b9a2f445b509407699a3c56, type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: 2c9aff866065b0b4bbb2669710af7831, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
       - time: 0.7527389
         functionName: CkeckAtack
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: d02318141b9a2f445b509407699a3c56, type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: 2c9aff866065b0b4bbb2669710af7831, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
@@ -462,11 +448,11 @@ ModelImporter:
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1
-  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 550ee0d474a83684bbd6e325766457fe, type: 3}
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 2
   humanoidOversampling: 1
-  avatarSetup: 1
+  avatarSetup: 2
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
   additionalBone: 0
   userData: 

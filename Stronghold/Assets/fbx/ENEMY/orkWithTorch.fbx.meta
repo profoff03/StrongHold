@@ -186,13 +186,6 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.32618362
-        functionName: FirstAtkEffect
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: d02318141b9a2f445b509407699a3c56, type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
       - time: 0.41403145
         functionName: DoHit
         data: 
@@ -212,11 +205,11 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Armature|IDLE(turnHead)
-      takeName: Armature|IDLE(turnHead)
+      name: TorchOrk|IDLE
+      takeName: Armature|IDLE
       internalID: 0
       firstFrame: 2
-      lastFrame: 332
+      lastFrame: 53
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -241,11 +234,11 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Armature|IDLE
-      takeName: Armature|IDLE
+      name: TorchOrk|IDLE(turnHead)
+      takeName: Armature|IDLE(turnHead)
       internalID: 0
       firstFrame: 0
-      lastFrame: 53
+      lastFrame: 332
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -419,13 +412,6 @@ ModelImporter:
         messageOptions: 0
       - time: 0.5819103
         functionName: CkeckAtack
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: d02318141b9a2f445b509407699a3c56, type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.32845676
-        functionName: SecondAtkEffect
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: d02318141b9a2f445b509407699a3c56, type: 3}
         floatParameter: 0
