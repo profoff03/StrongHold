@@ -19,6 +19,12 @@ namespace ENEMY
 
     public class BulletBoss : MonoBehaviour
     {
+        private AudioSource[] audioSource;
+        [SerializeField]
+        private AudioClip[] tpClips;
+        [SerializeField]
+        private AudioClip[] fireClips;
+
         // external objects
         public GameObject bullet; // prefab
         public Transform totalPosition;
@@ -58,6 +64,8 @@ namespace ENEMY
 
         private void Start()
         {
+            audioSource = GetComponents<AudioSource>();
+
             _constantHeightPosition = transform.position.y;
             player = FindObjectOfType<PlayerControll>();
             totalPosition = GameObject.Find("PositionsForGhostBoss").GetComponent<Transform>();
@@ -117,7 +125,7 @@ namespace ENEMY
             bull.GetComponent<Bullet>().MakeLinearMovement(20f);
             bull.GetComponent<Bullet>().parentTransform = gameObject.transform;
             bull.GetComponent<Bullet>().lifetime = lifetime;
-            bull.GetComponent<DamageProperty>().Damage = 10f;
+            bull.GetComponent<DamageProperty>().Damage = 8f;
             bull.SetActive(true);
 
             return bull;
@@ -178,7 +186,8 @@ namespace ENEMY
             };
 
             if (phase == Phases.Second && attackNumber == 1) attackNumber = 9;
-            
+            audioSource[0].pitch = Random.Range(0.7f, 0.9f);
+            audioSource[0].PlayOneShot(tpClips[Random.Range(0, tpClips.Length)]);
             switch (attackNumber)
             {
                 case 0:
@@ -195,7 +204,7 @@ namespace ENEMY
                     StartCoroutine(LineAttack());
                     break;
                 case 3:
-                    TeleportToRandPosition();
+                    TeleportToRandPosition();  
                     StartCoroutine(HomingAttack());
                     break;
                 case 4:
@@ -203,7 +212,7 @@ namespace ENEMY
                     StartCoroutine(CircleHomingAttack());
                     break;
                 case 5:
-                    TeleportToRandPosition();
+                    TeleportToRandPosition();  
                     StartCoroutine(ChessCircleAttack(rows: 6));
                     _wait = 6;
                     break;
@@ -238,15 +247,21 @@ namespace ENEMY
 
         private IEnumerator CircleAttack(float radius = 10, float step = 30, float offset = 0)
         {
+            audioSource[1].pitch = Random.Range(0.8f, 1f);
+            audioSource[1].PlayOneShot(fireClips[Random.Range(0, tpClips.Length)]);
             for (var i = 0 + offset; i < 360 + offset; i += step)
+            {
                 SpawnBullet(
                     new Vector3(Mathf.Cos(Mathf.Deg2Rad * i) * radius, -3, Mathf.Sin(Mathf.Deg2Rad * i) * radius),
                     new Vector3(0, -i + 90, 0));
+            }        
             yield break;
         }
 
         private IEnumerator LineAttack(float radius = 5, float step = 72, float offset = 0)
         {
+            audioSource[1].pitch = Random.Range(0.8f, 1f);
+            audioSource[1].PlayOneShot(fireClips[Random.Range(0, tpClips.Length)]);
             var bull = SpawnBullet(new Vector3(0, -3, 0), Vector3.forward);
             bull.transform.LookAt(player.transform.position);
             var direction = new Vector3(0, bull.transform.rotation.eulerAngles.y, 0);
@@ -264,6 +279,8 @@ namespace ENEMY
             float rotationSpeed = 50f,
             float moveSpeed = 30f)
         {
+            audioSource[1].pitch = Random.Range(0.8f, 1f);
+            audioSource[1].PlayOneShot(fireClips[Random.Range(0, tpClips.Length)]);
             for (var i = 0 + offset; i < 360 + offset; i += step)
             {
                 var bull = SpawnBullet(
@@ -275,7 +292,7 @@ namespace ENEMY
             yield break;
         }
 
-        private IEnumerator RotationAttack(float radius = 50,
+        private IEnumerator RotationAttack(float radius = 70,
             float step = 90,
             float stepRadius = 10,
             float offset = 0,
@@ -283,6 +300,8 @@ namespace ENEMY
             float rotationSpeed = 20,
             float lifetime = 8f)
         {
+            audioSource[1].pitch = Random.Range(0.8f, 1f);
+            audioSource[1].PlayOneShot(fireClips[Random.Range(0, tpClips.Length)]);
             for (var i = 0f + offset; i < 360 + offset; i += step)
             for (var j = 0f + offsetRadius; j < radius + offsetRadius; j += stepRadius)
             {
@@ -291,7 +310,7 @@ namespace ENEMY
                     new Vector3(0, -i - 180, 0), lifetime);
                 bull.GetComponent<Bullet>().MakeCircularMovement(rotationSpeed, transform);
                 bull.GetComponent<Bullet>().reflective = false;
-                bull.GetComponent<DamageProperty>().Damage = 20f;
+                bull.GetComponent<DamageProperty>().Damage = 10f;
                 bull.transform.localScale = Vector3.one * 4;
                 bull.transform.LookAt(player.transform.position);
             }
@@ -301,6 +320,8 @@ namespace ENEMY
 
         private IEnumerator HomingAttack(float rotationSpeed = 60, float moveSpeed = 30f, float lifetime = 8f)
         {
+            audioSource[1].pitch = Random.Range(0.8f, 1f);
+            audioSource[1].PlayOneShot(fireClips[Random.Range(0, tpClips.Length)]);
             var bull = SpawnBullet(new Vector3(0, -3, 0), Vector3.forward, lifetime);
             bull.transform.LookAt(player.transform.position);
             bull.GetComponent<Bullet>().MakeHomingMovement(player.transform, rotationSpeed, moveSpeed);
