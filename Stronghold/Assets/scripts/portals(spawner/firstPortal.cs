@@ -13,9 +13,9 @@ public class firstPortal : MonoBehaviour
     [SerializeField]
     GameObject wizzardSpawnEffect;
 
-    [Header("audio")]
     AudioSource[] mainAudioSourse;
     AudioSource playerAudioSource;
+    [Header("audio")]
     [SerializeField]
     AudioClip explosionSound;
     [SerializeField]
@@ -41,9 +41,6 @@ public class firstPortal : MonoBehaviour
     GameObject portal;
     [SerializeField]
     GameObject explosionFX;
-
-    [SerializeField]
-    float enemyStartForce;
 
     [SerializeField]
     float spawnDelay;

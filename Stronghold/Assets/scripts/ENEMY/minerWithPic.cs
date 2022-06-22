@@ -270,7 +270,23 @@ public class minerWithPic : MonoBehaviour
         Destroy(sphereCollider, 0.1f);
         Destroy(sphereCollider.GetComponent<DamageProperty>(), 0.1f);
     }
+    void DoStunHit()
+    {
+        _audioSource[1].PlayOneShot(whoosh[Random.Range(0, whoosh.Length)]);
+        _audioSource[0].PlayOneShot(attackGrowlClips[Random.Range(0, attackGrowlClips.Length)]);
 
+        var sphereCollider = gameObject.AddComponent<SphereCollider>();
+        sphereCollider.isTrigger = true;
+        sphereCollider.radius = 4f;
+        sphereCollider.center = new Vector3(0, 5f, 3f);
+
+        sphereCollider.tag = "StunHit";
+
+        sphereCollider.gameObject.AddComponent<DamageProperty>();
+        sphereCollider.GetComponent<DamageProperty>().Damage = dmg;
+        Destroy(sphereCollider, 0.1f);
+        Destroy(sphereCollider.GetComponent<DamageProperty>(), 0.1f);
+    }
     private void RotateToTarget()
     {
         Vector3 lookVector;
