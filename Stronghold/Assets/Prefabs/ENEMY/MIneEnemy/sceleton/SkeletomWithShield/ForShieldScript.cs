@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ForShieldScript : MonoBehaviour
 {
-    internal float maxHealth = 50f;
+    internal float maxHealth = 70f;
     internal float health;
     internal float Damage;
     internal float dmgg;

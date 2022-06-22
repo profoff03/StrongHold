@@ -18,30 +18,27 @@ public class EnemyWithShield : MonoBehaviour
     private float _viewDistance;
     [SerializeField, Range(0f, 10f)]
     private float _attackDistance;
-    private bool _isAttack;
+    public bool _isAttack = false;
     private float _rotationSpeed;
     private bool _IsSees;
     private float _defSpeed;
     public bool _remoteShield;
-    private bool _isStan;
     private float _fixedTIme;
-    private bool Started = false;
-    private bool Attacked = false;
+    [SerializeField]
     private float AttackCoolDown;
     [SerializeField]
     private bool _goBack;
-    private bool _fight;
 
-    private bool StrongReact;
-    private bool SimpleReact;
     [SerializeField]
-    float maxHealth;
-    public float health;
+    private float maxHealth;
+    private float health;
     private Canvas canvas;
     private Slider healthSlider;
 
     private bool _simpleWas;
     private bool _strongWas;
+    bool canAtack = true;
+    bool iHome = false;
 
     [SerializeField]
     private ForShieldScript Shield;
@@ -56,7 +53,6 @@ public class EnemyWithShield : MonoBehaviour
         _defSpeed = _agent.speed;
         _remoteShield = false;
 
-        _isStan = false;
         #region health
         health = maxHealth;
 
@@ -78,7 +74,6 @@ public class EnemyWithShield : MonoBehaviour
         {
             _animator.SetBool("Sees", false);
             RotateToTarget();
-            _isStan = true;
             _remoteShield = true;
             _agent.speed = 0;
             _agent.velocity = Vector3.zero;
@@ -107,37 +102,93 @@ public class EnemyWithShield : MonoBehaviour
 
         if (_IsSees && !Shield.highDamage && !Shield.lowDamage)
         {
-
-            RotateToTarget();
-            if (_distanceToPlayer < _attackDistance && _distanceToPlayer < _viewDistance && _isAttack)
+            if (_distanceToPlayer < _viewDistance)
             {
-                _isAttack = true;
-                _animator.SetTrigger("Attack");
+                if (!_isAttack)
+                {
+
+                    if (_distanceToPlayer > _attackDistance)
+                    {
+                        _agent.speed = _defSpeed;
+                        _agent.SetDestination(_target.transform.position);
+                        _animator.SetBool("Run", true);
+                    }else if (_distanceToPlayer <= _attackDistance)
+                    {
+                        _isAttack = true;
+                        _animator.SetBool("Run", false);
+                        _animator.SetTrigger("Attack");
+                    }
+                }
+                else
+                {
+                    RotateToTarget();
+                    if (canAtack)
+                    {
+                        canAtack = false;
+                        StartCoroutine(attackDelay());
+                    }
+                    if (!iHome)
+                    {
+                        if (_distanceToPlayer <= _StayDistance)
+                        {
+                            _agent.speed = 0;
+                            _agent.velocity = Vector3.zero;
+                            _animator.SetBool("Run", false);
+                            _animator.SetBool("RunBack", true);
+                        }
+                        else if (_distanceToPlayer > _StayDistance + 5f)
+                        {
+                            _agent.speed = _defSpeed;
+                            _agent.SetDestination(_target.transform.position);
+                            _animator.SetBool("Run", true);
+                            _animator.SetBool("RunBack", false);
+                        }
+                        else
+                        {
+                            iHome = true;
+                            _agent.speed = 0;
+                            _agent.velocity = Vector3.zero;
+                            _animator.SetBool("Run", false);
+                            _animator.SetBool("RunBack", false);
+                        }
+                    }
+                    else
+                    {
+                        if (_distanceToPlayer > _StayDistance + 5f)
+                        {
+                            _agent.speed = _defSpeed;
+                            _agent.SetDestination(_target.transform.position);
+                            _animator.SetBool("Run", true);
+                            _animator.SetBool("RunBack", false);
+                        }
+                        else
+                        {
+                            _agent.speed = 0;
+                            _agent.velocity = Vector3.zero;
+                            _animator.SetBool("Run", false);
+                            _animator.SetBool("RunBack", false);
+                        }
+                    }
+                    
+                }
+
             }
 
-
-            if (_distanceToPlayer > _StayDistance && !_isAttack)
-            {
-                _fight = false;
-                _animator.SetBool("RunBack", false);
-                _agent.speed = _defSpeed;
-                _animator.SetBool("Run", true);
-                _agent.SetDestination(_target.transform.position);
-            }
-            if (!_isAttack && _distanceToPlayer < _StayDistance)
-            {
-                _animator.SetBool("Run", false);
-                _agent.speed = 0;
-                _agent.velocity = Vector3.zero;
-            }
         }
+        
         canvas.transform.LookAt(canvas.worldCamera.transform);
+    }
+    private IEnumerator attackDelay()
+    {
+        yield return new WaitForSeconds(AttackCoolDown);
+        iHome = false;
+        _isAttack = false;
+        canAtack = true;
     }
     private IEnumerator strongReactDelay()
     {
         yield return new WaitForSeconds(3.5f);
         _animator.SetBool("Sees", true);
-        _isStan = false;
         _remoteShield = false;
         _strongWas = false;
         Shield.lowDamage = false;
@@ -148,20 +199,19 @@ public class EnemyWithShield : MonoBehaviour
     {
         _remoteShield = false;
         yield return new WaitForSeconds(1);
-        SimpleReact = false;
         _simpleWas = false;
         Shield.lowDamage = false;
         Shield.highDamage = false;
     }
 
     void CkeckAtack()
-    { 
+    {
+        _isAttack = true;
         gameObject.tag = "Enemy";
     }
 
     void DoHit()
     {
-        Debug.Log(1);
         var sphereCollider = gameObject.AddComponent<SphereCollider>();
         sphereCollider.isTrigger = true;
         sphereCollider.radius = 9f;
@@ -205,10 +255,14 @@ public class EnemyWithShield : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Hit") && _remoteShield)
+        if (_remoteShield)
         {
-            TakeDamage(other.GetComponent<DamageProperty>()?.Damage);
+            if (other.gameObject.CompareTag("Hit"))
+            {
+                TakeDamage(other.GetComponent<DamageProperty>()?.Damage);
+            }
         }
+        
     }
 
     private void Kill()

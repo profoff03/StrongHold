@@ -539,9 +539,10 @@ MonoBehaviour:
   _StayDistance: 20
   _viewDistance: 40
   _attackDistance: 10
+  _remoteShield: 0
+  AttackCoolDown: 5
   _goBack: 0
   maxHealth: 250
-  health: 0
   Shield: {fileID: 2643295191383028477}
 --- !u!195 &2643295190945819345
 NavMeshAgent:

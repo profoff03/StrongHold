@@ -54,6 +54,8 @@ public class secondPortal : MonoBehaviour
 
     bool playerEnter = false;
 
+    bool canBuildWall = false;
+
     internal bool roaring = false;
 
     [System.Obsolete]
@@ -75,7 +77,8 @@ public class secondPortal : MonoBehaviour
         if (detroyPortal) portal.transform.position -= new Vector3(0, 0.2f, 0);
         if (playerEnter && !wallEnable)
         {
-            StartCoroutine(enableWall());
+            if(canBuildWall)
+                StartCoroutine(enableWall());
             StartCoroutine(changeMusicToBattle());
             //Debug.Log(distance);
         }
@@ -147,6 +150,7 @@ public class secondPortal : MonoBehaviour
             if (startEnemy.GetChildCount() <= 1)
             {
                 Debug.Log("allDie");
+                canBuildWall = true;
                 allEnemyDie = true;
                 StartCoroutine(SpawnEnemyFirstWave());
             }
