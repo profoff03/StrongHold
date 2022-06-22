@@ -45,6 +45,7 @@ GameObject:
   - component: {fileID: 1087910559088355524}
   - component: {fileID: 1087910559088355523}
   - component: {fileID: 8891917156121240229}
+  - component: {fileID: 1455129121354651940}
   m_Layer: 0
   m_Name: goblinWithBomb
   m_TagString: Enemy
@@ -117,11 +118,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 112f49b5d5382df4989b5494b12cf745, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  explosionSound:
+  - {fileID: 8300000, guid: 7047c4c6c82e09a46bcec6c095cb4ed0, type: 3}
+  - {fileID: 8300000, guid: bda79490fb9557a4ba41ec6400a0a8e4, type: 3}
+  - {fileID: 8300000, guid: a18ba5982dd786e4299ea89aaa07baf9, type: 3}
+  - {fileID: 8300000, guid: d4e674b69147d4d439cce28eb2804a4d, type: 3}
+  loughSound:
+  - {fileID: 8300000, guid: 7809426ecaecb684e97703fd28b37c64, type: 3}
+  - {fileID: 8300000, guid: 0420e49c1877bdc499bb79b494572aca, type: 3}
+  - {fileID: 8300000, guid: a5d855b75fac2a84d8c5bfa22e972010, type: 3}
+  - {fileID: 8300000, guid: 5e02a6c2eef3c0247a890de79bfa4e1c, type: 3}
+  - {fileID: 8300000, guid: 75e352b81d4f21a47bbee974c47550e4, type: 3}
+  - {fileID: 8300000, guid: eb18855d07a3d90458ef1b8919a5837a, type: 3}
+  - {fileID: 8300000, guid: c92af5f11382cfc4995a5fc8d5456c86, type: 3}
+  fuseStartSound: {fileID: 8300000, guid: e6ebdb33b80e8cf41a461c76c93e8e32, type: 3}
+  fuseSound: {fileID: 8300000, guid: 797360d2cb081944dba13bf542dd7079, type: 3}
   _particleSystem: {fileID: 198202731371243394, guid: 65932b7368590234d8163da03c2055d8, type: 3}
   viewDistance: 70
   explosionDistance: 5
-  bombDamage: 4
-  moveSpeed: 5
+  bombDamage: 2
+  moveSpeed: 8
+  explosionTime: 3
 --- !u!195 &1087910559088355523
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -160,6 +177,102 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!82 &1455129121354651940
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 277078245489513497}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 5057764460878180113, guid: b94ca0a2c38db5048850feaf332c4bcd, type: 2}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 0.2
+  m_Pitch: 0.7
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 100
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &330288275873536812
 GameObject:
   m_ObjectHideFlags: 0

@@ -16,6 +16,7 @@ public class BigOrkBoss : MonoBehaviour
     internal Animator _animator;
     private NavMeshAgent _agent;
     private PlayerControll _playerControl;
+    private HUDBarScript _hudScript;
 
     private Collider _collider;
 
@@ -39,8 +40,19 @@ public class BigOrkBoss : MonoBehaviour
     AudioClip[] hitSounds;
 
     [SerializeField]
+    AudioClip[] atkSounds;
+
+    [SerializeField]
+    AudioClip[] rockSounds;
+
+    [SerializeField]
+    AudioClip[] seeGrowlClips;
+
+    [SerializeField]
     AudioClip roaringSounds;
 
+    [SerializeField]
+    AudioClip[] dieClips;
 
     [Header("Particle")]
     [SerializeField]
@@ -55,6 +67,8 @@ public class BigOrkBoss : MonoBehaviour
 
     [SerializeField]
     GameObject blood;
+    
+    goblinBossLocation _goblinBossLocation;
 
 
     #region bool
@@ -71,7 +85,6 @@ public class BigOrkBoss : MonoBehaviour
     bool canRun = true;
     bool canKick = true;
 
-    bool nearOther = false;
     bool inSmoke = false;
 
     internal bool isFirstState = false;
@@ -82,6 +95,8 @@ public class BigOrkBoss : MonoBehaviour
     bool isHome = false;
 
     internal bool allDie = false;
+
+    bool _isDie = false;
     #endregion
 
 
@@ -113,6 +128,8 @@ public class BigOrkBoss : MonoBehaviour
     float RotationSpeed;
     void Start()
     {
+        _goblinBossLocation = GameObject.Find("goblinBossLocation").GetComponent<goblinBossLocation>();
+
         _collider = GetComponent<Collider>();
 
         spawner = GameObject.Find("secondSpawner").GetComponent<secondPortal>();
@@ -121,6 +138,7 @@ public class BigOrkBoss : MonoBehaviour
 
         _agent = (NavMeshAgent)this.GetComponent("NavMeshAgent");
         _target = GameObject.Find("Player");
+        _hudScript = _hudScript = GameObject.Find("Canvas").GetComponentInChildren<HUDBarScript>();
         _rb = GetComponent<Rigidbody>();
         _playerControl = _target.GetComponent<PlayerControll>();
         _animator = GetComponent<Animator>();
@@ -149,34 +167,34 @@ public class BigOrkBoss : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!isFirstState)
+        if (!_isDie)
         {
-            if (!inSmoke)
+            if (!isFirstState)
             {
-                if (!nearOther)
+                if (!inSmoke)
                 {
-                    if(startDoing) _rb.AddForce(transform.forward * 70000 * Time.deltaTime, ForceMode.Acceleration);
-                    
+                    if (startDoing) _rb.AddForce(transform.forward * 70000 * Time.deltaTime, ForceMode.Acceleration);
+
                     if (!startDoing)
                     {
                         if (!isRush && !isJump)
                             RotateToTarget();
-                        
-                        
+
+
                         float distance = Vector3.Distance(_agent.transform.position, _target.transform.position);
-                        
-                        if ((distance < vewDist && 
-                            distance > kickDist 
+
+                        if ((distance < vewDist &&
+                            distance > kickDist
                             && distance > groundAtackDist
-                            && canRun|| isRush || isJump)
-                            && !IsAnimationPlaying("kick", 0) 
-                            && !IsAnimationPlaying("groundAtack", 0) )
+                            && canRun || isRush || isJump)
+                            && !IsAnimationPlaying("kick", 0)
+                            && !IsAnimationPlaying("groundAtack", 0))
                         {
                             if (canAddForce)
                                 _rb.AddForce(transform.forward * 90000 * Time.deltaTime, ForceMode.Acceleration);
                             if (canJump)
                             {
-                                
+
                                 if (!isJump)
                                 {
                                     _animator.SetBool("isRun", false);
@@ -184,10 +202,10 @@ public class BigOrkBoss : MonoBehaviour
                                 }
                                 isJump = true;
                                 _animator.SetTrigger("isJump");
-                            }
-                            
+                            }//jumoLogic
 
-                            if (canRush && !canJump) 
+
+                            if (canRush && !canJump)
                             {
                                 _rb.AddForce(transform.forward * 90000 * Time.deltaTime, ForceMode.Acceleration);
                                 if (!isRush)
@@ -206,10 +224,10 @@ public class BigOrkBoss : MonoBehaviour
                                 _rb.AddForce(transform.forward * 40000 * Time.deltaTime, ForceMode.Acceleration);
                                 _animator.SetBool("isRun", true);
                             }//simpleRunLogic
-                            
-                            
-                        
-                        
+
+
+
+
                         }
                         if (distance < kickDist && !isRush && !isJump)
                         {
@@ -240,6 +258,7 @@ public class BigOrkBoss : MonoBehaviour
                                 canRun = false;
                                 isDoGroundAtk = true;
 
+
                                 _animator.SetTrigger("isGroundAtack");
 
                                 StartCoroutine(canRunning());
@@ -254,84 +273,78 @@ public class BigOrkBoss : MonoBehaviour
                 }
                 else
                 {
-                    StartCoroutine(changeDistanation());
+                    _animator.SetBool("isRush", false);
+                    _animator.SetBool("isRun", false);
+                    isRush = false;
+                    isJump = false;
+                    isDoKick = false;
+                    isDoGroundAtk = false;
                 }
+
             }
-            else
+            else if (isHome)
             {
-                _animator.SetBool("isRush", false);
-                _animator.SetBool("isRun", false);
-                isRush = false;
-                isJump = false;
-                isDoKick = false;
-                isDoGroundAtk=false;
-            }
+                #region MainHomeLogic
+                float distance = Vector3.Distance(_agent.transform.position, _target.transform.position);
+                _rb.AddForce(Vector3.zero);
+                RotateToTarget();
 
-        }
-        else if (isHome)
-        {
-            #region MainHomeLogic
-            float distance = Vector3.Distance(_agent.transform.position, _target.transform.position);
-            _rb.AddForce(Vector3.zero);
-            RotateToTarget();
+                atkDelay = 2f;
 
-            atkDelay = 2f;
 
-            
-            if (distance < kickDist)
-            {
-
-                if (!isDoKick)
+                if (distance < kickDist)
                 {
-                    isDoKick = true;
-                    canRun = false;
-                    canKick = true;
 
-                    _animator.SetTrigger("isKick");
+                    if (!isDoKick)
+                    {
+                        isDoKick = true;
+                        canRun = false;
+                        canKick = true;
+                        _animator.SetTrigger("isKick");
+                        StartCoroutine(kickDelay());
 
-                    StartCoroutine(kickDelay());
+                    }
+
+                    if (canKick) StartCoroutine(kikcAtack());
+
 
                 }
-
-                if (canKick) StartCoroutine(kikcAtack());
-
+                #endregion
 
             }
-            #endregion
-
-        }
-        else if (!isHome)
-        {
-            
-            RotateToHome();
-            _rb.AddForce(transform.forward * 70000 * Time.deltaTime, ForceMode.Acceleration);
-            _animator.SetBool("isRun", true);
-            if (Vector3.Distance(transform.position, home.position) <= 10f) 
+            else if (!isHome)
             {
-                _animator.SetBool("isRun", false);
-                _animator.SetTrigger("isRoaring");
-                
-                isHome = true;
-            } 
-        }
 
-        if (health <= 500 && !secondStateStart)
-        {
-            firstStateStart = false;
-            secondStateStart = true;
-        }
+                RotateToHome();
+                _rb.AddForce(transform.forward * 70000 * Time.deltaTime, ForceMode.Acceleration);
+                _animator.SetBool("isRun", true);
+                if (Vector3.Distance(transform.position, home.position) <= 10f)
+                {
+                    _animator.SetBool("isRun", false);
+                    _animator.SetTrigger("isRoaring");
+
+                    isHome = true;
+                }
+            }
+
+            if (health <= 500 && !secondStateStart)
+            {
+                firstStateStart = false;
+                secondStateStart = true;
+            }
 
 
-        if (!firstStateStart && !isFirstState && health <= 1000)
-        {
-            isHome = false;
-            Debug.Log("firstState");
-            isFirstState = true;
-            firstStateStart = true;
-            atkDelay = Mathf.Round(atkDelay/1.2f);
-            curAtkDelay = atkDelay;
+            if (!firstStateStart && !isFirstState && health <= 1000)
+            {
+                isHome = false;
+                Debug.Log("firstState");
+                isFirstState = true;
+                firstStateStart = true;
+                atkDelay = Mathf.Round(atkDelay / 1.2f);
+                curAtkDelay = atkDelay;
+            }
+            canvas.transform.LookAt(canvas.worldCamera.transform);
         }
-        canvas.transform.LookAt(canvas.worldCamera.transform);
     }
 
     void roaringTrue() => spawner.roaring = true;
@@ -341,7 +354,7 @@ public class BigOrkBoss : MonoBehaviour
     void playRoaringSound()
     {
         audioSource.volume = 0.5f;
-        audioSource.pitch = 1.5f;
+        audioSource.pitch = 0.9f;
         audioSource.PlayOneShot(roaringSounds);
     }
     void StartGroundAtk() => StartCoroutine(groundAtack());
@@ -406,6 +419,8 @@ public class BigOrkBoss : MonoBehaviour
 
         groundAtkP = Instantiate(groundAtackParticle, transform.position, transform.rotation);
         DoGroundHit(new Vector3(0, 0f, 0f));
+        audioSource.PlayOneShot(atkSounds[Random.Range(0, atkSounds.Length)]);
+        audioSource.PlayOneShot(rockSounds[Random.Range(0, rockSounds.Length)]);
         yield return new WaitForSeconds(0.1f);
         DoGroundHit(new Vector3(0, 0f, 3f));
         yield return new WaitForSeconds(0.1f);
@@ -419,7 +434,9 @@ public class BigOrkBoss : MonoBehaviour
     {
         yield return new WaitForSeconds(0.6f);
         if (can)
-        {        
+        {
+            audioSource.PlayOneShot(rockSounds[Random.Range(0, rockSounds.Length)]);
+            audioSource.PlayOneShot(atkSounds[Random.Range(0, atkSounds.Length)]);
             Instantiate(kickParticle, transform.position,transform.rotation);
             shake.Shake();
             DoStunHit(new Vector3(0, 5f, 6f), 20);
@@ -428,7 +445,7 @@ public class BigOrkBoss : MonoBehaviour
         _playerControl._playerRigidbody.AddForce(transform.forward * Time.deltaTime * 20000, ForceMode.Impulse);
         canKick = false;
         yield return new WaitForSeconds(1);
-        _agent.tag = "Untagged";
+        _agent.tag = "Enemy";
 
 
     }
@@ -443,7 +460,7 @@ public class BigOrkBoss : MonoBehaviour
     
     private IEnumerator jumpAtack()
     {
-
+        audioSource.PlayOneShot(rockSounds[Random.Range(0, rockSounds.Length)]);
         for (float i = 0; i < 10; i++)
             Instantiate(kickParticle, transform.position, Quaternion.Euler(new Vector3(0, i * 500)));
         
@@ -452,19 +469,10 @@ public class BigOrkBoss : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
         DoStunHit(Vector3.zero, 25);
         yield return new WaitForSeconds(0.5f);
-        _agent.tag = "Untagged";
+        _agent.tag = "Enemy";
 
 
     } 
-    
-    private IEnumerator changeDistanation()
-    {
-        _animator.SetBool("isRun", true);
-        _agent.SetDestination(_target.transform.position + new Vector3(100, 0, 0));
-        yield return new WaitForSeconds(2);
-        _animator.SetBool("isRun", false);
-        nearOther = false;
-    }
 
     private IEnumerator outSmoke(float delay)
     {
@@ -545,17 +553,28 @@ public class BigOrkBoss : MonoBehaviour
         if (health == 0) Kill();
         healthSlider.value = health;
 
-        _agent.tag = "Untagged";
+        _agent.tag = "Enemy";
     }
-    private void Kill()
+
+    private IEnumerator Kill()
     {
+        _hudScript.StartHeal();
+        _goblinBossLocation.disablevillageWall();
+        _isDie = true;
+        _animator.SetTrigger("isDie");
+        yield return new WaitForSeconds(0.5f);
+        audioSource.PlayOneShot(dieClips[Random.Range(0, dieClips.Length)]);
+        yield return new WaitForSeconds(3f);
+        _agent.enabled = false;
+        _collider.enabled = false;
+        yield return new WaitForSeconds(3f);
         Destroy(gameObject);
     }
-    
+
     
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Hit"))
+        if (other.gameObject.CompareTag("Hit") && !_isDie)
         {
             TakeDamage(other.GetComponent<DamageProperty>()?.Damage);
            
@@ -569,11 +588,6 @@ public class BigOrkBoss : MonoBehaviour
             if (15f - t > 0)
                 StartCoroutine(outSmoke(15f - t));
             else inSmoke = false;
-        }
-
-        if (other.gameObject.CompareTag("Enemy"))
-        {
-            nearOther = true;
         }
 
     }

@@ -5,33 +5,42 @@ using UnityEngine.AI;
 
 public class firstPortal : MonoBehaviour
 {
-    AudioSource[] mainAudioSourse;
+    [Header("wizzard")]
+    [SerializeField]
+    Transform wizzard;
+    [SerializeField]
+    Transform wizzardPos;
+    [SerializeField]
+    GameObject wizzardSpawnEffect;
 
+    AudioSource[] mainAudioSourse;
+    AudioSource playerAudioSource;
+    [Header("audio")]
+    [SerializeField]
+    AudioClip explosionSound;
+    [SerializeField]
+    AudioClip rockStartSound;
+    [SerializeField]
+    AudioClip rockEndSound;
+
+    [Header("other")]
     [SerializeField]
     Transform startEnemy;
-
+    [SerializeField]
+    HUDBarScript hud;
     [SerializeField]
     Transform playerTransform;
-
     [SerializeField]
     GameObject[] enemyPrefabs;
-
     [SerializeField]
     GameObject stoneParticles;
-
     ParticleSystem[] stoneWallParticles;
-
     [SerializeField]
     GameObject firstPortalLoc;
-
     [SerializeField]
     GameObject portal;
-    
     [SerializeField]
     GameObject explosionFX;
-
-    [SerializeField]
-    float enemyStartForce;
 
     [SerializeField]
     float spawnDelay;
@@ -42,6 +51,7 @@ public class firstPortal : MonoBehaviour
     [System.Obsolete]
     void Start()
     {
+        playerAudioSource = playerTransform.GetComponent<AudioSource>();
         mainAudioSourse = Camera.main.GetComponents<AudioSource>();
         StartCoroutine(CheckFirstEnemy());
         stoneWallParticles = stoneParticles.GetComponentsInChildren<ParticleSystem>();
@@ -61,6 +71,7 @@ public class firstPortal : MonoBehaviour
     }
     private IEnumerator enableWall()
     {
+        playerAudioSource.PlayOneShot(rockStartSound);
         wallEnable = true;
         stoneParticles.SetActive(true);
         foreach (ParticleSystem particle in stoneWallParticles)
@@ -97,14 +108,8 @@ public class firstPortal : MonoBehaviour
         {
             for(int i = 0; i < 2; i++)
             {
-                GameObject thisEnemy = Instantiate(enemy, transform.position, transform.rotation, transform);
-                //Animator anim = thisEnemy.GetComponent<Animator>();
-                
-
-
-                //anim.SetBool("isRunForward", true);
+                Instantiate(enemy, transform.position, transform.rotation, transform);
                 yield return new WaitForSeconds(spawnDelay);
-                //anim.SetBool("isRunForward", false);
                 
             }
         }
@@ -126,14 +131,15 @@ public class firstPortal : MonoBehaviour
     [System.Obsolete]
     private IEnumerator SpawnEnemySecondWave()
     {
+        int k = 1;
         foreach (GameObject enemy in enemyPrefabs)
         {
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < k; i++)
             {
                 Instantiate(enemy, transform.position, transform.rotation, transform);
-                
                 yield return new WaitForSeconds(spawnDelay);
             }
+            k++;
         }
         yield return new WaitForSeconds(4);
         bool allEnemyDie = false;
@@ -185,17 +191,26 @@ public class firstPortal : MonoBehaviour
         }
     }
 
+    private IEnumerator spawnWizzard()
+    {
+        Instantiate(wizzardSpawnEffect, wizzardPos.position, wizzardPos.rotation, wizzard);
+        yield return new WaitForSeconds(0.1f);
+        wizzard.position = wizzardPos.position;
+    }
+
     void destroyPortal()
     {
         Instantiate(explosionFX, transform.position, Quaternion.identity,transform);
+        playerAudioSource.PlayOneShot(explosionSound);
+        playerAudioSource.PlayOneShot(rockEndSound);
         detroyPortal = true;
         foreach (ParticleSystem particle in stoneWallParticles)
         {
             particle.Play();
         }
-        Destroy(portal, 1.5f);
+        StartCoroutine(spawnWizzard());
         Destroy(firstPortalLoc, 2f);
-
+        hud.StartHeal();
         StartCoroutine(changeMusicToMain());
     }
 }
