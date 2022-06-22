@@ -91,6 +91,7 @@ public class goblinBoss : MonoBehaviour
 
     void Start()
     {
+        Check();
         _collider = GetComponent<Collider>();
         _agent = GetComponent<NavMeshAgent>();
         _target = GameObject.Find("Player");
@@ -115,6 +116,17 @@ public class goblinBoss : MonoBehaviour
         _canvas.worldCamera = Camera.main;
         _canvas.transform.rotation = _canvas.worldCamera.transform.rotation;
         #endregion
+    }
+
+    private void Check()
+    {
+        if (PlayerPrefs.HasKey("FirstBossKilled"))
+        {
+            if (PlayerPrefs.GetInt("FirstBossKilled") == 1)
+            {
+                Destroy(gameObject, 0.4f);
+            }
+        }
     }
 
 
@@ -365,6 +377,7 @@ public class goblinBoss : MonoBehaviour
     }
     private IEnumerator Kill()
     {
+        PlayerPrefs.SetInt("FirstBossKilled", 1);
         _hudScript.StartHeal();
         _location.disablecastleWall();
         _location.disableBrigeWall();

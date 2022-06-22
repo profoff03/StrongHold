@@ -128,6 +128,7 @@ public class BigOrkBoss : MonoBehaviour
     float RotationSpeed;
     void Start()
     {
+        Check();
         _goblinBossLocation = GameObject.Find("goblinBossLocation").GetComponent<goblinBossLocation>();
 
         _collider = GetComponent<Collider>();
@@ -162,6 +163,17 @@ public class BigOrkBoss : MonoBehaviour
         #endregion
 
         StartCoroutine(startDoingCor());
+    }
+
+    private void Check()
+    {
+        if (PlayerPrefs.HasKey("SecondBossKilled"))
+        {
+            if (PlayerPrefs.GetInt("SecondBossKilled") == 1)
+            {
+                Destroy(gameObject, 0.4f);
+            }
+        }
     }
 
     // Update is called once per frame
@@ -558,6 +570,7 @@ public class BigOrkBoss : MonoBehaviour
 
     private IEnumerator Kill()
     {
+        PlayerPrefs.SetInt("SecondBossKilled", 1);
         _hudScript.StartHeal();
         _goblinBossLocation.disablevillageWall();
         _isDie = true;

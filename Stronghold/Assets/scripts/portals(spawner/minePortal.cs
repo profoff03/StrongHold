@@ -56,10 +56,27 @@ public class minePortal : MonoBehaviour
     [System.Obsolete]
     void Start()
     {
+        //TODO
+        Check();
         playerAudioSource = playerTransform.GetComponent<AudioSource>();
         mainAudioSourse = Camera.main.GetComponents<AudioSource>();
         StartCoroutine(CheckFirstEnemy());
         stoneWallParticles = stoneParticles.GetComponentsInChildren<ParticleSystem>();
+    }
+
+    private void Check()
+    {
+        if (PlayerPrefs.HasKey("EnemyNearPortal2"))
+        {
+            if (PlayerPrefs.GetInt("EnemyNearPortal2") == 1) { Destroy(startEnemy); }
+        }
+        if (PlayerPrefs.HasKey("DestroyPortal2"))
+        {
+            if (PlayerPrefs.GetInt("DestroyPortal2") == 1)
+            {
+                destroyPortal();
+            }
+        }
     }
 
     private void Update()
@@ -99,6 +116,8 @@ public class minePortal : MonoBehaviour
         {
             if(startEnemy.GetChildCount() < 1)
             {
+                //TODO
+                PlayerPrefs.SetInt("EnemyNearPortal2", 1);
                 canBildWall = true;
                 allEnemyDie = true;
                 StartCoroutine(SpawnEnemyFirstWave());
@@ -149,6 +168,8 @@ public class minePortal : MonoBehaviour
         {
             if (transform.GetChildCount() == 0)
             {
+                //TODO
+                PlayerPrefs.SetInt("DestroyPortal2", 1);
                 Debug.Log("allDie");
                 allEnemyDie = true;
                 

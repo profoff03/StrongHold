@@ -63,12 +63,30 @@ public class vilPortal : MonoBehaviour
     [System.Obsolete]
     void Start()
     {
+        //TODO
+        Check();
         playerAudioSource = playerTransform.GetComponent<AudioSource>();
         mainAudioSourse = Camera.main.GetComponents<AudioSource>();
 
         spawnerTransforms = transform.GetComponentsInChildren<Transform>();
         StartCoroutine(CheckFirstEnemy());
         stoneWallParticles = stoneParticles.GetComponentsInChildren<ParticleSystem>();
+    }
+
+    //TODO
+    private void Check()
+    {
+        if (PlayerPrefs.HasKey("EnemyNearPortal4"))
+        {
+            if (PlayerPrefs.GetInt("EnemyNearPortal4") == 1) { Destroy(startEnemy); }
+        }
+        if (PlayerPrefs.HasKey("DestroyPortal4"))
+        {
+            if (PlayerPrefs.GetInt("DestroyPortal4") == 1)
+            {
+                destroyPortal();
+            }
+        }
     }
 
     [System.Obsolete]
@@ -146,6 +164,8 @@ public class vilPortal : MonoBehaviour
         {
             if (startEnemy.GetChildCount() <= 4)
             {
+                //TODO
+                PlayerPrefs.SetInt("EnemyNearPortal4", 1);
                 Debug.Log("allDie");
                 canBuildWall = true;
                 allEnemyDie = true;
@@ -204,6 +224,8 @@ public class vilPortal : MonoBehaviour
         {
             if (transform.GetChildCount() <= 2)
             {
+                //TODO
+                PlayerPrefs.SetInt("DestroyPortal4", 1);
                 Debug.Log("allDie");
                 allEnemyDie = true;
                 destroyPortal();

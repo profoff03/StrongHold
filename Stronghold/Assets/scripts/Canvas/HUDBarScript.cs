@@ -7,11 +7,17 @@ using UnityEngine.UI;
 public class HUDBarScript : MonoBehaviour
 {
     private bool canPlayHitSound = true;
-    
 
+    #region Save
+    private float HPAmount;
+    private float UltAmount;
+    #endregion
     [SerializeField]
     PlayerControll playerControll;
     public GameObject blood;
+    [Header("PushShield")]
+    private bool CanPushAway = false;
+
 
     [Header("Shield")]
     private bool CanTakeShields = false;
@@ -66,11 +72,13 @@ public class HUDBarScript : MonoBehaviour
         DefaultShieldCoolDown = MaxShieldCoolDown;
         DefaultSmokeCoolDown = 0;
         HP = maxHP/100;
+        Load(); //TODO
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.K)) { Save(); }//TODO
         if (playerControll.canDoSmth)
         {
             CheckDashCoolDown();
@@ -345,5 +353,110 @@ public class HUDBarScript : MonoBehaviour
     {
         yield return new WaitForSeconds(5);
         canPlayHitSound = true;
+    }
+
+
+
+    private void Save()//TODO
+    {
+        PlayerPrefs.SetFloat("HPAmount", HP);
+        PlayerPrefs.SetFloat("UltimateAmount", Ultimate.fillAmount);
+
+        if (canHeal)
+        {
+            PlayerPrefs.SetInt("CanHealth", 1);
+        }
+        else { PlayerPrefs.SetInt("CanHealth", 0); }
+
+        if (CanSmoke)
+        {
+            PlayerPrefs.SetInt("CanUseSmoke", 1);
+        }
+        else { PlayerPrefs.SetInt("CanUseSmoke", 0); }
+
+        if (CanTakeShields)
+        {
+            PlayerPrefs.SetInt("CanUseShield", 1);
+        }
+        else { PlayerPrefs.SetInt("CanUseShield", 0); }
+        
+        if(CanDash)
+        {
+            PlayerPrefs.SetInt("CanDash", 1);
+        }
+        else { PlayerPrefs.SetInt("CanDash", 0); }
+
+        if(CanPushAway)
+        {
+            PlayerPrefs.SetInt("CanPushAway", 1);
+        } 
+        else
+        {
+            PlayerPrefs.SetInt("CanPushAway", 0);
+        }
+    }
+
+    private void Load()//TODO
+    {
+        if (PlayerPrefs.HasKey("CanHealth"))
+        {
+            if(PlayerPrefs.GetInt("CanHealth", 1))
+            {
+                canHeal = true;
+            } else { canHeal = false; }
+        }
+
+        if (PlayerPrefs.HasKey("CanUseSmoke"))
+        {
+            if (PlayerPrefs.GetInt("CanUseSmoke", 1))
+            {
+                CanSmoke = true;
+            }
+            else { CanSmoke = false; }
+        }
+
+        if (PlayerPrefs.HasKey("CanUseShield"))
+        {
+            if (PlayerPrefs.GetInt("CanUseShield", 1))
+            {
+                CanTakeShields = true;
+            }
+            else { CanTakeShields = false; }
+        }
+
+        if (PlayerPrefs.HasKey("CanDash"))
+        {
+            if (PlayerPrefs.GetInt("CanDash", 1))
+            {
+                CanDash = true;
+            }
+            else { CanDash = false; }
+        }
+        if (PlayerPrefs.HasKey("CanPushAway"))
+        {
+            if (PlayerPrefs.GetInt("CanPushAway", 1))
+            {
+                CanPushAway = true;
+            }
+            else { CanPushAway = false; }
+        }
+
+
+        if (PlayerPrefs.HasKey("HPAmount"))
+        {
+            HPAmount = PlayerPrefs.GetFloat("HPAmount");
+        }
+        if (PlayerPrefs.HasKey("UltimateAmount"))
+        {
+            UltAmount = PlayerPrefs.GetFloat("UltimateAmount");
+        }
+
+        Ultimate.fillAmount = UltAmount;
+        HP = HPAmount;
+
+        if (Ultimate.fillAmount < 0.99)
+        {
+            playerControll.ultRegenerate = true;
+        }
     }
 }

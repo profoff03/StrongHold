@@ -35,6 +35,7 @@ public class PlayerControll : MonoBehaviour
 
     [SerializeField]
     private HUDBarScript hud;
+    private float X, Y, Z;
 
     [SerializeField]
     Bomb bombPref;
@@ -182,6 +183,11 @@ public class PlayerControll : MonoBehaviour
         _audioSource = GetComponents<AudioSource>();
  
     }
+
+    private void Start()
+    {
+        Load();
+    }
     private void SetDmg()
     {
 
@@ -232,6 +238,7 @@ public class PlayerControll : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.K)) { Save(); }//TODO
         if (!IsAnimationPlaying("Death", 0) && !IsAnimationPlaying("ULTIMATE", 0) && !isStan && !_inSmoke  && canWalk && canDoSmth)
         {
             if (!IsAnimationPlaying("dash", 0))
@@ -549,6 +556,31 @@ public class PlayerControll : MonoBehaviour
     void Die()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+
+    private void Save()
+    {
+        PlayerPrefs.SetFloat("X", transform.position.x);
+        PlayerPrefs.SetFloat("Y", transform.position.y);
+        PlayerPrefs.SetFloat("Z", transform.position.z);
+        PlayerPrefs.Save();
+    }
+    private void Load()
+    {
+        if (PlayerPrefs.HasKey("X"))
+        {
+            X = PlayerPrefs.GetFloat("X");
+        }
+        if (PlayerPrefs.HasKey("Y"))
+        {
+            Y = PlayerPrefs.GetFloat("Y");
+        }
+        if (PlayerPrefs.HasKey("Z"))
+        {
+            Z = PlayerPrefs.GetFloat("Z");
+        }
+        transform.position = new Vector3(X, Y, Z);
     }
 
 

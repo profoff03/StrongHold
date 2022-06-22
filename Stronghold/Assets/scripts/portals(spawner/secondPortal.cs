@@ -61,12 +61,29 @@ public class secondPortal : MonoBehaviour
     [System.Obsolete]
     void Start()
     {
+        //TODO
+        Check();
         playerAudioSource = playerTransform.GetComponent<AudioSource>();
         mainAudioSourse = Camera.main.GetComponents<AudioSource>();
 
         spawnerTransforms = transform.GetComponentsInChildren<Transform>();
         StartCoroutine(CheckFirstEnemy());
         stoneWallParticles = stoneParticles.GetComponentsInChildren<ParticleSystem>();
+    }
+
+    private void Check()
+    {
+        if (PlayerPrefs.HasKey("EnemyNearPortal3"))
+        {
+            if (PlayerPrefs.GetInt("EnemyNearPortal3") == 1) { Destroy(startEnemy); }
+        }
+        if (PlayerPrefs.HasKey("DestroyPortal3"))
+        {
+            if (PlayerPrefs.GetInt("DestroyPortal3") == 1)
+            {
+                destroyPortal();
+            }
+        }
     }
 
     [System.Obsolete]
@@ -150,6 +167,8 @@ public class secondPortal : MonoBehaviour
         {
             if (startEnemy.GetChildCount() <= 1)
             {
+                //TODO
+                PlayerPrefs.SetInt("EnemyNearPortal3", 1);
                 Debug.Log("allDie");
                 canBuildWall = true;
                 allEnemyDie = true;
@@ -205,6 +224,8 @@ public class secondPortal : MonoBehaviour
         {
             if (transform.GetChildCount() <=2)
             {
+                //TODO
+                PlayerPrefs.SetInt("DestroyPortal3", 1);
                 Debug.Log("allDie");
                 allEnemyDie = true;
 
