@@ -121,7 +121,7 @@ public class minerWithPic : MonoBehaviour
                         {
                             if (!seeSoundPlay)
                             {
-                                _audioSource[1].PlayOneShot(seeGrowlClips[Random.Range(0, seeGrowlClips.Length)]);
+                                _audioSource[0].PlayOneShot(seeGrowlClips[Random.Range(0, seeGrowlClips.Length)]);
                                 StartCoroutine(seeSoundDelay());
                                 seeSoundPlay = true;
                             }
@@ -231,18 +231,19 @@ public class minerWithPic : MonoBehaviour
     }
     void CkeckAtack()
     {
-        _audioSource[0].PlayOneShot(whoosh[Random.Range(0, whoosh.Length)]);
-        _audioSource[1].PlayOneShot(attackGrowlClips[Random.Range(0, attackGrowlClips.Length)]);
         isAtack = true;
         _myColider.tag = "Enemy";
     }
 
     void DoHit()
     {
+        _audioSource[1].PlayOneShot(whoosh[Random.Range(0, whoosh.Length)]);
+        _audioSource[0].PlayOneShot(attackGrowlClips[Random.Range(0, attackGrowlClips.Length)]);
+        
         var sphereCollider = gameObject.AddComponent<SphereCollider>();
         sphereCollider.isTrigger = true;
-        sphereCollider.radius = 9f;
-        sphereCollider.center = new Vector3(0, 5f, 4f);
+        sphereCollider.radius = 3f;
+        sphereCollider.center = new Vector3(0, 5f, 3f);
         
         sphereCollider.tag = "EnemyHit";
         
@@ -254,10 +255,13 @@ public class minerWithPic : MonoBehaviour
 
     void DoPunchHit()
     {
+        _audioSource[1].PlayOneShot(whoosh[Random.Range(0, whoosh.Length)]);
+        _audioSource[0].PlayOneShot(attackGrowlClips[Random.Range(0, attackGrowlClips.Length)]);
+
         var sphereCollider = gameObject.AddComponent<SphereCollider>();
         sphereCollider.isTrigger = true;
-        sphereCollider.radius = 9f;
-        sphereCollider.center = new Vector3(0, 5f, 4f);
+        sphereCollider.radius = 3f;
+        sphereCollider.center = new Vector3(0, 5f, 3f);
 
         sphereCollider.tag = "punchHit";
 
@@ -342,13 +346,13 @@ public class minerWithPic : MonoBehaviour
             StartCoroutine(reactDelay());
             if (IsAnimationPlayerPlaying("Strong", 0))
             {
-                _audioSource[1].PlayOneShot(strongHurtlClips[Random.Range(0, strongHurtlClips.Length)]);
+                _audioSource[0].PlayOneShot(strongHurtlClips[Random.Range(0, strongHurtlClips.Length)]);
                 _animator.SetTrigger("strongReact");
 
             }
             else
             {
-                _audioSource[1].PlayOneShot(hurtlClips[Random.Range(0, hurtlClips.Length)]);
+                _audioSource[0].PlayOneShot(hurtlClips[Random.Range(0, hurtlClips.Length)]);
                 _animator.SetTrigger("react");
             }
         }
@@ -357,8 +361,8 @@ public class minerWithPic : MonoBehaviour
         int soundNumber = Random.Range(0, 20);
         if (soundNumber <= 10) soundNumber = 0;
         if (soundNumber > 10) soundNumber = 1;
-        _audioSource[0].pitch = Random.Range(0.7f, 1.2f);
-        _audioSource[0].PlayOneShot(slashClips[soundNumber]);
+        _audioSource[1].pitch = Random.Range(0.7f, 1.2f);
+        _audioSource[1].PlayOneShot(slashClips[soundNumber]);
 
         dmg ??= 0;
         health -= (float)dmg;
