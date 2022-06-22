@@ -245,7 +245,7 @@ public class HUDBarScript : MonoBehaviour
         dmg ??= 0;
         canHeal = false;
         
-        HP -=(float)(dmg / 100);
+        //HP -=(float)(dmg / 100);
         if (!playerControll.isUlting)
         {
             Ultimate.fillAmount += (float)(dmg / 50);

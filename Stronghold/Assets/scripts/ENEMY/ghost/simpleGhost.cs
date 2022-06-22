@@ -10,7 +10,6 @@ public class simpleGhost : MonoBehaviour
     NavMeshAgent _agent;
     Animator _playerAnimator;
     Animator _animator;
-    Rigidbody _rb;
 
     AudioSource[] _audioSource;
     [SerializeField]
@@ -26,15 +25,11 @@ public class simpleGhost : MonoBehaviour
     [SerializeField]
     AudioClip[] whoosh;
 
-    [SerializeField]
-    GameObject AttackParticle;
-    
-
     Transform home;
     [SerializeField]
-    Transform firstPos;
+    internal Transform firstPos;
     [SerializeField]
-    Transform secondPos;
+    internal Transform secondPos;
 
     CapsuleCollider _myColider;
 
@@ -83,7 +78,6 @@ public class simpleGhost : MonoBehaviour
     void Start()
     {
         home = secondPos;
-        _rb = GetComponent<Rigidbody>();
         _myColider = GetComponent<CapsuleCollider>();
         _agent = GetComponent<NavMeshAgent>();
         _target = GameObject.Find("Player");

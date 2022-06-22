@@ -52,7 +52,7 @@ public class secondPortal : MonoBehaviour
     bool detroyPortal = false;
     bool wallEnable = false;
 
-    bool playerEnter = false;
+    public bool playerEnter = false;
 
     bool canBuildWall = false;
 
@@ -79,6 +79,7 @@ public class secondPortal : MonoBehaviour
         {
             if(canBuildWall)
                 StartCoroutine(enableWall());
+            
             StartCoroutine(changeMusicToBattle());
             //Debug.Log(distance);
         }
@@ -284,5 +285,9 @@ public class secondPortal : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Player")) playerEnter = true;
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player")) playerEnter = false;
     }
 }
