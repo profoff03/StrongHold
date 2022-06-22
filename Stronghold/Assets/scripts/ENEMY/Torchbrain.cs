@@ -266,19 +266,29 @@ public class Torchbrain : MonoBehaviour
     void CkeckAtack()
     {
         isAtack = true;
-        FirstAttackParticle.SetActive(false);
-        SecondAttackParticle.SetActive(false);
+        if (gameObject.layer != 11)
+        {   
+            FirstAttackParticle.SetActive(false);
+            SecondAttackParticle.SetActive(false);
+        }
         _myColider.tag = "Enemy";
     }
 
     void DoHit()
     {
+
         var sphereCollider = gameObject.AddComponent<SphereCollider>();
         sphereCollider.isTrigger = true;
         sphereCollider.radius = 9f;
         sphereCollider.center = new Vector3(0, 5f, 4f);
 
         if (gameObject.layer == 8) sphereCollider.tag = "fireHit";
+        else if (gameObject.layer == 11)
+        {
+            _audioSource[0].PlayOneShot(whoosh[Random.Range(0, whoosh.Length)]);
+            _audioSource[1].PlayOneShot(attackGrowlClips[Random.Range(0, attackGrowlClips.Length)]);
+            sphereCollider.tag = "EnemyHit";
+        }
         else sphereCollider.tag = "EnemyHit";
 
         sphereCollider.gameObject.AddComponent<DamageProperty>();

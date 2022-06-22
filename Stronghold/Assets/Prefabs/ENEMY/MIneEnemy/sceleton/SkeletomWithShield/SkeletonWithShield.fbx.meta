@@ -33,7 +33,37 @@ ModelImporter:
   - first:
       74: 3053935313177511298
     second: skeletonWithShield|WalkForward
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DarkMaterial.002
+    second: {fileID: 2100000, guid: 73d90eba31b79b445bc40adf98b59145, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: bone
+    second: {fileID: -3981065676529349206, guid: 4e3402e3fd2c53f42add780066acaf2a, type: 3}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: eyes
+    second: {fileID: 2100000, guid: 34e1e1b90c05b704f9cfbed8d92767da, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lether
+    second: {fileID: 2100000, guid: c7d07f983e64cb54cb06bf6fc680e7e2, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lether.001
+    second: {fileID: 2100000, guid: c7d07f983e64cb54cb06bf6fc680e7e2, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: metall
+    second: {fileID: 2100000, guid: 73d90eba31b79b445bc40adf98b59145, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -85,7 +115,21 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.4416382
+        functionName: DoHit
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: a4e82c2879d9ea64cb5b8a616ec9a6a2, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.4953488
+        functionName: CkeckAtack
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: a4e82c2879d9ea64cb5b8a616ec9a6a2, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
